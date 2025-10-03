@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('asistente', function (Blueprint $table) {
-            $table->string('ci')->primary();
-            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
-            $table->dateTime('turno');
-            $table->date('fechaContratacion');
+        Schema::create('historia_clinica', function (Blueprint $table) {
+            $table->id('idHistoriaClinica');
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asistente');
+        Schema::dropIfExists('historia_clinica');
     }
 };

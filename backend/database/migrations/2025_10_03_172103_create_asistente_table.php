@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hace', function (Blueprint $table) {
-            $table->string('idPaciente')->primary();
-            $table->string('idCita')->primary();
-            $table->string('idAsistente');
-            $table->string('idOdontologo');
-            $table->date('fecha');
+        Schema::create('asistente', function (Blueprint $table) {
+            $table->string('ci')->primary();
+            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
+
+            $table->dateTime('turno');
+            $table->date('fechaContratacion');
+
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hace');
+        Schema::dropIfExists('asistente');
     }
 };

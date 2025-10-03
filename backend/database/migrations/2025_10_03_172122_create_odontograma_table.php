@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tiene', function (Blueprint $table) {
-            $table->id();
+        Schema::create('odontograma', function (Blueprint $table) {
+            $table->id('idOdontograma');
+
+            $table->string('nombre');
+            $table->string('descripcion');
+            $table->time('hora');
+            $table->string('observacion');
+            $table->date('fecha');
             $table->timestamps();
         });
     }
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tiene');
+        Schema::dropIfExists('odontograma');
     }
 };

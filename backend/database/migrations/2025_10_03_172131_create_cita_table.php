@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('asiste', function (Blueprint $table) {
-            $table->id();
+        Schema::create('cita', function (Blueprint $table) {
+            $table->id('idCita');
+            $table->time('hora');
+            $table->date('fecha');
+            $table->enum('estado',['cancelada','cumplida','pospuesta']);
+            $table->decimal('costo',8,2);
+            $table->decimal('pagado',8,2);
+
             $table->timestamps();
         });
     }
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asiste');
+        Schema::dropIfExists('cita');
     }
 };

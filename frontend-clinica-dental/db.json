@@ -16,6 +16,14 @@
       "especialidad": "Ortodontista",
       "horario": "mañana",
       "estado": "Inactivo"
+    },
+    {
+      "id": "4901",
+      "nombre": "Kae",
+      "ci": "124",
+      "especialidad": "Asistente",
+      "horario": "mañana",
+      "estado": "Inactivo"
     }
   ],
   "citas": []

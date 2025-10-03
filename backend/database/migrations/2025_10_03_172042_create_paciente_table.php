@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('odontologo', function (Blueprint $table) {
+        Schema::create('paciente', function (Blueprint $table) {
             $table->string('ci')->primary();
             $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
-            $table->date('fechaContratacion');
-            $table->time('horario');
+
+            $table->string('codigoSeguro')->nullable();
+            $table->string('lugarNacimiento')->nullable();
+            $table->string('domicilio')->nullable();
+            $table->date('fechaIngreso');
+            // $table->time('horaIngreso'); Es correcto?
             $table->timestamps();
         });
     }
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('odontologo');
+        Schema::dropIfExists('paciente');
     }
 };

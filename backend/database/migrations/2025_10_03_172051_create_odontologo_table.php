@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('efectua', function (Blueprint $table) {
-            $table->id();
+        Schema::create('odontologo', function (Blueprint $table) {
+            $table->string('ci')->primary();
+            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
+
+            $table->date('fechaContratacion')->nullable();
+            $table->time('horario');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('efectua');
+        Schema::dropIfExists('odontologo');
     }
 };

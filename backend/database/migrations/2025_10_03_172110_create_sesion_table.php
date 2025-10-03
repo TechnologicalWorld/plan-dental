@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detalle_dental_create', function (Blueprint $table) {
-            $table->id();
+        Schema::create('sesion', function (Blueprint $table) {
+            $table->string('ci')->primary();
+            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detalle_dental_create');
+        Schema::dropIfExists('sesion');
     }
 };
