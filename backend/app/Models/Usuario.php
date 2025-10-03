@@ -25,4 +25,9 @@ class Usuario extends Model
         'correo',
         'direccion'
     ];
+    protected $hidden=[
+        'contrasena',
+        'remember_token'
+    ];
+
 }
