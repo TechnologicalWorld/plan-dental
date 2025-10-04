@@ -24,18 +24,18 @@ class AsistenteController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'ci'=>'required|exists:usuario,ci',
-            'turno'=>'required|date_format:Y-m-d H:i',
-            'fechaContratacion'=>"required|date",
+            'idUsuario' => 'required|exists:usuario,idUsuario',
+            'turno' => 'required|date_format:Y-m-d H:i',
+            'fechaContratacion' => "required|date",
         ]);
 
         if ($validator->fails()) {
-            return response()->json(["error"=>$validator->errors()],422);
+            return response()->json(["error" => $validator->errors()], 422);
         }
 
         $asistente = Asistente::create($request->all());
 
-        return response()->json($asistente,201);
+        return response()->json($asistente, 201);
     }
 
     /**
@@ -55,13 +55,13 @@ class AsistenteController extends Controller
         $asistente = Asistente::findOrFail($id);
         //
         $validator = Validator::make($request->all(), [
-            'ci'=>'exists:usuario,ci',
-            'turno'=>'date_format:Y-m-d H:i',
-            'fechaContratacion'=>"date",
+            'idUsuario' => 'exists:usuario,idUsuario',
+            'turno' => 'date_format:Y-m-d H:i',
+            'fechaContratacion' => "date",
         ]);
 
         if ($validator->fails()) {
-            return response()->json(["error"=>$validator->errors()],422);
+            return response()->json(["error" => $validator->errors()], 422);
         }
 
         $asistente->update($request->all());
@@ -77,6 +77,6 @@ class AsistenteController extends Controller
         //
         $asistente = Asistente::findOrFail($id);
         $asistente->delete();
-        return response()->json(null,204);
+        return response()->json(null, 204);
     }
 }

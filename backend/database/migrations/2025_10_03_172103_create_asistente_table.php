@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('asistente', function (Blueprint $table) {
-            $table->string('ci')->primary();
-            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
+            $table->unsignedBigInteger('idUsuario')->primary();
+            $table->foreign('idUsuario')->references('idUsuario')->on('usuario')->onDelete('cascade');
 
             $table->dateTime('turno');
             $table->date('fechaContratacion');

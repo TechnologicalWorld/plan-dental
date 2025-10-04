@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Administrador extends Model
 {
     protected $table = 'administrador';
-    protected $primaryKey = 'ci';
+    protected $primaryKey = 'idUsuario';
     protected $keyType = 'string';
     public $incrementing = false;
 
     protected $fillable = [
-        'ci'
+        'idUsuario'
     ];
 
     public function usuario(){
-        return $this->belongsTo(Usuario::class,'ci','ci');
+        return $this->belongsTo(Usuario::class,'idUsuario','idUsuario');
     }
 }

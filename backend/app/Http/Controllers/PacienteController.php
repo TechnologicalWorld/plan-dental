@@ -24,7 +24,7 @@ class PacienteController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'ci'=>'required|exists:usuario,ci',
+            'idUsuario'=>'required|exists:usuario,idUsuario',
             'codigoSeguro'=>'nullable|string',
             'lugarNacimiento'=>'nullable|string',
             'domicilio'=>'nullable|string',
@@ -55,7 +55,7 @@ class PacienteController extends Controller
         //
         $paciente = Paciente::findOrFail($id);
         $validator = Validator::make($request->all(), [
-            'ci'=>'exists:usuario,ci',
+            'idUsuario'=>'exists:usuario,idUsuario',
             'codigoSeguro'=>'nullable|string',
             'lugarNacimiento'=>'nullable|string',
             'domicilio'=>'nullable|string',

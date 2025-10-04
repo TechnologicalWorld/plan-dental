@@ -8,16 +8,16 @@ class Odontologo extends Model
 {
     //
     protected $table = 'odontologo';
-    protected $primaryKey = 'ci';
+    protected $primaryKey = 'idUsuario';
     public $incrementing = false;
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     protected $fillable = [
-        'ci',
+        'idUsuario',
         'fechaContratacion',
         'horario',
     ];
     public function usuario(){
-        return $this->belongsTo(Usuario::class,'ci','ci');
+        return $this->belongsTo(Usuario::class,'idUsuario','idUsuario');
     }
 }

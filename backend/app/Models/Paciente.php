@@ -8,12 +8,12 @@ class Paciente extends Model
 {
     //
     protected $table = 'paciente';
-    protected $primaryKey = 'ci';
-    protected $keyType = 'string';
+    protected $primaryKey = 'idUsuario';
+    protected $keyType = 'int';
     public $incrementing = false;
 
     protected $fillable = [
-        'ci',
+        'idUsuario',
         'codigoSeguro',
         'lugarNacimiento',
         'domicilio',
@@ -21,6 +21,6 @@ class Paciente extends Model
     ];
 
     public function usuario(){
-        return $this->belongsTo(Usuario::class,'ci','ci');
+        return $this->belongsTo(Usuario::class,'idUsuario','idUsuario');
     }
 }

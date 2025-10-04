@@ -9,9 +9,9 @@ class Usuario extends Model
 {
     use HasFactory;
     protected $table = 'usuario';
-    protected $primaryKey = 'ci';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $primaryKey = 'idUsuario';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'ci',

@@ -21,14 +21,18 @@ class AdministradorController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),
-        ['ci'=>'required|exists:usuario,ci']);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'idUsuario' => 'required|exists:usuario,idUsuario',
+            ]
+        );
 
         if ($validator->fails()) {
-            return response()->json(["error"=>$validator->errors()],422);
+            return response()->json(["error" => $validator->errors()], 422);
         }
         $administrador = Administrador::create($request->all());
-        return response()->json($administrador,201);
+        return response()->json($administrador, 201);
     }
 
     /**
@@ -46,11 +50,15 @@ class AdministradorController extends Controller
     public function update(Request $request, string $id)
     {
         $administrador = Administrador::findOrFail($id);
-        $validator = Validator::make($request->all(),
-        ['ci'=>'required|exists:usuario,ci']);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'idUsuario' => 'required|exists:usuario,idUsuario',
+            ]
+        );
 
         if ($validator->fails()) {
-            return response()->json(["error"=>$validator->errors()],422);
+            return response()->json(["error" => $validator->errors()], 422);
         }
 
         $administrador->update($request->all());
@@ -65,6 +73,6 @@ class AdministradorController extends Controller
         //
         $administrador = Administrador::findOrFail($id);
         $administrador->delete();
-        return response()->json(null,204);
+        return response()->json(null, 204);
     }
 }

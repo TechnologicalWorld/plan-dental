@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sesion', function (Blueprint $table) {
             $table->string('ci')->primary();
             $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps(); // ?
         });
     }
 

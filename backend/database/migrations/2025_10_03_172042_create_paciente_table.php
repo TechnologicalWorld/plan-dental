@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('paciente', function (Blueprint $table) {
-            $table->string('ci')->primary();
-            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
-
-            $table->string('codigoSeguro')->nullable();
+            $table->unsignedInteger('idUsuario')->primary();
+            $table->foreign('idUsuario')->references('idUsuario')->on('usuario')->onDelete('cascade');
+            $table->string('codigoSeguro')->nullable(); 
             $table->string('lugarNacimiento')->nullable();
             $table->string('domicilio')->nullable();
             $table->date('fechaIngreso');

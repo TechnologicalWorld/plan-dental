@@ -22,7 +22,7 @@ class OdontologoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci' => 'required|exists:usuario,ci',
+            'idUsuario'=>'required|exists:usuario,idUsuario',
             'fechaContratacion' => 'date|nullable',
             'horario' => 'required|date_format:H:i',
         ]);
@@ -52,7 +52,7 @@ class OdontologoController extends Controller
         //
         $odontologo = Odontologo::findOrFail($id);
         $validator = Validator::make($request->all(), [
-            'ci' => 'required|exists:usuario,ci',
+            'idUsuario'=>'exists:usuario,idUsuario',
             'fechaContratacion' => 'date|nullable',
             'horario' => 'required|date_format:H:i',
         ]);
