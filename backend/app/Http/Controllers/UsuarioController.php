@@ -32,7 +32,8 @@ class UsuarioController extends Controller
             'telefono'=>'nullable|string',
             'contrasena'=>'string|required',
             'correo'=>"required|email|unique:usuario,correo",
-            'direccion'=>'nullable|string'
+            'direccion'=>'nullable|string',
+            'estado'=>'nullable|boolean'
         ]);
 
         if ($validator->fails()) {
