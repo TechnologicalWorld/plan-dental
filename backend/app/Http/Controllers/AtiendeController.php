@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Atiendes;
+use App\Models\Atiende;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class AtiendesController extends Controller
+class AtiendeController extends Controller
 {
     public function index()
     {
-        return Atiendes::all();
+        return Atiende::all();
     }
 
     public function store(Request $request)
@@ -27,13 +27,13 @@ class AtiendesController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $atiende = Atiendes::create($request->all());
+        $atiende = Atiende::create($request->all());
         return response()->json($atiende, 201);
     }
 
     public function show($id)
     {
-        return Atiendes::findOrFail($id);
+        return Atiende::findOrFail($id);
     }
 
     public function update(Request $request, $id)
@@ -50,7 +50,7 @@ class AtiendesController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $atiende = Atiendes::findOrFail($id);
+        $atiende = Atiende::findOrFail($id);
         $atiende->update($request->all());
 
         return response()->json($atiende, 200);
@@ -58,7 +58,7 @@ class AtiendesController extends Controller
 
     public function destroy($id)
     {
-        $atiende = Atiendes::findOrFail($id);
+        $atiende = Atiende::findOrFail($id);
         $atiende->delete();
 
         return response()->json(['message' => 'Registro eliminado correctamente'], 204);
