@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sesion', function (Blueprint $table) {
-            $table->string('ci')->primary();
-            $table->foreign('ci')->references('ci')->on('usuario')->onDelete('cascade');
-            $table->timestamps(); // ?
+            $table->unsignedBigInteger('idSesion')->primary();
+            $table->string('nombre', 100);
+            $table->text('descripcion')->nullable();
+            $table->time('hora')->nullable();
+            $table->text('observacion')->nullable();
+            $table->date('fecha')->nullable();
+            
+            $table->timestamps(); 
         });
     }
 

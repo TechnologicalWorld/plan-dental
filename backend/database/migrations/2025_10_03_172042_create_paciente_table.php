@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('paciente', function (Blueprint $table) {
-            $table->unsignedBigInteger('idUsuario')->primary();
-            $table->foreign('idUsuario')->references('idUsuario')->on('usuario')->onDelete('cascade');
+            $table->unsignedBigInteger('idUsuario_Paciente')->primary();
+            $table->foreign('idUsuario_Paciente')->references('idUsuario')->on('usuario')->onDelete('cascade');
             $table->string('codigoSeguro')->nullable(); 
             $table->string('lugarNacimiento')->nullable();
             $table->string('domicilio')->nullable();
             $table->date('fechaIngreso');
-            // $table->time('horaIngreso'); Es correcto?
+            // $table->time('horaIngreso'); Es correcto? -- por el momento no
             $table->timestamps();
         });
     }

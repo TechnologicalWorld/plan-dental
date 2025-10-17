@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('odontograma', function (Blueprint $table) {
             $table->id('idOdontograma');
-
-            $table->string('nombre');
-            $table->string('descripcion');
-            $table->time('hora');
-            $table->string('observacion');
-            $table->date('fecha');
+            $table->string('nombre', 100)->nullable();
+            $table->text('descripcion')->nullable();
+            $table->date('fecha')->nullable();
+            
             $table->timestamps();
         });
     }

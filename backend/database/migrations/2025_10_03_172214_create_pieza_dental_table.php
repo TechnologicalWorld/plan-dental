@@ -12,7 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pieza_dental', function (Blueprint $table) {
-            $table->id();
+            $table->id('idPieza');
+            $table->string('pocision', 20)->nullable();
+            $table->string('nombre', 50)->nullable();
+            $table->string('tipo', 50)->nullable();
+            $table->string('estado', 50)->nullable();
+
+            $table->unsignedBigInteger('idPaciente');
+            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

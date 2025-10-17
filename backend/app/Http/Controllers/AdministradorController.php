@@ -5,74 +5,75 @@ namespace App\Http\Controllers;
 use App\Models\Administrador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdministradorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return Administrador::with('usuario')->get();
+        $perPage = $request->get('per_page', 10);
+        $query = Administrador::with('usuario');
+
+        if ($request->filled('search')) {
+            $query->whereHas('usuario', function ($q) use ($request) {
+                $q->where('nombre', 'like', "%{$request->search}%")
+                  ->orWhere('paterno', 'like', "%{$request->search}%");
+            });
+        }
+
+        return response()->json($query->paginate($perPage));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'idUsuario' => 'required|exists:usuario,idUsuario',
-            ]
-        );
+        $validator = Validator::make($request->all(), [
+            'idUsuario_ADM' => 'required|exists:usuario,idUsuario'
+        ]);
 
         if ($validator->fails()) {
-            return response()->json(["error" => $validator->errors()], 422);
-        }
-        $administrador = Administrador::create($request->all());
-        return response()->json($administrador, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-        return Administrador::with('usuario')->findOrFail($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $administrador = Administrador::findOrFail($id);
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'idUsuario' => 'required|exists:usuario,idUsuario',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json(["error" => $validator->errors()], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $administrador->update($request->all());
-        return response()->json($administrador);
+        try {
+            $admin = Administrador::create($request->all());
+            return response()->json([
+                'message' => 'Administrador registrado correctamente',
+                'data' => $admin
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al registrar administrador', 'details' => $e->getMessage()], 500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function show($id)
     {
-        //
-        $administrador = Administrador::findOrFail($id);
-        $administrador->delete();
-        return response()->json(null, 204);
+        try {
+            $admin = Administrador::with('usuario')->findOrFail($id);
+            return response()->json($admin);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Administrador no encontrado'], 404);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $admin = Administrador::findOrFail($id);
+            $admin->update($request->all());
+            return response()->json(['message' => 'Administrador actualizado correctamente', 'data' => $admin]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Administrador no encontrado'], 404);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $admin = Administrador::findOrFail($id);
+            $admin->delete();
+            return response()->json(['message' => 'Administrador eliminado correctamente']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Administrador no encontrado'], 404);
+        }
     }
 }

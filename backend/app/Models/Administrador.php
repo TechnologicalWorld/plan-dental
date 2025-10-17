@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Administrador extends Model
 {
+    use HasFactory;
     protected $table = 'administrador';
-    protected $primaryKey = 'idUsuario';
-    protected $keyType = 'string';
+    protected $primaryKey = 'idUsuario_ADM';
+    protected $keyType = 'int';
     public $incrementing = false;
 
     protected $fillable = [
-        'idUsuario'
+        'idUsuario_ADM'
     ];
 
     public function usuario(){
-        return $this->belongsTo(Usuario::class,'idUsuario','idUsuario');
+        return $this->belongsTo(Usuario::class,'idUsuario_ADM','idUsuario');
     }
 }

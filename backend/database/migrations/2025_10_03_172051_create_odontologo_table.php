@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('odontologo', function (Blueprint $table) {
-            $table->unsignedBigInteger('idUsuario')->primary();
-            $table->foreign('idUsuario')->references('idUsuario')->on('usuario')->onDelete('cascade');
+            $table->unsignedBigInteger('idUsuario_Odontologo')->primary();
+            $table->foreign('idUsuario_Odontologo')->references('idUsuario')->on('usuario')->onDelete('cascade');
 
             $table->date('fechaContratacion')->nullable();
-            $table->time('horario');
+            $table->string('horario', 1000)->nullable();
             $table->timestamps();
         });
     }

@@ -32,25 +32,28 @@ class Usuario extends Autenticable
         'contrasena',
         'remember_token'
     ];
-
+    public function getAuthPassword()
+    {
+        return $this->contrasena;
+    }
     public function odontologo()
     {
-        return $this->hasOne(Odontologo::class, 'idUsuario');
+        return $this->hasOne(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario');
     }
 
     public function paciente()
     {
-        return $this->hasOne(Paciente::class, 'idUsuario');
+        return $this->hasOne(Paciente::class, 'idUsuario_Paciente', 'idUsuario');
     }
 
     public function administrador()
     {
-        return $this->hasOne(Administrador::class, 'idUsuario');
+        return $this->hasOne(Administrador::class, 'idUsuario_ADM', 'idUsuario');
     }
 
     public function asistente()
     {
-        return $this->hasOne(Asistente::class, 'idUsuario');
+        return $this->hasOne(Asistente::class, 'idUsuario_Asistente', 'idUsuario');
     }
 
     public function isOdontologo()
@@ -72,6 +75,11 @@ class Usuario extends Autenticable
     {
         return $this->asistente !== null;
     }
+
+    protected $casts = [
+    'fechaNacimiento' => 'date',
+    'estado' => 'boolean',
+    ];
 
     public function getRoles()
     {

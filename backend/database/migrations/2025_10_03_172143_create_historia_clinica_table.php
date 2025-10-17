@@ -13,6 +13,21 @@ return new class extends Migration
     {
         Schema::create('historia_clinica', function (Blueprint $table) {
             $table->id('idHistoriaClinica');
+            $table->text('antecedentesPatologicos')->nullable();
+            $table->text('motivoConsulta')->nullable();
+            $table->text('signosVitales')->nullable();
+            $table->text('descripcionSignosSintomasDentales')->nullable();
+            $table->text('examenClinicoBucoDental')->nullable();
+            $table->text('observaciones')->nullable();
+            $table->text('enfermedadActual')->nullable();
+
+            $table->unsignedBigInteger('idPaciente');
+            $table->unsignedBigInteger('idOdontologo');
+
+            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
+            $table->foreign('idOdontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+
+
             $table->timestamps();
         });
     }

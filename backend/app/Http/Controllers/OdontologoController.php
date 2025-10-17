@@ -5,74 +5,98 @@ namespace App\Http\Controllers;
 use App\Models\Odontologo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OdontologoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        return Odontologo::with('usuario')->get();
+        $perPage = $request->get('per_page', 20);
+        $query = Odontologo::with(['usuario', 'especialidad']);
+        /** Kae esto solo es para filtros para las tablas */
+        if ($request->filled('search')) {
+            $query->whereHas('usuario', function ($q) use ($request) {
+                $q->where('nombre', 'like', "%{$request->search}%")
+                  ->orWhere('paterno', 'like', "%{$request->search}%");
+            });
+        }
+
+        return response()->json($query->paginate($perPage));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    /** Crea un nuevo odontologo*/
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'idUsuario' => 'required|exists:usuario,idUsuario',
-            'fechaContratacion' => 'date|nullable',
-            'horario' => 'required|date_format:H:i',
+            'fechaContratacion' => 'required|date',
+            'horario' => 'required|string|max:100',
+            'idEspecialidad' => 'required|exists:especialidad,idEspecialidad',
+            'idUsuario_Odontologo' => 'required|exists:usuario,idUsuario',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $odontologo = Odontologo::create($request->all());
-        return response()->json($odontologo, 201);
+        try {
+            $odontologo = Odontologo::create($request->all());
+            return response()->json([
+                'message' => 'Odontologo registrado exitosamente',
+                'data' => $odontologo
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al registrar odontologo', 'details' => $e->getMessage()], 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    /** Muestra un odontologo específico */
+    public function show($id)
     {
-        //
-        return Odontologo::with('usuario')->findOrFail($id);
+        try {
+            $odontologo = Odontologo::with(['usuario', 'especialidad'])->findOrFail($id);
+            return response()->json($odontologo);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Odontologo no encontrado'], 404);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    /** Actualiza un odontologo existente */
+    public function update(Request $request, $id)
     {
-        //
-        $odontologo = Odontologo::findOrFail($id);
         $validator = Validator::make($request->all(), [
-            'idUsuario' => 'exists:usuario,idUsuario',
-            'fechaContratacion' => 'date|nullable',
-            'horario' => 'required|date_format:H:i',
+            'fechaContratacion' => 'nullable|date',
+            'horario' => 'nullable|string|max:100',
+            'idEspecialidad' => 'nullable|exists:especialidad,idEspecialidad',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 244);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $odontologo->update(request()->all());
-        return response()->json($odontologo);
+        try {
+            $odontologo = Odontologo::findOrFail($id);
+            $odontologo->update($request->all());
+
+            return response()->json([
+                'message' => 'Odontologo actualizado correctamente',
+                'data' => $odontologo
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Odontologo no encontrado'], 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    /** Elimina un odontologo */
+    public function destroy($id)
     {
-        //
-        $odontologo = Odontologo::findOrFail($id);
-        $odontologo->delete();
-        return response()->json(null, 204);
+        try {
+            $odontologo = Odontologo::findOrFail($id);
+            $odontologo->delete();
+
+            return response()->json(['message' => 'Odontologo eliminado correctamente'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Odontologo no encontrado'], 404);
+        }
     }
 }

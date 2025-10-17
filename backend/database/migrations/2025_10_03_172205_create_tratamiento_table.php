@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tratamiento', function (Blueprint $table) {
-            $table->id();
+            $table->id('idTratamiento');
+            $table->string('nombre', 100);
+            $table->decimal('precio', 10,2)->nullable();
+ 
+            $table->unsignedBigInteger('idCita')->nullable();
+            $table->foreign('idCita')->references('idCita')->on('cita')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

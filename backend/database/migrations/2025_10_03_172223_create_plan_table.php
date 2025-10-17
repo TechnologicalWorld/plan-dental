@@ -12,7 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plan', function (Blueprint $table) {
-            $table->id();
+            $table->id('idPlan');
+            $table->text('observacion')->nullable();
+            $table->text('medicamentos')->nullable();
+            $table->integer('duracionTotal')->nullable();
+            $table->integer('duracionEstimada')->nullable();
+
+            $table->unsignedBigInteger('idPaciente');
+            $table->unsignedBigInteger('idOdontograma');
+
+            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
+            $table->foreign('idOdontograma')->references('idOdontograma')->on('odontograma')->onDelete('cascade');
             $table->timestamps();
         });
     }
