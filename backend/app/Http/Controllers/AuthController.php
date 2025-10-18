@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -105,7 +106,7 @@ class AuthController extends Controller
         $usuario = Usuario::create(
             $request->all()
         );
-        $request['idPaciente'] = $usuario->idUsuario;
+        $request['idUsuario_Paciente'] = $usuario->idUsuario;
 
         
         $usuario->paciente()->create(
