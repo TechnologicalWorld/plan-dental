@@ -6,6 +6,7 @@ use App\Models\Odontologo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Routing\Controller;
 
 class OdontologoController extends Controller
 {
