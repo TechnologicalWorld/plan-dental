@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('tipo', 50)->nullable();
             $table->string('estado', 50)->nullable();
 
-            $table->unsignedBigInteger('idPaciente');
-            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
+            $table->unsignedBigInteger('idUsuario_Paciente');
+            $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

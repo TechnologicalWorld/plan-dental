@@ -18,7 +18,7 @@ class PlanFactory extends Factory
             'medicamentos' => $this->faker->words(3, true),
             'duracionTotal' => $this->faker->numberBetween(1, 60),
             'duracionEstimada' => $this->faker->numberBetween(1, 60),
-            'idPaciente' => Paciente::factory(),
+            'idUsuario_Paciente' => Paciente::factory(),
             'idOdontograma' => Odontograma::factory(),
         ];
     }

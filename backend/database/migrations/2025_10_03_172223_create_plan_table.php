@@ -18,10 +18,10 @@ return new class extends Migration
             $table->integer('duracionTotal')->nullable();
             $table->integer('duracionEstimada')->nullable();
 
-            $table->unsignedBigInteger('idPaciente');
+            $table->unsignedBigInteger('idUsuario_Paciente');
             $table->unsignedBigInteger('idOdontograma');
 
-            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
+            $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
             $table->foreign('idOdontograma')->references('idOdontograma')->on('odontograma')->onDelete('cascade');
             $table->timestamps();
         });

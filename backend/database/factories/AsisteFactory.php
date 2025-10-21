@@ -16,8 +16,8 @@ class AsisteFactory extends Factory
     {
         return [
             'idSesion' => Sesion::factory(),
-            'idPaciente' => Paciente::factory(),
-            'idOdontologo' => Odontologo::factory(),
+            'idUsuario_Paciente' => Paciente::factory(),
+            'idUsuario_Odontologo' => Odontologo::factory(),
             'fecha' => $this->faker->date(),
         ];
     }

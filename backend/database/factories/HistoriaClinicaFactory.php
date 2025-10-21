@@ -21,8 +21,8 @@ class HistoriaClinicaFactory extends Factory
             'examenClinicoBucoDental' => $this->faker->paragraph(),
             'observaciones' => $this->faker->sentence(),
             'enfermedadActual' => $this->faker->sentence(),
-            'idPaciente' => Paciente::factory(),
-            'idOdontologo' => Odontologo::factory(),
+            'idUsuario_Paciente' => Paciente::factory(),
+            'idUsuario_Odontologo' => Odontologo::factory(),
         ];
     }
 }

@@ -19,9 +19,7 @@ class OdontogramaFactory extends Factory
         return [
             'nombre' => $this->faker->word,
             'descripcion' => $this->faker->sentence,
-            'observacion' => $this->faker->sentence,
-            'idPaciente' => Paciente::factory(),
-            'idOdontologo' => Odontologo::factory(),
+            'fecha' => $this->faker->date()
         ];
     }
 }

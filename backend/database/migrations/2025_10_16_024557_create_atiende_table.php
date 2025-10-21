@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('atiende', function (Blueprint $table) {
         $table->id();
-        $table->unsignedBigInteger('idOdontologo');
+        $table->unsignedBigInteger('idUsuario_Odontologo');
         $table->unsignedBigInteger('idCita');
         $table->date('fecha')->nullable();
 
-        $table->foreign('idOdontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+        $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
         $table->foreign('idCita')->references('idCita')->on('cita')->onDelete('cascade');
 
 

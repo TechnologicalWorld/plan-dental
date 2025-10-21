@@ -15,7 +15,7 @@ class TieneFactory extends Factory
     {
         return [
             'idEspecialidad' => Especialidad::factory(),
-            'idOdontologo' => Odontologo::factory(),
+            'idUsuario_Odontologo' => Odontologo::factory(),
         ];
     }
 }

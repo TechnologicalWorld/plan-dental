@@ -18,6 +18,6 @@ use HasFactory;
 
     public function odontologos()
     {
-        return $this->belongsToMany(Odontologo::class, 'tiene', 'idEspecialidad', 'idOdontologo');
+        return $this->belongsToMany(Odontologo::class, 'tiene', 'idEspecialidad', 'idUsuario_Odontologo');
     }
 }

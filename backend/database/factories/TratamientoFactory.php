@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Tratamiento;
 use App\Models\Odontologo;
+use App\Models\Cita;
 
 class TratamientoFactory extends Factory
 {
@@ -14,10 +15,8 @@ class TratamientoFactory extends Factory
     {
         return [
             'nombre' => $this->faker->word(),
-            'descripcion' => $this->faker->sentence(),
-            'costo' => $this->faker->randomFloat(2, 50, 500),
-            'duracion' => $this->faker->numberBetween(1, 10) . ' días',
-            'idOdontologo' => Odontologo::factory(),
+            'precio' => $this->faker->randomFloat(2, 50, 500),
+            'idCita' => Cita::factory(),
         ];
     }
 }

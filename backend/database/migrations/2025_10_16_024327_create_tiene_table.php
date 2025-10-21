@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('tiene', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('idEspecialidad');
-        $table->unsignedBigInteger('idOdontologo');
+        $table->unsignedBigInteger('idUsuario_Odontologo');
 
         $table->foreign('idEspecialidad')->references('idEspecialidad')->on('especialidad')->onDelete('cascade');
-        $table->foreign('idOdontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+        $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
 
         $table->timestamps();
         });

@@ -16,10 +16,10 @@ class HaceFactory extends Factory
     public function definition()
     {
         return [
-            'idPaciente' => Paciente::factory(),
+            'idUsuario_Paciente' => Paciente::factory(),
             'idCita' => Cita::factory(),
-            'idAsistente' => Asistente::factory(),
-            'idOdontologo' => Odontologo::factory(),
+            'idUsuario_Asistente' => Asistente::factory(),
+            'idUsuario_Odontologo' => Odontologo::factory(),
             'fecha' => $this->faker->date(),
         ];
     }

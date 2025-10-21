@@ -14,7 +14,7 @@ class AtiendeFactory extends Factory
     public function definition()
     {
         return [
-            'idOdontologo' => Odontologo::factory(),
+            'idUsuario_Odontologo' => Odontologo::factory(),
             'idCita' => Cita::factory(),
             'fecha' => $this->faker->date(),
         ];

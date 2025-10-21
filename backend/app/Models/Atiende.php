@@ -15,7 +15,7 @@ class Atiende extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'idOdontologo', 
+        'idUsuario_Odontologo', 
         'idCita', 
         'fecha'
     ];
@@ -25,7 +25,7 @@ class Atiende extends Model
     ];
 
     public function odontologo() { 
-        return $this->belongsTo(Odontologo::class, 'idOdontologo', 'idUsuario_Odontologo');
+        return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo');
     }
     public function cita() { 
         return $this->belongsTo(Cita::class, 'idCita', 'idCita'); 

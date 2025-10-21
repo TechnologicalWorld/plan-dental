@@ -19,13 +19,13 @@ class Plan extends Model
         'medicamentos',
         'duracionTotal',
         'duracionEstimada',
-        'idPaciente',
+        'idUsuario_Paciente',
         'idOdontograma'
     ];
 
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class, 'idPaciente', 'idUsuario_Paciente');
+        return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
     }
 
     public function odontograma()

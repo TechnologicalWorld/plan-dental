@@ -16,8 +16,8 @@ class EfectuaFactory extends Factory
     {
         return [
             'idOdontograma' => Odontograma::factory(),
-            'idOdontologo' => Odontologo::factory(),
-            'idPaciente' => Paciente::factory(),
+            'idUsuario_Odontologo' => Odontologo::factory(),
+            'idUsuario_Paciente' => Paciente::factory(),
             'fecha' => $this->faker->date(),
         ];
     }

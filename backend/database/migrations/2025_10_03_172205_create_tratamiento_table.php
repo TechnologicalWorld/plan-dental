@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('idTratamiento');
             $table->string('nombre', 100);
             $table->decimal('precio', 10,2)->nullable();
- 
             $table->unsignedBigInteger('idCita')->nullable();
             $table->foreign('idCita')->references('idCita')->on('cita')->onDelete('cascade');
 

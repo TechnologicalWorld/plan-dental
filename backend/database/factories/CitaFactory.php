@@ -14,12 +14,13 @@ class CitaFactory extends Factory
     public function definition()
     {
         return [
-            'fecha' => $this->faker->date(),
             'hora' => $this->faker->time('H:i:s'),
-            'motivo' => $this->faker->sentence(),
-            'estado' => $this->faker->randomElement(['pendiente', 'realizada', 'cancelada']),
-            'idPaciente' => Paciente::factory(),
-            'idOdontologo' => Odontologo::factory(),
+            'fecha' => $this->faker->date(),
+            'estado' => $this->faker->randomElement(['cancelada', 'cumplida', 'pospuesta']),
+            'tipoCita' => $this->faker->randomElement(['consulta', 'limpieza', 'extracción', 'tratamiento']),
+            'costo' => $this->faker->randomFloat(2, 50, 500),
+            'pagado' => $this->faker->randomFloat(2, 0, 500),
+            
         ];
     }
 }

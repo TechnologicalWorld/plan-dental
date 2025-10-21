@@ -14,6 +14,8 @@ class AccionFactory extends Factory
         return [
             'nombre' => $this->faker->word(),
             'color' => $this->faker->hexColor(),
+
+            
         ];
     }
 }

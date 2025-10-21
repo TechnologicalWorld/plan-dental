@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('asiste', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idSesion');
-            $table->unsignedBigInteger('idPaciente');
-            $table->unsignedBigInteger('idOdontologo');
+            $table->unsignedBigInteger('idUsuario_Paciente');
+            $table->unsignedBigInteger('idUsuario_Odontologo');
             $table->date('fecha')->nullable();
 
             $table->foreign('idSesion')->references('idSesion')->on('sesion')->onDelete('cascade');
-            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
-            $table->foreign('idOdontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+            $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
+            $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
             $table->timestamps();
         });
     }

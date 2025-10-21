@@ -20,11 +20,11 @@ class PiezaDental extends Model
         'nombre',
         'tipo',
         'estado',
-        'idPaciente'
+        'idUsuario_Paciente'
     ];
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class, 'idPaciente', 'idUsuario_Paciente');
+        return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
     }
     public function detalle(){
         return $this->hasMany(DetalleDental::class, 'idPiezaDental', 'idPieza');

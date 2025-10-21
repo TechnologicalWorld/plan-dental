@@ -21,11 +21,11 @@ return new class extends Migration
             $table->text('observaciones')->nullable();
             $table->text('enfermedadActual')->nullable();
 
-            $table->unsignedBigInteger('idPaciente');
-            $table->unsignedBigInteger('idOdontologo');
+            $table->unsignedBigInteger('idUsuario_Paciente');
+            $table->unsignedBigInteger('idUsuario_Odontologo');
 
-            $table->foreign('idPaciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
-            $table->foreign('idOdontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+            $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
+            $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
 
 
             $table->timestamps();

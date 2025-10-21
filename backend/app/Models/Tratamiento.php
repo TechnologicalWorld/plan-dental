@@ -19,10 +19,10 @@ class Tratamiento extends Model
         'descripcion',
         'costo',
         'duracion',
-        'idOdontologo'
+        'idUsuario_Odontologo'
     ];
     public function odontologo()
     {
-        return $this->belongsTo(Odontologo::class, 'idOdontologo', 'idUsuario_Odontologo');
+        return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo');
     }
 }

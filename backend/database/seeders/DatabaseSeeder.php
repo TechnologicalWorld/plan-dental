@@ -23,12 +23,12 @@ use App\Models\Efectua;
 use App\Models\Evalua;
 use App\Models\Hace;
 use App\Models\Tiene;
+use App\Models\Sesion;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 🔹 Crear usuarios base
         $adminUsuario = Usuario::factory()->create([
             'nombre' => 'Admin',
             'paterno' => 'Principal',
@@ -46,8 +46,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $pacienteUsuario = Usuario::factory()->create([
-            'nombre' => 'prueba',
-            'paterno' => 'prueba2',
+            'nombre' => 'Prueba',
+            'paterno' => 'Paciente',
             'correo' => 'paciente@clinicadental.com',
             'contrasena' => bcrypt('123456789'),
             'estado' => true,
@@ -55,99 +55,102 @@ class DatabaseSeeder extends Seeder
 
         $asistenteUsuario = Usuario::factory()->create([
             'nombre' => 'Kae',
-            'paterno' => 'K de apellido',
+            'paterno' => 'Apellido',
             'correo' => 'asistente@clinicadental.com',
             'contrasena' => bcrypt('123456789'),
             'estado' => true,
         ]);
+        $admin = Administrador::factory()->create([
+            'idUsuario_ADM' => $adminUsuario->idUsuario,
+        ]);
 
-        // Crear roles derivados
-        $admin = Administrador::factory()->create(['idUsuario_ADM' => $adminUsuario->idUsuario]);
-        $odontologo = Odontologo::factory()->create(['idUsuario_Odontologo' => $odontologoUsuario->idUsuario]);
-        $paciente = Paciente::factory()->create(['idUsuario_Paciente' => $pacienteUsuario->idUsuario]);
-        $asistente = Asistente::factory()->create(['idUsuario_Asistente' => $asistenteUsuario->idUsuario]);
+        $odontologo = Odontologo::factory()->create([
+            'idUsuario_Odontologo' => $odontologoUsuario->idUsuario,
+        ]);
 
-        // Crear especialidades y asignarlas al odontólogo
+        $paciente = Paciente::factory()->create([
+            'idUsuario_Paciente' => $pacienteUsuario->idUsuario,
+        ]);
+
+        $asistente = Asistente::factory()->create([
+            'idUsuario_Asistente' => $asistenteUsuario->idUsuario,
+        ]);
+
         $especialidades = Especialidad::factory(3)->create();
         foreach ($especialidades as $esp) {
             Tiene::factory()->create([
-                'idOdontologo' => $odontologo->idUsuario_Odontologo,
+                'idUsuario_Odontologo' => $odontologo->idUsuario_Odontologo,
                 'idEspecialidad' => $esp->idEspecialidad,
             ]);
         }
 
-        // Crear historias clínicas
         $historia = HistoriaClinica::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
-            'idOdontologo' => $odontologo->idUsuario_Odontologo,
+            'idUsuario_Paciente' => $paciente->idUsuario_Paciente,
+            'idUsuario_Odontologo' => $odontologo->idUsuario_Odontologo,
         ]);
 
-        // Crear citas
         $cita = Cita::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
-            'idOdontologo' => $odontologo->idUsuario_Odontologo,
             'estado' => 'cumplida',
         ]);
 
-        // Crear odontogramas
         $odontograma = Odontograma::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
-            'idOdontologo' => $odontologo->idUsuario_Odontologo,
             'nombre' => 'Odontograma Inicial',
         ]);
 
-        // Crear piezas dentales con detalles
-        $piezas = PiezaDental::factory(5)->create(['idPaciente' => $paciente->idUsuario_Paciente]);
+        $piezas = PiezaDental::factory(5)->create([
+            'idUsuario_Paciente' => $paciente->idUsuario_Paciente,
+        ]);
+
         foreach ($piezas as $pieza) {
             $acciones = Accion::factory(2)->create();
             foreach ($acciones as $accion) {
                 DetalleDental::factory()->create([
-                    'idPiezaDental' => $pieza->idPiezaDental,
+                    'idPiezaDental' => $pieza->idPieza,
                     'idAccion' => $accion->idAccion,
                 ]);
             }
 
             Evolucion::factory()->create([
-                'idPiezaDental' => $pieza->idPiezaDental,
-                'idOdontologo' => $odontologo->idUsuario_Odontologo,
+                'idPieza' => $pieza->idPieza,
             ]);
         }
 
-        //Crear plan de tratamiento
         $plan = Plan::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
+            'idUsuario_Paciente' => $paciente->idUsuario_Paciente,
             'idOdontograma' => $odontograma->idOdontograma,
-            'descripcion' => 'Plan integral de rehabilitación dental',
+            'observacion' => 'Plan integral de rehabilitación dental',
         ]);
 
-        //Registrar asistencias, atenciones y acciones
+        $sesion = Sesion::factory()->create();
         Asiste::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
-            'idOdontologo' => $odontologo->idUsuario_Odontologo,
+            'idSesion' => $sesion->idSesion,
+            'idUsuario_Paciente' => $paciente->idUsuario_Paciente,
+            'idUsuario_Odontologo' => $odontologo->idUsuario_Odontologo,
         ]);
 
         Atiende::factory()->create([
             'idCita' => $cita->idCita,
-            'idOdontologo' => $odontologo->idUsuario_Odontologo,
+            'idUsuario_Odontologo' => $odontologo->idUsuario_Odontologo,
         ]);
 
         Efectua::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
+            'idUsuario_Paciente' => $paciente->idUsuario_Paciente,
             'idOdontograma' => $odontograma->idOdontograma,
+            'idUsuario_Odontologo' => $odontologo->idUsuario_Odontologo,
         ]);
 
         Evalua::factory()->create([
-            'idSesion' => 1,
+            'idSesion' => $sesion->idSesion,
             'idOdontograma' => $odontograma->idOdontograma,
         ]);
 
         Hace::factory()->create([
-            'idPaciente' => $paciente->idUsuario_Paciente,
+            'idUsuario_Paciente' => $paciente->idUsuario_Paciente,
             'idCita' => $cita->idCita,
-            'idAsistente' => $asistente->idUsuario_Asistente,
-            'idOdontologo' => $odontologo->idUsuario_Odontologo,
+            'idUsuario_Asistente' => $asistente->idUsuario_Asistente,
+            'idUsuario_Odontologo' => $odontologo->idUsuario_Odontologo,
         ]);
 
-        $this->command->info('Datos de ejemplo OK de Clínica Dental');
+        $this->command->info('Posi en subir ahora si OKKKKKK');
     }
 }

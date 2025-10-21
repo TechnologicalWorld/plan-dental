@@ -16,13 +16,13 @@ class Tiene extends Model
 
     protected $fillable = [
         'idEspecialidad', 
-        'idOdontologo'
+        'idUsuario_Odontologo'
     ];
 
     public function especialidad() { 
         return $this->belongsTo(Especialidad::class, 'idEspecialidad', 'idEspecialidad'); 
     }
     public function odontologo() { 
-        return $this->belongsTo(Odontologo::class, 'idOdontologo', 'idUsuario_Odontologo'); 
+        return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo'); 
     }
 }

@@ -17,7 +17,7 @@ class PiezaDentalFactory extends Factory
             'nombre' => $this->faker->word(),
             'tipo' => $this->faker->randomElement(['Incisivo','Canino','Molar','Premolar']),
             'estado' => $this->faker->randomElement(['sano','cariado','restaurado']),
-            'idPaciente' => Paciente::factory(),
+            'idUsuario_Paciente' => Paciente::factory(),
         ];
     }
 }

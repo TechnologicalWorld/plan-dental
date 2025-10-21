@@ -16,8 +16,8 @@ class Asiste extends Model
 
     protected $fillable = [
         'idSesion',
-        'idPaciente', 
-        'idOdontologo', 
+        'idUsuario_Paciente', 
+        'idUsuario_Odontologo', 
         'fecha'
     ];
 
@@ -27,9 +27,9 @@ class Asiste extends Model
         return $this->belongsTo(Sesion::class, 'idSesion', 'idSesion');
     }
     public function paciente() { 
-        return $this->belongsTo(Paciente::class, 'idPaciente', 'idUsuario_Paciente'); 
+        return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente'); 
     }
     public function odontologo() { 
-        return $this->belongsTo(Odontologo::class, 'idOdontologo', 'idUsuario_Odontologo'); 
+        return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo'); 
     }
 }
