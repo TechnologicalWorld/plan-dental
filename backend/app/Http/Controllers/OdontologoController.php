@@ -14,7 +14,7 @@ class OdontologoController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->get('per_page', 20);
-        $query = Odontologo::with(['usuario', 'especialidad']);
+        $query = Odontologo::with(['usuario', 'especialidades']);
         /** Kae esto solo es para filtros para las tablas */
         if ($request->filled('search')) {
             $query->whereHas('usuario', function ($q) use ($request) {

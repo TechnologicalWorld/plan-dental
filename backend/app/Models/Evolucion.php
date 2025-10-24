@@ -37,4 +37,5 @@ class Evolucion extends Model
     {
         return $this->belongsTo(PiezaDental::class, 'idPieza', 'idPieza');
     }
+    
 }

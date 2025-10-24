@@ -17,7 +17,7 @@ class AccionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:100',
-            'descripcion' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -37,7 +37,7 @@ class AccionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'string|max:100',
-            'descripcion' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {

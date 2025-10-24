@@ -17,11 +17,9 @@ class AtiendeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci_odontologo' => 'required|string|exists:odontologo,ci',
-            'ci_paciente' => 'required|string|exists:paciente,ci',
+            'idUsuario_Odontologo' => 'required|exists:odontologo,idUsuario_Odontologo',
+            'idCita' => 'required|exists:cita,idCita',
             'fecha' => 'required|date',
-            'hora' => 'required|string|max:10',
-            'motivo' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -40,11 +38,9 @@ class AtiendeController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'ci_odontologo' => 'string|exists:odontologo,ci',
-            'ci_paciente' => 'string|exists:paciente,ci',
+            'idUsuario_Odontologo' => 'exists:odontologo,idUsuario_Odontologo',
+            'idCita' => 'exists:cita,idCita',
             'fecha' => 'date',
-            'hora' => 'string|max:10',
-            'motivo' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {

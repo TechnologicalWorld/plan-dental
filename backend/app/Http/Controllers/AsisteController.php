@@ -16,10 +16,10 @@ class AsisteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci_asistente' => 'required|exists:asistente,ci',
-            'id_sesion' => 'required|exists:sesion,id',
-            'turno' => 'nullable|string|max:20',
-            'fecha' => 'required|date',
+            'idSesion'=>'required|exists:sesion,idSesion',
+            'idUsuario_Paciente'=>'required|exists:paciente,idUsuario_Paciente',
+            'idUsuario_Odontologo'=>'required|exists:odontologo,idUsuario_Odontologo',
+            'fecha'=>'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -38,8 +38,10 @@ class AsisteController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'turno' => 'nullable|string|max:20',
-            'fecha' => 'date',
+            'idSesion'=>'exists:sesion,idSesion',
+            'idUsuario_Paciente'=>'exists:paciente,idUsuario_Paciente',
+            'idUsuario_Odontologo'=>'exists:odontologo,idUsuario_Odontologo',
+            'fecha'=>'date',
         ]);
 
         if ($validator->fails()) {

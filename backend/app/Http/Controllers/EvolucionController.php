@@ -11,7 +11,7 @@ class EvolucionController extends Controller
 {
     public function index()
     {
-        return response()->json(Evolucion::with(['paciente', 'odontologo'])->paginate(10));
+        return response()->json(Evolucion::with(['tratamiento', 'pieza'])->paginate(10));
     }
 
     public function store(Request $request)
