@@ -16,6 +16,7 @@ class SesionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+
             'nombre' => 'required|string|max:100',
             'descripcion' => 'nullable|string|max:255',
             'hora' => 'required|string|max:10',

@@ -16,10 +16,10 @@ class Cita extends Model
     protected $fillable = [
         'fecha',
         'hora',
-        'motivo',
+        'tipoCita',
         'estado',
-        'idUsuario_Paciente',
-        'idUsuario_Odontologo'
+        'pagado',
+        'costo'
     ];
     
     protected $casts = [

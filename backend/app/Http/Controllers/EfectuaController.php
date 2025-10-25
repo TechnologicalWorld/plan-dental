@@ -16,11 +16,10 @@ class EfectuaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci_asistente' => 'required|exists:asistente,ci',
-            'id_sesion' => 'required|exists:sesion,id',
-            'observacion' => 'nullable|string|max:255',
-            'hora_inicio' => 'required|string|max:10',
-            'hora_fin' => 'nullable|string|max:10',
+            'idOdontograma' => 'required|exists:odontograma,idOdontograma',
+            'idUsuario_Odontologo'=>'required|exists:odontologo,idUsuario_Odontologo',
+            'idUsuario_Paciente'=>'required|exists:paciente,idUsuario_Paciente',
+            'fecha'=>'required|date',
         ]);
 
         if ($validator->fails()) {

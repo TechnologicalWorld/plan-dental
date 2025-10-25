@@ -16,11 +16,13 @@ class CitaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci_paciente' => 'required|exists:paciente,ci',
             'fecha' => 'required|date',
             'hora' => 'required|string|max:10',
             'estado' => 'nullable|string|max:50',
             'observacion' => 'nullable|string|max:255',
+            'tipoCita'=> 'nullable|string',
+            'costo'=> 'required|numeric',
+            'pagado' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {

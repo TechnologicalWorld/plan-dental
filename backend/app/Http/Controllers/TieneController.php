@@ -17,10 +17,9 @@ class TieneController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci_paciente' => 'required|exists:paciente,ci',
-            'id_plan' => 'required|exists:plan,id',
-            'fecha_asignacion' => 'required|date',
-            'estado' => 'nullable|string|max:50',
+            "idEspecialidad" => 'required|exists:especialidad,idEspecialidad',
+            "idUsuario_Odontologo" => 'required|exists:odontologo,idUsuario_Odontologo',
+
         ]);
 
         if ($validator->fails()) {
@@ -39,8 +38,9 @@ class TieneController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'fecha_asignacion' => 'date',
-            'estado' => 'nullable|string|max:50',
+            "idEspecialidad" => 'required|exists:especialidad,idEspecialidad',
+            "idUsuario_Odontologo" => 'required|exists:odontologo,idUsuario_Odontologo',
+
         ]);
 
         if ($validator->fails()) {

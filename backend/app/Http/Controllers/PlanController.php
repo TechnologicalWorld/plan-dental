@@ -17,9 +17,12 @@ class PlanController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:100',
-            'descripcion' => 'nullable|string',
-            'costo' => 'required|numeric|min:0'
+            "observacion" => "nullable|string",
+            "medicamentos" => "nullable|string",
+            "duracionTotal" => "nullable|int",
+            "duracionEstimada" => 'nullable|int',
+            "idUsuario_Paciente" => 'required|exists:paciente,idUsuario_Paciente',
+            "idOdontograma" => 'required|exists:odontograma,idOdontograma',
         ]);
 
         if ($validator->fails())
@@ -42,6 +45,18 @@ class PlanController extends Controller
     {
         try {
             $plan = Plan::findOrFail($id);
+            $validator = Validator::make($request->all(), [
+                "observacion" => "nullable|string",
+                "medicamentos" => "nullable|string",
+                "duracionTotal" => "nullable|int",
+                "duracionEstimada" => 'nullable|int',
+                "idUsuario_Paciente" => 'required|exists:paciente,idUsuario_Paciente',
+                "idOdontograma" => 'required|exists:odontograma,idOdontograma',
+            ]);
+
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 422);
+
             $plan->update($request->all());
             return response()->json(['message' => 'Plan actualizado correctamente', 'data' => $plan]);
         } catch (ModelNotFoundException $e) {

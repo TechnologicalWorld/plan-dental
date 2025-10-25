@@ -19,7 +19,8 @@ class Hace extends Model
         'idCita', 
         'idUsuario_Asistente', 
         'idUsuario_Odontologo', 
-        'fecha'
+        'fecha',
+        
     ];
 
     protected $casts = [

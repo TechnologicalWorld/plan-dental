@@ -16,10 +16,10 @@ class HaceController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci_odontologo' => 'required|exists:odontologo,ci',
-            'id_plan' => 'required|exists:plan,id',
+            'idUsuario_Paciente' => 'required|exists:paciente,idUsuario_Paciente',
+            'idCita' => 'required|exists:cita,idCita',
+            'idUsuario_Asistente'=>'required|exists:asistente,idUsuario_Asistente',
             'fecha' => 'required|date',
-            'observacion' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -38,8 +38,10 @@ class HaceController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'idUsuario_Paciente' => 'exists:paciente,idUsuario_Paciente',
+            'idCita' => 'exists:cita,idCita',
+            'idUsuario_Asistente'=>'exists:asistente,idUsuario_Asistente',
             'fecha' => 'date',
-            'observacion' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {

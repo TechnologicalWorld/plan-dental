@@ -16,10 +16,9 @@ class EvaluaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_sesion' => 'required|exists:sesion,id',
-            'ci_odontologo' => 'required|exists:odontologo,ci',
-            'observacion' => 'nullable|string|max:255',
-            'resultado' => 'nullable|string|max:255',
+            'idSesion' => 'required|exists:sesion,idSesion',
+            'idOdontograma' => 'required|exists:odontograma,idOdontograma',
+            'fecha' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -38,8 +37,9 @@ class EvaluaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'observacion' => 'nullable|string|max:255',
-            'resultado' => 'nullable|string|max:255',
+            'idSesion' => 'exists:sesion,idSesion',
+            'idOdontograma' => 'exists:odontograma,idOdontograma',
+            'fecha' => 'date',
         ]);
 
         if ($validator->fails()) {

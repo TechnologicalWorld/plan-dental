@@ -16,11 +16,11 @@ class DetalleDentalController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_odontograma' => 'required|exists:odontograma,id',
-            'id_pieza_dental' => 'required|exists:pieza_dental,id',
-            'diagnostico' => 'nullable|string|max:255',
-            'tratamiento' => 'nullable|string|max:255',
-            'estado' => 'nullable|string|max:50',
+            'idAccion' => 'required|exists:accion,idAccion',
+            'idPiezaDental' => 'required|exists:pieza_dental,idPieza',
+            'descripcion' => 'nullable|string|max:255',
+            'fecha' => 'required|string|max:255',
+            'cuadrante' => 'required|string|max:50',
         ]);
 
         if ($validator->fails()) {
@@ -39,9 +39,11 @@ class DetalleDentalController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'diagnostico' => 'nullable|string|max:255',
-            'tratamiento' => 'nullable|string|max:255',
-            'estado' => 'nullable|string|max:50',
+            'idAccion' => 'exists:accion,idAccion',
+            'idPiezaDental' => 'exists:pieza_dental,idPieza',
+            'descripcion' => 'string|max:255',
+            'fecha' => 'string|max:255',
+            'cuadrante' => 'string|max:50',
         ]);
 
         if ($validator->fails()) {

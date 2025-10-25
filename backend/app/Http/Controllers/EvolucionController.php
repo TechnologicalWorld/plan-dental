@@ -17,11 +17,12 @@ class EvolucionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'fecha' => 'required|date',
-            'descripcion' => 'required|string|max:255',
-            'observacion' => 'nullable|string',
-            'idPaciente' => 'required|exists:paciente,idPaciente',
-            'idOdontologo' => 'required|exists:odontologo,idOdontologo'
+            "idTratamiento" => 'exists:tratamiento,idTratamiento',
+            "idPieza" => 'exists:pieza_dental,idPieza',
+            "fecha" => "nullable|date",
+            "hora" => "nullable|string",
+            "diagnosticoCIE" => "nullable|string",
+            "procedimientoIndicacion" => "nullable|string",
         ]);
 
         if ($validator->fails())
@@ -34,7 +35,7 @@ class EvolucionController extends Controller
     public function show($id)
     {
         try {
-            $evolucion = Evolucion::with(['paciente', 'odontologo'])->findOrFail($id);
+            $evolucion = Evolucion::with(['tratamiento', 'pieza'])->findOrFail($id);
             return response()->json($evolucion);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Evolución no encontrada'], 404);
@@ -44,7 +45,20 @@ class EvolucionController extends Controller
     public function update(Request $request, $id)
     {
         try {
+
             $evolucion = Evolucion::findOrFail($id);
+            $validator = Validator::make($request->all(), [
+                "idTratamiento" => 'exists:tratamiento,idTratamiento',
+                "idPieza" => 'exists:pieza_dental,idPieza',
+                "fecha" => "nullable|date",
+                "hora" => "nullable|string",
+                "diagnosticoCIE" => "nullable|string",
+                "procedimientoIndicacion" => "nullable|string",
+            ]);
+
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 422);
+
             $evolucion->update($request->all());
             return response()->json(['message' => 'Evolución actualizada correctamente', 'data' => $evolucion]);
         } catch (ModelNotFoundException $e) {

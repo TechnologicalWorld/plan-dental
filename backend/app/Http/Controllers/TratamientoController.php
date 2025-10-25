@@ -16,10 +16,9 @@ class TratamientoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            "precio" => "required|numeric|min:0",
+            "idCita" => "required|exists:cita,idCita",
             'nombre' => 'required|string|max:100|unique:tratamiento,nombre',
-            'descripcion' => 'nullable|string|max:255',
-            'costo' => 'required|numeric|min:0',
-            'duracion' => 'nullable|string|max:50',
         ]);
 
         if ($validator->fails()) {
@@ -38,10 +37,9 @@ class TratamientoController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'string|max:100|unique:tratamiento,nombre,' . $id,
-            'descripcion' => 'nullable|string|max:255',
-            'costo' => 'numeric|min:0',
-            'duracion' => 'nullable|string|max:50',
+            "precio" => "required|numeric|min:0",
+            "idCita" => "required|exists:cita,idCita",
+            'nombre' => 'required|string|max:100|unique:tratamiento,nombre',
         ]);
 
         if ($validator->fails()) {
