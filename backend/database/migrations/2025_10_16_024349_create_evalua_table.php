@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evalua', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idSesion');
             $table->unsignedBigInteger('idOdontograma');
-            $table->date('fecha')->nullable();
+            $table->date('fecha');
 
             $table->foreign('idSesion')->references('idSesion')->on('sesion')->onDelete('cascade');
             $table->foreign('idOdontograma')->references('idOdontograma')->on('odontograma')->onDelete('cascade');
-
-            $table->timestamps();
+            
+            $table->primary(['idSesion', 'idOdontograma']);
         });
     }
 

@@ -10,9 +10,8 @@ class Evalua extends Model
     use HasFactory;
 
     protected $table = 'evalua';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'idSesion',
@@ -20,7 +19,9 @@ class Evalua extends Model
         'fecha'
     ];
 
-    protected $casts = ['fecha' => 'date'];
+    protected $casts = [
+        'fecha' => 'date'
+    ];
 
     public function sesion()
     {

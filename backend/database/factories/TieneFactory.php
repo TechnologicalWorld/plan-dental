@@ -18,4 +18,6 @@ class TieneFactory extends Factory
             'idUsuario_Odontologo' => Odontologo::factory(),
         ];
     }
+
+    
 }

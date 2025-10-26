@@ -12,19 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hace', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idUsuario_Paciente');
             $table->unsignedBigInteger('idCita');
-            $table->unsignedBigInteger('idUsuario_Asistente')->nullable();
+            $table->unsignedBigInteger('idUsuario_Asistente');
             $table->unsignedBigInteger('idUsuario_Odontologo');
-            $table->date('fecha')->nullable();
+            $table->date('fecha');
 
             $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
             $table->foreign('idCita')->references('idCita')->on('cita')->onDelete('cascade');
             $table->foreign('idUsuario_Asistente')->references('idUsuario_Asistente')->on('asistente')->onDelete('cascade');
             $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
-
-            $table->timestamps();
+            
+            $table->primary(['idUsuario_Paciente', 'idCita', 'idUsuario_Asistente', 'idUsuario_Odontologo']);
         });
     }
 

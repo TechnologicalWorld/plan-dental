@@ -15,12 +15,25 @@ class Accion extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['nombre', 'color'];
+    protected $fillable = [
+        'nombre',
+        'color'
+    ];
+
+    public function piezasDentales()
+    {
+        return $this->belongsToMany(PiezaDental::class, 'detalle_dental', 'idAccion', 'idPiezaDental')->withPivot('descripcion', 'fecha', 'cuadrante');
+    }
 
     public function detalles()
     {
         return $this->hasMany(DetalleDental::class, 'idAccion', 'idAccion');
     }
+    public function detalleDentalRelaciones()
+    {
+        return $this->hasMany(DetalleDental::class, 'idAccion', 'idAccion');
+    }
+    
 
 }
 

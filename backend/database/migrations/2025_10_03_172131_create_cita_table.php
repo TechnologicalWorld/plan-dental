@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('idCita');
             $table->time('hora')->nullable();
             $table->date('fecha')->nullable();
-            $table->enum('estado', ['cancelada', 'cumplida', 'pospuesta']);
+            $table->enum('estado', ['pendiente', 'confirmada', 'completada', 'cancelada']);
             $table->string('tipoCita', 100)->nullable();
             $table->decimal('costo',8,2);
             $table->decimal('pagado',8,2);

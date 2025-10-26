@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('pieza_dental', function (Blueprint $table) {
             $table->id('idPieza');
-            $table->string('pocision', 20)->nullable();
+            $table->string('posicion', 20)->nullable();
             $table->string('nombre', 50)->nullable();
             $table->string('tipo', 50)->nullable();
             $table->string('estado', 50)->nullable();
 
-            $table->unsignedBigInteger('idUsuario_Paciente');
-            $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
             $table->timestamps();
         });
     }

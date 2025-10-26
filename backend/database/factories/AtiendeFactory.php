@@ -16,7 +16,7 @@ class AtiendeFactory extends Factory
         return [
             'idUsuario_Odontologo' => Odontologo::factory(),
             'idCita' => Cita::factory(),
-            'fecha' => $this->faker->date(),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
         ];
     }
 }

@@ -12,16 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('atiende', function (Blueprint $table) {
-        $table->id();
-        $table->unsignedBigInteger('idUsuario_Odontologo');
-        $table->unsignedBigInteger('idCita');
-        $table->date('fecha')->nullable();
+            $table->unsignedBigInteger('idUsuario_Odontologo');
+            $table->unsignedBigInteger('idCita');
+            $table->date('fecha');
 
-        $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
-        $table->foreign('idCita')->references('idCita')->on('cita')->onDelete('cascade');
-
-
-            $table->timestamps();
+            $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+            $table->foreign('idCita')->references('idCita')->on('cita')->onDelete('cascade');
+            
+            $table->primary(['idUsuario_Odontologo', 'idCita']);
         });
     }
 

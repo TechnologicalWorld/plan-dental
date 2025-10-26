@@ -60,8 +60,22 @@ class PacienteController extends Controller
         }
     }
 
+
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'codigoSeguro' => 'string|max:50',
+            'lugarNacimiento' => 'string|max:200',
+            'domicilio' => 'string',
+            'fechaIngreso' => 'date'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
         try {
             $paciente = Paciente::findOrFail($id);
             $paciente->update($request->all());

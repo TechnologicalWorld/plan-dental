@@ -13,12 +13,14 @@ class DetalleDentalFactory extends Factory
 
     public function definition()
     {
+        $cuadrantes = ['Superior Derecho', 'Superior Izquierdo', 'Inferior Derecho', 'Inferior Izquierdo'];
+
         return [
             'idAccion' => Accion::factory(),
             'idPiezaDental' => PiezaDental::factory(),
-            'descripcion' => $this->faker->sentence(),
-            'fecha' => $this->faker->date(),
-            'cuadrante' => $this->faker->randomElement(['I','II','III','IV', 'V']),
+            'descripcion' => $this->faker->optional()->sentence(),
+            'cuadrante' => $this->faker->randomElement($cuadrantes),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d')
         ];
     }
 }

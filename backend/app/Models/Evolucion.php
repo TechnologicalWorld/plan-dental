@@ -10,9 +10,8 @@ class Evolucion extends Model
     use HasFactory;
 
     protected $table = 'evolucion';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'idTratamiento',

@@ -12,14 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tiene', function (Blueprint $table) {
-        $table->id();
-        $table->unsignedBigInteger('idEspecialidad');
-        $table->unsignedBigInteger('idUsuario_Odontologo');
+            $table->unsignedBigInteger('idEspecialidad');
+            $table->unsignedBigInteger('idUsuario_Odontologo');
 
-        $table->foreign('idEspecialidad')->references('idEspecialidad')->on('especialidad')->onDelete('cascade');
-        $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
-
-        $table->timestamps();
+            $table->foreign('idEspecialidad')->references('idEspecialidad')->on('especialidad')->onDelete('cascade');
+            $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
+            
+            $table->primary(['idEspecialidad', 'idUsuario_Odontologo']);
         });
     }
 

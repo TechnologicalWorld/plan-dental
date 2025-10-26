@@ -18,7 +18,7 @@ class AsisteFactory extends Factory
             'idSesion' => Sesion::factory(),
             'idUsuario_Paciente' => Paciente::factory(),
             'idUsuario_Odontologo' => Odontologo::factory(),
-            'fecha' => $this->faker->date(),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
         ];
     }
 }

@@ -17,10 +17,26 @@ class Tratamiento extends Model
     protected $fillable = [
         'nombre',
         'precio',
-        'idCita',
+        'idCita'
     ];
+    protected $casts = [
+        'precio' => 'decimal:2'
+    ];
+
     public function odontologo()
     {
         return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo');
+    }
+    public function cita()
+    {
+        return $this->belongsTo(Cita::class, 'idCita', 'idCita');
+    }
+    public function piezasDentales()
+    {
+        return $this->belongsToMany(PiezaDental::class, 'evolucion', 'idTratamiento', 'idPieza')->withPivot('fecha', 'diagnosticoCIE', 'procedimientoIndicacion');
+    }
+    public function evolucionRelaciones()
+    {
+        return $this->hasMany(Evolucion::class, 'idTratamiento', 'idTratamiento');
     }
 }

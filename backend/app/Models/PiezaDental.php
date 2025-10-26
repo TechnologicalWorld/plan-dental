@@ -16,21 +16,21 @@ class PiezaDental extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'pocision',
+        'posicion',
         'nombre',
         'tipo',
-        'estado',
-        'idUsuario_Paciente'
+        'estado'
     ];
-    public function paciente()
+
+    public function acciones()
     {
-        return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
+        return $this->belongsToMany(Accion::class, 'detalle_dental', 'idPiezaDental', 'idAccion')->withPivot('descripcion', 'fecha', 'cuadrante');
     }
-    public function detalle(){
-        return $this->hasMany(DetalleDental::class, 'idPiezaDental', 'idPieza');
-    }
-    public function evoluciones()
+
+    public function tratamientos()
     {
-        return $this->hasMany(Evolucion::class, 'idPieza', 'idPieza');
+        return $this->belongsToMany(Tratamiento::class, 'evolucion', 'idPieza', 'idTratamiento')->withPivot('fecha', 'diagnosticoCIE', 'procedimientoIndicacion');
     }
+    
+
 }

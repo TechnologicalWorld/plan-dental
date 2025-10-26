@@ -20,4 +20,5 @@ class Administrador extends Model
     public function usuario(){
         return $this->belongsTo(Usuario::class,'idUsuario_ADM','idUsuario');
     }
+    
 }

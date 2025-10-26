@@ -11,15 +11,12 @@ class AsistenteController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Asistente::with('usuario');
-        if ($request->filled('search')) {
-            $query->whereHas('usuario', function ($q) use ($request) {
-                $q->where('nombre', 'like', "%{$request->search}%")
-                  ->orWhere('paterno', 'like', "%{$request->search}%");
-            });
-        }
+        $asistentes = Asistente::with('usuario')->get();
 
-        return response()->json($query->paginate($request->get('per_page', 10)));
+        return response()->json([
+            'success' => true,
+            'data' => $asistentes
+        ], 200);
     }
 
     public function store(Request $request)

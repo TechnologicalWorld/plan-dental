@@ -14,10 +14,17 @@ use HasFactory;
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['nombre', 'descripcion'];
+    protected $fillable = [
+        'nombre', 
+        'descripcion'
+    ];
 
     public function odontologos()
     {
         return $this->belongsToMany(Odontologo::class, 'tiene', 'idEspecialidad', 'idUsuario_Odontologo');
+    }
+    public function tieneRelaciones()
+    {
+        return $this->hasMany(Tiene::class, 'idEspecialidad', 'idEspecialidad');
     }
 }

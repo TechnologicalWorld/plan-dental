@@ -13,9 +13,9 @@ class OdontologoFactory extends Factory
     public function definition()
     {
         return [
-            'idUsuario_Odontologo' => Usuario::factory(),
-            'fechaContratacion' => $this->faker->date(),
-            'horario' => $this->faker->randomElement(['lunes a miercoles 08:00-16:00',' sabados y feriados 10:00-14:00']),
+            'idUsuario_Odontologo' => Usuario::factory()->odontologo(),
+            'fechaContratacion' => $this->faker->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
+            'horario' => $this->faker->randomElement(['Lunes a Viernes 8:00-16:00', 'Lunes a Sábado 9:00-17:00', 'Turno mañana 8:00-14:00']),
         ];
     }
 }

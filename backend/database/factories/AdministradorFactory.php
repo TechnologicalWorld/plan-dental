@@ -13,7 +13,7 @@ class AdministradorFactory extends Factory
     public function definition()
     {
         return [
-            'idUsuario_ADM' => Usuario::factory(),
+            'idUsuario_ADM' => Usuario::factory()->administrador(),
         ];
     }
 }

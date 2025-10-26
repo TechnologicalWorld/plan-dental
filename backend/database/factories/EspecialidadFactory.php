@@ -11,9 +11,20 @@ class EspecialidadFactory extends Factory
 
     public function definition()
     {
+        $especialidades = [
+            'Ortodoncia',
+            'Endodoncia',
+            'Periodoncia',
+            'Odontopediatría',
+            'Cirugía Oral',
+            'Implantes Dentales',
+            'Estética Dental',
+            'Rehabilitación Oral'
+        ];
+
         return [
-            'nombre' => $this->faker->word(),
-            'descripcion' => $this->faker->sentence(),
+            'nombre' => $this->faker->unique()->randomElement($especialidades),
+            'descripcion' => $this->faker->optional()->sentence(),
         ];
     }
 }

@@ -16,7 +16,7 @@ class EvaluaFactory extends Factory
         return [
             'idSesion' => Sesion::factory(),
             'idOdontograma' => Odontograma::factory(),
-            'fecha' => $this->faker->date(),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
         ];
     }
 }

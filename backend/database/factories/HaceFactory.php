@@ -20,7 +20,7 @@ class HaceFactory extends Factory
             'idCita' => Cita::factory(),
             'idUsuario_Asistente' => Asistente::factory(),
             'idUsuario_Odontologo' => Odontologo::factory(),
-            'fecha' => $this->faker->date(),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
         ];
     }
 }

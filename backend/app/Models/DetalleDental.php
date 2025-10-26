@@ -10,16 +10,15 @@ class DetalleDental extends Model
     use HasFactory;
 
     protected $table = 'detalle_dental';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'idAccion',
         'idPiezaDental',
         'descripcion',
-        'fecha',
-        'cuadrante'
+        'cuadrante',
+        'fecha'
     ];
 
     protected $casts = [

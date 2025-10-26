@@ -18,7 +18,7 @@ class EfectuaFactory extends Factory
             'idOdontograma' => Odontograma::factory(),
             'idUsuario_Odontologo' => Odontologo::factory(),
             'idUsuario_Paciente' => Paciente::factory(),
-            'fecha' => $this->faker->date(),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
         ];
     }
 }

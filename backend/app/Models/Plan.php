@@ -23,7 +23,7 @@ class Plan extends Model
         'idOdontograma'
     ];
 
-    public function paciente()
+     public function paciente()
     {
         return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
     }

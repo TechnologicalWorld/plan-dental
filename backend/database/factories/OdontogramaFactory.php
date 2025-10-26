@@ -16,10 +16,20 @@ class OdontogramaFactory extends Factory
 
     public function definition(): array
     {
+        $tiposOdontograma = [
+            'Odontograma inicial',
+            'Odontograma de control',
+            'Odontograma post-tratamiento',
+            'Odontograma pre-operatorio',
+            'Odontograma de seguimiento',
+            'Odontograma ortodóntico'
+        ];
+
         return [
-            'nombre' => $this->faker->word,
-            'descripcion' => $this->faker->sentence,
-            'fecha' => $this->faker->date()
+            'nombre' => $this->faker->randomElement($tiposOdontograma),
+            'descripcion' => $this->faker->optional()->sentence(),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
+            'observacion' => $this->faker->optional()->sentence(),
         ];
     }
 }

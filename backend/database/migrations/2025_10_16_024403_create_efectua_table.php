@@ -12,17 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('efectua', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idOdontograma');
             $table->unsignedBigInteger('idUsuario_Odontologo');
             $table->unsignedBigInteger('idUsuario_Paciente');
-            $table->date('fecha')->nullable();
+            $table->date('fecha');
 
             $table->foreign('idOdontograma')->references('idOdontograma')->on('odontograma')->onDelete('cascade');
             $table->foreign('idUsuario_Odontologo')->references('idUsuario_Odontologo')->on('odontologo')->onDelete('cascade');
             $table->foreign('idUsuario_Paciente')->references('idUsuario_Paciente')->on('paciente')->onDelete('cascade');
-
-            $table->timestamps();
+            
+            $table->primary(['idOdontograma', 'idUsuario_Odontologo', 'idUsuario_Paciente']);
         });
     }
 

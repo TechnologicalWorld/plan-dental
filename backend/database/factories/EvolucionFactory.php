@@ -16,9 +16,8 @@ class EvolucionFactory extends Factory
         return [
             'idTratamiento' => Tratamiento::factory(),
             'idPieza' => PiezaDental::factory(),
-            'fecha' => $this->faker->date(),
-            'hora' => $this->faker->time('H:i:s'),
-            'diagnosticoCIE' => strtoupper($this->faker->bothify('A##')),
+            'fecha' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
+            'diagnosticoCIE' => $this->faker->randomElement(['K02.1', 'K04.0', 'K05.2', 'K07.3', 'K08.1']),
             'procedimientoIndicacion' => $this->faker->sentence(),
         ];
     }

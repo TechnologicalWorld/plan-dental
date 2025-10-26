@@ -10,9 +10,8 @@ class Asiste extends Model
     use HasFactory;
 
     protected $table = 'asiste';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'idSesion',
@@ -21,7 +20,9 @@ class Asiste extends Model
         'fecha'
     ];
 
-    protected $casts = ['fecha' => 'date'];
+    protected $casts = [
+        'fecha' => 'date'
+    ];
 
     public function sesion() { 
         return $this->belongsTo(Sesion::class, 'idSesion', 'idSesion');

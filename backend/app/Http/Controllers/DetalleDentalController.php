@@ -8,10 +8,17 @@ use Illuminate\Support\Facades\Validator;
 
 class DetalleDentalController extends Controller
 {
+
     public function index()
     {
-        return DetalleDental::all();
+        $detalles = DetalleDental::with(['accion', 'piezaDental'])->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $detalles
+        ], 200);
     }
+    
 
     public function store(Request $request)
     {
@@ -50,10 +57,22 @@ class DetalleDentalController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $detalle = DetalleDental::findOrFail($id);
-        $detalle->update($request->all());
+        try {
+            $detalle = DetalleDental::findOrFail($id);
+            $detalle->update($request->all());
+            $detalle->load(['accion', 'piezaDental']);
 
-        return response()->json($detalle, 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Detalle dental actualizado correctamente',
+                'data' => $detalle
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Detalle dental no encontrado'
+            ], 404);
+        }
     }
 
     public function destroy($id)

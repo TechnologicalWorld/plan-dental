@@ -13,9 +13,9 @@ class AsistenteFactory extends Factory
     public function definition()
     {
         return [
-            'idUsuario_Asistente' => Usuario::factory(),
-            'turno' => $this->faker->randomElement(['Mañana', 'Tarde']),
-            'fechaContratacion' => $this->faker->date(),
+            'idUsuario_Asistente' => Usuario::factory()->asistente(),
+            'turno' => $this->faker->randomElement(['mañana', 'tarde', 'noche']),
+            'fechaContratacion' => $this->faker->dateTimeBetween('-3 years', 'now')->format('Y-m-d'),
         ];
     }
 }

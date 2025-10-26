@@ -12,18 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evolucion', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idTratamiento');
             $table->unsignedBigInteger('idPieza');
-            $table->date('fecha')->nullable();
-            $table->time('hora')->nullable();
-            $table->string('diagnosticoCIE', 50)->nullable();
-            $table->text('procedimientoIndicacion')->nullable();
+            $table->date('fecha');
+            $table->string('diagnosticoCIE', 100);
+            $table->text('procedimientoIndicacion');
 
             $table->foreign('idTratamiento')->references('idTratamiento')->on('tratamiento')->onDelete('cascade');
             $table->foreign('idPieza')->references('idPieza')->on('pieza_dental')->onDelete('cascade');
-
-            $table->timestamps();
+            
+            $table->primary(['idTratamiento', 'idPieza']);
         });
     }
 

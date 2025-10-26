@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detalle_dental', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idAccion');
             $table->unsignedBigInteger('idPiezaDental');
             $table->text('descripcion')->nullable();
-            $table->date('fecha')->nullable();
-            $table->string('cuadrante', 50)->nullable();
+            $table->string('cuadrante', 50);
+            $table->date('fecha');
+
 
             $table->foreign('idAccion')->references('idAccion')->on('accion')->onDelete('cascade');
             $table->foreign('idPiezaDental')->references('idPieza')->on('pieza_dental')->onDelete('cascade');
-
-            $table->timestamps();
+            
+            $table->primary(['idAccion', 'idPiezaDental']);
         });
     }
 

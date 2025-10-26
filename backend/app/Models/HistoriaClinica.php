@@ -31,6 +31,7 @@ class HistoriaClinica extends Model
     {
         return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
     }
+
     public function odontologo()
     {
         return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo');

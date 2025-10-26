@@ -22,9 +22,14 @@ class Asistente extends Model
 
     protected $casts = [
         'fechaContratacion' => 'date',
+        'turno' => 'string',
     ];
     
     public function usuario(){
         return $this->belongsTo(Usuario::class,'idUsuario_Asistente','idUsuario');
+    }
+    public function citas()
+    {
+        return $this->belongsToMany(Cita::class, 'hace', 'idUsuario_Asistente', 'idCita')->withPivot('fecha', 'idUsuario_Paciente', 'idUsuario_Odontologo');
     }
 }

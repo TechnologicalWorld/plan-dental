@@ -2,31 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sesion;
+use App\Models\Odontograma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class SesionController extends Controller
+class OdontogramaController extends Controller
 {
+
     public function index()
     {
-        $sesiones = Sesion::with(['pacientes.usuario', 'odontologos.usuario'])->get();
-
+        $odontogramas = Odontograma::with(['planes', 'sesiones'])->get();
         return response()->json([
             'success' => true,
-            'data' => $sesiones
+            'data' => $odontogramas
         ], 200);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
             'nombre' => 'required|string|max:100',
-            'descripcion' => 'nullable|string|max:255',
-            'hora' => 'required|string|max:10',
-            'observacion' => 'nullable|string|max:255',
+            'descripcion' => 'nullable|string',
             'fecha' => 'required|date',
+            'observacion' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -36,82 +34,74 @@ class SesionController extends Controller
             ], 422);
         }
 
-        $sesion = Sesion::create($request->only([
-            'nombre', 'descripcion', 'hora', 'observacion', 'fecha'
-        ]));
-
-        // Asignar relaciones
-        $sesion->pacientes()->attach($request->idUsuario_Paciente, [
-            'idUsuario_Odontologo' => $request->idUsuario_Odontologo,
-            'fecha' => $request->fecha
-        ]);
-
-        $sesion->load(['pacientes.usuario', 'odontologos.usuario']);
+        $odontograma = Odontograma::create($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Sesión creada correctamente',
-            'data' => $sesion
+            'message' => 'Odontograma creado correctamente',
+            'data' => $odontograma
         ], 201);
     }
 
     public function show($id)
     {
         try {
-            $sesion = Sesion::with(['pacientes.usuario', 'odontologos.usuario', 'odontogramas'])->findOrFail($id);
+            $odontograma = Odontograma::with(['planes.paciente.usuario', 'sesiones'])->findOrFail($id);
             return response()->json([
                 'success' => true,
-                'data' => $sesion
+                'data' => $odontograma
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Sesión no encontrada'
+                'error' => 'Odontograma no encontrado'
             ], 404);
         }
     }
 
     public function update(Request $request, $id)
     {
+        $odontograma = Odontograma::findOrFail($id);
+
         $validator = Validator::make($request->all(), [
             'nombre' => 'string|max:100',
-            'descripcion' => 'nullable|string|max:255',
-            'hora' => 'string|max:10',
-            'observacion' => 'nullable|string|max:255',
+            'descripcion' => 'nullable|string',
             'fecha' => 'date',
+            'observacion' => 'nullable|string'
         ]);
 
         try {
-            $sesion = Sesion::findOrFail($id);
-            $sesion->update($request->all());
+            $odontograma = Odontograma::findOrFail($id);
+            $odontograma->update($request->all());
 
             return response()->json([
                 'success' => true,
-                'message' => 'Sesión actualizada correctamente',
-                'data' => $sesion
+                'message' => 'Odontograma actualizado correctamente',
+                'data' => $odontograma
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Sesión no encontrada'
+                'error' => 'Odontograma no encontrado'
             ], 404);
         }
     }
 
+
     public function destroy($id)
     {
         try {
-            $sesion = Sesion::findOrFail($id);
-            $sesion->delete();
+            $odontograma = Odontograma::findOrFail($id);
+            $odontograma->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Sesión eliminada correctamente'
+                'message' => 'Odontograma eliminado correctamente'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'No se pudo eliminar la sesión'
+                'error' => 'No se pudo eliminar el odontograma'
             ], 500);
         }
     }

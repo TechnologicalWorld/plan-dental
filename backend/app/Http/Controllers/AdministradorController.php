@@ -11,17 +11,12 @@ class AdministradorController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->get('per_page', 10);
-        $query = Administrador::with('usuario');
+        $administradores = Administrador::with('usuario')->get();
 
-        if ($request->filled('search')) {
-            $query->whereHas('usuario', function ($q) use ($request) {
-                $q->where('nombre', 'like', "%{$request->search}%")
-                  ->orWhere('paterno', 'like', "%{$request->search}%");
-            });
-        }
-
-        return response()->json($query->paginate($perPage));
+        return response()->json([
+            'success' => true,
+            'data' => $administradores
+        ], 200);
     }
 
     public function store(Request $request)

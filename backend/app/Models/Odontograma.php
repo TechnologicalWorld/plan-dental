@@ -17,18 +17,44 @@ class Odontograma extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'observacion',
-        'idUsuario_Paciente',
-        'idUsuario_Odontologo'
+        'fecha',
+        'observacion'
     ];
 
-    public function paciente()
+    protected $casts = [
+        'fecha' => 'date',
+    ];  
+   
+    public function planes()
     {
-        return $this->belongsTo(Paciente::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
+        return $this->hasMany(Plan::class, 'idOdontograma', 'idOdontograma');
     }
-    public function odontologo()
+
+    public function sesiones()
     {
-        return $this->belongsTo(Odontologo::class, 'idUsuario_Odontologo', 'idUsuario_Odontologo');
+        return $this->belongsToMany(Sesion::class, 'evalua', 'idOdontograma', 'idSesion')
+                    ->withPivot('fecha');
+    }
+
+    public function pacientes()
+    {
+        return $this->belongsToMany(Paciente::class, 'efectua', 'idOdontograma', 'idUsuario_Paciente')
+                    ->withPivot('fecha', 'idUsuario_Odontologo');
+    }
+
+    public function odontologos()
+    {
+        return $this->belongsToMany(Odontologo::class, 'efectua', 'idOdontograma', 'idUsuario_Odontologo')
+                    ->withPivot('fecha', 'idUsuario_Paciente');
+    }
+    public function evaluaRelaciones()
+    {
+        return $this->hasMany(Evalua::class, 'idOdontograma', 'idOdontograma');
+    }
+
+    public function efectuaRelaciones()
+    {
+        return $this->hasMany(Efectua::class, 'idOdontograma', 'idOdontograma');
     }
 
 }

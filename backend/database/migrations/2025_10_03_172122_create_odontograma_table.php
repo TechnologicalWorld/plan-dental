@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100)->nullable();
             $table->text('descripcion')->nullable();
             $table->date('fecha')->nullable();
+            $table->text('observacion')->nullable();
             
             $table->timestamps();
         });

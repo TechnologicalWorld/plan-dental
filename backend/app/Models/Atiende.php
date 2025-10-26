@@ -10,10 +10,8 @@ class Atiende extends Model
     use HasFactory;
 
     protected $table = 'atiende';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
-
+    public $incrementing = false;
+    public $timestamps = false;
     protected $fillable = [
         'idUsuario_Odontologo', 
         'idCita', 

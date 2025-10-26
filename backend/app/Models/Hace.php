@@ -10,9 +10,8 @@ class Hace extends Model
     use HasFactory;
 
     protected $table = 'hace';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    public $incrementing = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'idUsuario_Paciente', 

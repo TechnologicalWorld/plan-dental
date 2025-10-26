@@ -13,14 +13,39 @@ class HistoriaClinicaFactory extends Factory
 
     public function definition()
     {
+        $motivosConsulta = [
+            'Dolor dental persistente',
+            'Caries visible',
+            'Sensibilidad al frío/calor',
+            'Sangrado de encías',
+            'Mal aliento',
+            'Dientes flojos',
+            'Problema estético',
+            'Revisión rutinaria',
+            'Traumatismo dental',
+            'Prótesis dental incómoda'
+        ];
+
+        $antecedentes = [
+            'Diabetes tipo 2',
+            'Hipertensión arterial',
+            'Alergia a penicilina',
+            'Asma bronquial',
+            'Ninguno significante',
+            'Problemas cardíacos',
+            'Embarazo',
+            'Hepatitis B',
+            'Ningún antecedente patológico'
+        ];
+
         return [
-            'antecedentesPatologicos' => $this->faker->paragraph(),
-            'motivoConsulta' => $this->faker->sentence(),
-            'signosVitales' => $this->faker->sentence(),
-            'descripcionSignosSintomasDentales' => $this->faker->paragraph(),
-            'examenClinicoBucoDental' => $this->faker->paragraph(),
-            'observaciones' => $this->faker->sentence(),
-            'enfermedadActual' => $this->faker->sentence(),
+            'antecedentesPatologicos' => $this->faker->optional(0.6)->randomElement($antecedentes),
+            'motivoConsulta' => $this->faker->randomElement($motivosConsulta),
+            'signosVitales' => $this->faker->optional(0.5)->text(100),
+            'descripcionSignosSintomasDentales' => $this->faker->optional(0.8)->text(200),
+            'examenClinicoBucoDental' => $this->faker->optional(0.7)->text(300),
+            'observaciones' => $this->faker->optional(0.5)->text(200),
+            'enfermedadActual' => $this->faker->optional(0.6)->text(150),
             'idUsuario_Paciente' => Paciente::factory(),
             'idUsuario_Odontologo' => Odontologo::factory(),
         ];

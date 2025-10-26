@@ -11,7 +11,12 @@ class EspecialidadController extends Controller
 {
     public function index()
     {
-        return response()->json(Especialidad::paginate(10));
+        $especialidades = Especialidad::all();
+
+        return response()->json([
+            'success' => true,
+            'data' => $especialidades
+        ], 200);
     }
 
     public function store(Request $request)
@@ -28,23 +33,50 @@ class EspecialidadController extends Controller
         return response()->json(['message' => 'Especialidad creada correctamente', 'data' => $especialidad], 201);
     }
 
-    public function show($id)
+    public function show(string $id)
     {
         try {
-            return response()->json(Especialidad::findOrFail($id));
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Especialidad no encontrada'], 404);
+            $especialidad = Especialidad::with('odontologos.usuario')->findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'data' => $especialidad
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Especialidad no encontrada'
+            ], 404);
         }
     }
 
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'string|max:100|unique:especialidad,nombre,' . $id . ',idEspecialidad',
+            'descripcion' => 'nullable|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         try {
             $especialidad = Especialidad::findOrFail($id);
             $especialidad->update($request->all());
-            return response()->json(['message' => 'Especialidad actualizada correctamente', 'data' => $especialidad]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Especialidad no encontrada'], 404);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Especialidad actualizada correctamente',
+                'data' => $especialidad
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Especialidad no encontrada'
+            ], 404);
         }
     }
 

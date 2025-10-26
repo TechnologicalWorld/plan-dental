@@ -26,16 +26,16 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ci' => 'required|string|max:50|unique:usuario,ci',
-            'nombre' => 'required|string',
-            'paterno' => 'required|string',
-            'materno' => 'nullable|string',
-            'fechaNacimiento' => 'nullable|date',
-            'genero' => 'nullable|in:M,F',
-            'telefono' => 'nullable|string',
-            'contrasena' => 'required|string|min:6',
+            'ci' => 'required|string|max:20|unique:usuario,ci',
+            'nombre' => 'required|string|max:100',
+            'paterno' => 'required|string|max:100',
+            'materno' => 'nullable|string|max:100',
+            'fechaNacimiento' => 'required|date',
+            'genero' => 'required|in:M,F,Otro',
+            'telefono' => 'required|string|max:15',
+            'contraseña' => 'required|string|min:6',
             'correo' => 'required|email|unique:usuario,correo',
-            'direccion' => 'nullable|string',
+            'direccion' => 'required|string',
             'estado' => 'nullable|boolean'
         ]);
 
@@ -99,20 +99,27 @@ class UsuarioController extends Controller
             ], 422);
         }
 
-        $usuario = Usuario::findOrFail($id);
-        $data = $request->all();
+        try {
+            $usuario = Usuario::findOrFail($id);
+            $data = $request->all();
 
-        if ($request->has('contrasena')) {
-            $data['contrasena'] = Hash::make($data['contrasena']);
+            if ($request->has('contraseña')) {
+                $data['contraseña'] = Hash::make($data['contraseña']);
+            }
+
+            $usuario->update($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Usuario actualizado correctamente',
+                'data' => $usuario
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Usuario no encontrado'
+            ], 404);
         }
-
-        $usuario->update($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Usuario actualizado correctamente',
-            'data' => $usuario
-        ], 200);
     }
 
     /** Eliminar (o desactivar) un usuario */
@@ -138,24 +145,36 @@ class UsuarioController extends Controller
     public function odontologos()
     {
         $odontologos = Usuario::whereHas('odontologo')->get();
-        return response()->json(['data' => $odontologos], 200);
+        return response()->json([
+            'success' => true,
+            'data' => $odontologos
+        ], 200);
     }
 
     public function pacientes()
     {
         $pacientes = Usuario::whereHas('paciente')->get();
-        return response()->json(['data' => $pacientes], 200);
+        return response()->json([
+            'success' => true,
+            'data' => $pacientes
+        ], 200);
     }
 
     public function administradores()
     {
         $admins = Usuario::whereHas('administrador')->get();
-        return response()->json(['data' => $admins], 200);
+        return response()->json([
+            'success' => true,
+            'data' => $admins
+        ], 200);
     }
 
     public function asistentes()
     {
         $asistentes = Usuario::whereHas('asistente')->get();
-        return response()->json(['data' => $asistentes], 200);
+        return response()->json([
+            'success' => true,
+            'data' => $asistentes
+        ], 200);
     }
 }

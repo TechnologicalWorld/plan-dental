@@ -76,6 +76,52 @@ class Usuario extends Autenticable
         return $this->asistente !== null;
     }
 
+    //utilizaremos para filtrar si es necesario
+    public function sesionesAsistidas()
+    {
+        return $this->belongsToMany(Sesion::class, 'asiste', 'idUsuario_Paciente', 'idSesion')
+                    ->withPivot('fecha', 'idUsuario_Odontologo')
+                    ->withTimestamps();
+    }
+
+    public function sesionesAtendidas()
+    {
+        return $this->belongsToMany(Sesion::class, 'asiste', 'idUsuario_Odontologo', 'idSesion')
+                    ->withPivot('fecha', 'idUsuario_Paciente')
+                    ->withTimestamps();
+    }
+
+    public function especialidades()
+    {
+        return $this->belongsToMany(Especialidad::class, 'tiene', 'idUsuario_Odontologo', 'idEspecialidad');
+    }
+
+    public function citasAtendidas()
+    {
+        return $this->belongsToMany(Cita::class, 'atiende', 'idUsuario_Odontologo', 'idCita')
+                    ->withPivot('fecha');
+    }
+
+    public function historiasClinicas()
+    {
+        return $this->hasMany(HistoriaClinica::class, 'idUsuario_Odontologo', 'idUsuario');
+    }
+    public function asisteRelaciones()
+    {
+        return $this->hasMany(Asiste::class, 'idUsuario_Paciente', 'idUsuario');
+    }
+
+    public function atiendeRelaciones()
+    {
+        return $this->hasMany(Atiende::class, 'idUsuario_Odontologo', 'idUsuario');
+    }
+
+    public function haceRelaciones()
+    {
+        return $this->hasMany(Hace::class, 'idUsuario_Paciente', 'idUsuario');
+    }
+
+
     protected $casts = [
     'fechaNacimiento' => 'date',
     'estado' => 'boolean',
