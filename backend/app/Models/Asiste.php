@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Asiste extends Model
 {
     use HasFactory;
-
     protected $table = 'asiste';
     public $incrementing = false;
     public $timestamps = false;

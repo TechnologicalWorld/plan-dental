@@ -19,7 +19,7 @@ class OdontologoController extends Controller
         if ($request->filled('search')) {
             $query->whereHas('usuario', function ($q) use ($request) {
                 $q->where('nombre', 'like', "%{$request->search}%")
-                  ->orWhere('paterno', 'like', "%{$request->search}%");
+                    ->orWhere('paterno', 'like', "%{$request->search}%");
             });
         }
 
@@ -55,7 +55,7 @@ class OdontologoController extends Controller
     public function show($id)
     {
         try {
-            $odontologo = Odontologo::with(['usuario', 'especialidad'])->findOrFail($id);
+            $odontologo = Odontologo::with(['usuario', 'especialidades'])->findOrFail($id);
             return response()->json($odontologo);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Odontologo no encontrado'], 404);
@@ -99,5 +99,29 @@ class OdontologoController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Odontologo no encontrado'], 404);
         }
+    }
+
+    public function asignarEspecialidades(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'especialidades' => 'required|array|min:1',
+            'especialidades.*' => 'integer|exists:especialidad,idEspecialidad'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $odontologo = Odontologo::findOrFail($id);
+
+        if (!$odontologo) {
+            return response()->json(['error' => 'Odontologo no encontrado']);
+        }
+
+        $odontologo->especialidades()->syncWithoutDetaching($request->especialidades);
+
+        return response()->json([
+            'message' => 'Especialidades asignadas correctamente a odontologo',
+            'data' => $odontologo->load('especialidades')
+        ]);
     }
 }

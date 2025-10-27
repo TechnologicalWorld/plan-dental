@@ -26,7 +26,7 @@ class Odontologo extends Model
         return $this->belongsTo(Usuario::class,'idUsuario_Odontologo','idUsuario');
     }
     public function especialidades(){
-        return $this->belongsTo(Especialidad::class,'tiene', 'idUsuario_Odontologo', 'idEspecialidad');
+        return $this->belongsToMany(Especialidad::class,'tiene', 'idUsuario_Odontologo', 'idEspecialidad');
     }
     public function historiasClinicas()
     {
