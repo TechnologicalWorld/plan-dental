@@ -61,4 +61,8 @@ class PiezaDentalController extends Controller
 
         return response()->json(['message' => 'Pieza dental eliminada correctamente'], 204);
     }
+
+    public function porPaciente(string $id){
+        
+    }
 }

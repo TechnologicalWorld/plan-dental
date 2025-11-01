@@ -19,7 +19,8 @@ class PiezaDental extends Model
         'posicion',
         'nombre',
         'tipo',
-        'estado'
+        'estado',
+        'idOdontograma'
     ];
 
     public function acciones()
@@ -31,6 +32,9 @@ class PiezaDental extends Model
     {
         return $this->belongsToMany(Tratamiento::class, 'evolucion', 'idPieza', 'idTratamiento')->withPivot('fecha', 'diagnosticoCIE', 'procedimientoIndicacion');
     }
-    
 
+    public function odotogramas()
+    {
+        return $this->belongsTo(Odontograma::class, 'idOdontograma', 'idOdontograma');
+    }
 }

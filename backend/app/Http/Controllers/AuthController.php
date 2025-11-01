@@ -83,17 +83,18 @@ class AuthController extends Controller
             'ci' => 'required|string|max:50|unique:usuario,ci',
             'nombre' => 'required|string',
             'paterno' => 'required|string',
+            'contrasena' => 'string|required',
+            'correo' => "required|email|unique:usuario,correo",
+            'fechaIngreso' => 'required|date',
+            
             'materno' => 'nullable|string',
             'fechaNacimiento' => 'date|nullable',
             'genero' => 'in:M,F',
             'telefono' => 'nullable|string',
-            'contrasena' => 'string|required',
-            'correo' => "required|email|unique:usuario,correo",
             'direccion' => 'nullable|string',
             'codigoSeguro' => 'nullable|string',
             'lugarNacimiento' => 'nullable|string',
             'domicilio' => 'nullable|string',
-            'fechaIngreso' => 'required|date',
         ]);
 
         if ($validator->fails()) {

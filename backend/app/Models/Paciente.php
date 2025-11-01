@@ -32,7 +32,7 @@ class Paciente extends Model
     // Relaciones con otras tablas pueden QUE PODRAN UTILIZAR EN EL FRONTEND
     public function historiasClinicas()
     {
-        return $this->hasMany(HistoriaClinica::class, 'idUsuario_Paciente', 'idUsuario_Paciente');
+        return $this->belongsTo(HistoriaClinica::class, 'idUsuario_Paciente', 'idUsuario_Paciente',);
     }
 
     public function planes()

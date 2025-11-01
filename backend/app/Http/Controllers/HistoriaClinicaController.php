@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HistoriaClinica;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,7 +62,8 @@ class HistoriaClinicaController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Historia clinica no encontrada'
+                'error' => 'Historia clinica no encontrada',
+                'detalles' => $e
             ], 404);
         }
     }
@@ -120,5 +122,13 @@ class HistoriaClinicaController extends Controller
                 'error' => 'No se pudo eliminar la historia clínica'
             ], 500);
         }
+    }
+
+    public function porPaciente(string $id){
+        $paciente = Paciente::with(['usuario','historiasClinicas'])->findOrFail($id);
+        return response()->json([
+            'success'=>true,
+            'paciente'=>$paciente
+        ]);
     }
 }

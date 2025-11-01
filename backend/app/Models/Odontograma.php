@@ -57,4 +57,7 @@ class Odontograma extends Model
         return $this->hasMany(Efectua::class, 'idOdontograma', 'idOdontograma');
     }
 
+    public function piezasDentales(){
+        return $this->hasMany(PiezaDental::class, 'idOdontograma', 'idOdontograma');
+    }
 }

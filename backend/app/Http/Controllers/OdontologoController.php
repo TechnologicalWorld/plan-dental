@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cita;
 use App\Models\Odontologo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -123,5 +124,16 @@ class OdontologoController extends Controller
             'message' => 'Especialidades asignadas correctamente a odontologo',
             'data' => $odontologo->load('especialidades')
         ]);
+    }
+
+    public function agenda(string $id)
+    {
+        $agenda = Odontologo::with(['usuario','citas'])->findOrFail($id);
+        return response()->json(
+            [
+                'message' => "Agenda del odontologo $id",
+                "agenda" => $agenda
+            ]
+        );
     }
 }

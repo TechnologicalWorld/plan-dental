@@ -25,7 +25,7 @@ use App\Http\Controllers\{
     OdontogramaController,
     HistoriaClinicaController
 };
-
+use App\Models\Odontograma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -83,7 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Pacientes
     Route::get('/pacientes/{id}/historial-medico', [PacienteController::class, 'historialMedico']);
-    Route::get('/pacientes/{id}/piezas-dentales', [PiezaDentalController::class, 'porPaciente']);
+    Route::get('/pacientes/{id}/piezas-dentales', [OdontogramaController::class, 'porPaciente']);
 
     // Historias clínicas
     Route::get('/historias-clinicas/paciente/{pacienteId}', [HistoriaClinicaController::class, 'porPaciente']);
