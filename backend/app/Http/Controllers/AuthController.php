@@ -107,6 +107,7 @@ class AuthController extends Controller
         $usuario = Usuario::create(
             $request->all()
         );
+        
         $request['idUsuario_Paciente'] = $usuario->idUsuario;
 
         

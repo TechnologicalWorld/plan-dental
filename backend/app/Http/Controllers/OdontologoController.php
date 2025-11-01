@@ -33,7 +33,6 @@ class OdontologoController extends Controller
         $validator = Validator::make($request->all(), [
             'fechaContratacion' => 'required|date',
             'horario' => 'required|string|max:100',
-            'idEspecialidad' => 'required|exists:especialidad,idEspecialidad',
             'idUsuario_Odontologo' => 'required|exists:usuario,idUsuario',
         ]);
 
