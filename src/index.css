@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+
+
+/* Quita el ojo nativo de Edge/IE en inputs password */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
