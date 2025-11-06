@@ -166,10 +166,10 @@ class DatabaseSeeder extends Seeder
 
         // Crear piezas dentales específicas (usando create en lugar de factory para evitar el campo incorrecto)
         $piezas = [
-            PiezaDental::create(['posicion' => '16', 'nombre' => 'Primer Molar Superior Derecho', 'tipo' => 'Molar', 'estado' => 'cariado']),
-            PiezaDental::create(['posicion' => '26', 'nombre' => 'Primer Molar Superior Izquierdo', 'tipo' => 'Molar', 'estado' => 'sano']),
-            PiezaDental::create(['posicion' => '36', 'nombre' => 'Primer Molar Inferior Izquierdo', 'tipo' => 'Molar', 'estado' => 'sano']),
-            PiezaDental::create(['posicion' => '46', 'nombre' => 'Primer Molar Inferior Derecho', 'tipo' => 'Molar', 'estado' => 'cariado']),
+            PiezaDental::create(['idOdontograma'=>$odontograma->idOdontograma,'posicion' => '16', 'nombre' => 'Primer Molar Superior Derecho', 'tipo' => 'Molar', 'estado' => 'cariado']),
+            PiezaDental::create(['idOdontograma'=>$odontograma->idOdontograma,'posicion' => '26', 'nombre' => 'Primer Molar Superior Izquierdo', 'tipo' => 'Molar', 'estado' => 'sano']),
+            PiezaDental::create(['idOdontograma'=>$odontograma->idOdontograma,'posicion' => '36', 'nombre' => 'Primer Molar Inferior Izquierdo', 'tipo' => 'Molar', 'estado' => 'sano']),
+            PiezaDental::create(['idOdontograma'=>$odontograma->idOdontograma,'posicion' => '46', 'nombre' => 'Primer Molar Inferior Derecho', 'tipo' => 'Molar', 'estado' => 'cariado']),
         ];
 
         // Crear acciones dentales

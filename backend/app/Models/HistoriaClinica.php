@@ -11,7 +11,7 @@ class HistoriaClinica extends Model
     use HasFactory;
 
     protected $table = 'historia_clinica';
-    protected $primaryKey = 'id_historia_clinica';
+    protected $primaryKey = 'idHistoriaClinica';
     protected $keyType = 'int';
     public $incrementing = true;
 

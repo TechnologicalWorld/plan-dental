@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('nombre', 50)->nullable();
             $table->string('tipo', 50)->nullable();
             $table->string('estado', 50)->nullable();
-
+            
+            $table->unsignedBigInteger("idOdontograma");
+            $table->foreign("idOdontograma")->references("idOdontograma")->on("odontograma")->onDelete("cascade");
             $table->timestamps();
         });
     }

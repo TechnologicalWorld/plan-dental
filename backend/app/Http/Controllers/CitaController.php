@@ -109,4 +109,11 @@ class CitaController extends Controller
             ], 500);
         }
     }
+
+    public function porFecha($fecha){
+
+        $citaActual = Cita::where('fecha',$fecha)->get();
+
+        return $citaActual;
+    }
 }

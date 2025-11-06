@@ -17,7 +17,6 @@ class Evolucion extends Model
         'idTratamiento',
         'idPieza',
         'fecha',
-        'hora',
         'diagnosticoCIE',
         'procedimientoIndicacion'
     ];

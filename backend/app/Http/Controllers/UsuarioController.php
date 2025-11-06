@@ -33,7 +33,7 @@ class UsuarioController extends Controller
             'fechaNacimiento' => 'required|date',
             'genero' => 'required|in:M,F,Otro',
             'telefono' => 'required|string|max:15',
-            'contraseña' => 'required|string|min:6',
+            'contrasena' => 'required|string|min:6',
             'correo' => 'required|email|unique:usuario,correo',
             'direccion' => 'required|string',
             'estado' => 'nullable|boolean'
@@ -103,8 +103,8 @@ class UsuarioController extends Controller
             $usuario = Usuario::findOrFail($id);
             $data = $request->all();
 
-            if ($request->has('contraseña')) {
-                $data['contraseña'] = Hash::make($data['contraseña']);
+            if ($request->has('contrasena')) {
+                $data['contrasena'] = Hash::make($data['contrasena']);
             }
 
             $usuario->update($data);

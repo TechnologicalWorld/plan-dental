@@ -1,0 +1,144 @@
+
+  GET|HEAD        / ................................................................................................. 
+  GET|HEAD        api/acciones .............................................. acciones.index › AccionController@index
+  POST            api/acciones .............................................. acciones.store › AccionController@store
+  GET|HEAD        api/acciones-list .......................................................... AccionController@index
+  GET|HEAD        api/acciones/{accione} ...................................... acciones.show › AccionController@show
+  PUT|PATCH       api/acciones/{accione} .................................. acciones.update › AccionController@update
+  DELETE          api/acciones/{accione} ................................ acciones.destroy › AccionController@destroy
+  GET|HEAD        api/admin-test .................................................................................... 
+  GET|HEAD        api/administradores ......................... administradores.index › AdministradorController@index
+  POST            api/administradores ......................... administradores.store › AdministradorController@store
+  GET|HEAD        api/administradores/{administradore} .......... administradores.show › AdministradorController@show
+  PUT|PATCH       api/administradores/{administradore} ...... administradores.update › AdministradorController@update
+  DELETE          api/administradores/{administradore} .... administradores.destroy › AdministradorController@destroy
+  GET|HEAD        api/asiste .................................................. asiste.index › AsisteController@index
+  POST            api/asiste .................................................. asiste.store › AsisteController@store
+  GET|HEAD        api/asiste/{asiste} ........................................... asiste.show › AsisteController@show
+  PUT|PATCH       api/asiste/{asiste} ....................................... asiste.update › AsisteController@update
+  DELETE          api/asiste/{asiste} ..................................... asiste.destroy › AsisteController@destroy
+  GET|HEAD        api/asistente-test ................................................................................ 
+  GET|HEAD        api/asistentes ....................................... asistentes.index › AsistenteController@index
+  POST            api/asistentes ....................................... asistentes.store › AsistenteController@store
+  GET|HEAD        api/asistentes/{asistente} ............................. asistentes.show › AsistenteController@show
+  PUT|PATCH       api/asistentes/{asistente} ......................... asistentes.update › AsistenteController@update
+  DELETE          api/asistentes/{asistente} ....................... asistentes.destroy › AsistenteController@destroy
+  GET|HEAD        api/atiende ............................................... atiende.index › AtiendeController@index
+  POST            api/atiende ............................................... atiende.store › AtiendeController@store
+  GET|HEAD        api/atiende/{atiende} ....................................... atiende.show › AtiendeController@show
+  PUT|PATCH       api/atiende/{atiende} ................................... atiende.update › AtiendeController@update
+  DELETE          api/atiende/{atiende} ................................. atiende.destroy › AtiendeController@destroy
+  GET|HEAD        api/citas ...................................................... citas.index › CitaController@index
+  POST            api/citas ...................................................... citas.store › CitaController@store
+  GET|HEAD        api/citas/por-fecha/{fecha} ............................................... CitaController@porFecha
+  GET|HEAD        api/citas/{cita} ................................................. citas.show › CitaController@show
+  PUT|PATCH       api/citas/{cita} ............................................. citas.update › CitaController@update
+  DELETE          api/citas/{cita} ........................................... citas.destroy › CitaController@destroy
+  POST            api/citas/{id}/cambiar-estado ........................................ CitaController@cambiarEstado
+  GET|HEAD        api/detalle-dental ........................... detalle-dental.index › DetalleDentalController@index
+  POST            api/detalle-dental ........................... detalle-dental.store › DetalleDentalController@store
+  GET|HEAD        api/detalle-dental/{detalle_dental} ............ detalle-dental.show › DetalleDentalController@show
+  PUT|PATCH       api/detalle-dental/{detalle_dental} ........ detalle-dental.update › DetalleDentalController@update
+  DELETE          api/detalle-dental/{detalle_dental} ...... detalle-dental.destroy › DetalleDentalController@destroy
+  GET|HEAD        api/efectua ............................................... efectua.index › EfectuaController@index
+  POST            api/efectua ............................................... efectua.store › EfectuaController@store
+  GET|HEAD        api/efectua/{efectua} ....................................... efectua.show › EfectuaController@show
+  PUT|PATCH       api/efectua/{efectua} ................................... efectua.update › EfectuaController@update
+  DELETE          api/efectua/{efectua} ................................. efectua.destroy › EfectuaController@destroy
+  GET|HEAD        api/especialidades ............................ especialidades.index › EspecialidadController@index
+  POST            api/especialidades ............................ especialidades.store › EspecialidadController@store
+  GET|HEAD        api/especialidades-list .............................................. EspecialidadController@index
+  GET|HEAD        api/especialidades/{especialidade} .............. especialidades.show › EspecialidadController@show
+  PUT|PATCH       api/especialidades/{especialidade} .......... especialidades.update › EspecialidadController@update
+  DELETE          api/especialidades/{especialidade} ........ especialidades.destroy › EspecialidadController@destroy
+  GET|HEAD        api/especialidades/{id}/odontologos ............................ EspecialidadController@odontologos
+  GET|HEAD        api/evalua .................................................. evalua.index › EvaluaController@index
+  POST            api/evalua .................................................. evalua.store › EvaluaController@store
+  GET|HEAD        api/evalua/{evalua} ........................................... evalua.show › EvaluaController@show
+  PUT|PATCH       api/evalua/{evalua} ....................................... evalua.update › EvaluaController@update
+  DELETE          api/evalua/{evalua} ..................................... evalua.destroy › EvaluaController@destroy
+  GET|HEAD        api/evoluciones ..................................... evoluciones.index › EvolucionController@index
+  POST            api/evoluciones ..................................... evoluciones.store › EvolucionController@store
+  GET|HEAD        api/evoluciones/{evolucione} .......................... evoluciones.show › EvolucionController@show
+  PUT|PATCH       api/evoluciones/{evolucione} ...................... evoluciones.update › EvolucionController@update
+  DELETE          api/evoluciones/{evolucione} .................... evoluciones.destroy › EvolucionController@destroy
+  GET|HEAD        api/hace ........................................................ hace.index › HaceController@index
+  POST            api/hace ........................................................ hace.store › HaceController@store
+  GET|HEAD        api/hace/{hace} ................................................... hace.show › HaceController@show
+  PUT|PATCH       api/hace/{hace} ............................................... hace.update › HaceController@update
+  DELETE          api/hace/{hace} ............................................. hace.destroy › HaceController@destroy
+  GET|HEAD        api/historias-clinicas ................. historias-clinicas.index › HistoriaClinicaController@index
+  POST            api/historias-clinicas ................. historias-clinicas.store › HistoriaClinicaController@store
+  GET|HEAD        api/historias-clinicas/paciente/{pacienteId} ................ HistoriaClinicaController@porPaciente
+  GET|HEAD        api/historias-clinicas/{historias_clinica} historias-clinicas.show › HistoriaClinicaController@show
+  PUT|PATCH       api/historias-clinicas/{historias_clinica} historias-clinicas.update › HistoriaClinicaController@u…
+  DELETE          api/historias-clinicas/{historias_clinica} historias-clinicas.destroy › HistoriaClinicaController@…
+  POST            api/login .................................................................... AuthController@login
+  POST            api/logout .................................................................. AuthController@logout
+  GET|HEAD        api/odontogramas ................................. odontogramas.index › OdontogramaController@index
+  POST            api/odontogramas ................................. odontogramas.store › OdontogramaController@store
+  GET|HEAD        api/odontogramas/{odontograma} ..................... odontogramas.show › OdontogramaController@show
+  PUT|PATCH       api/odontogramas/{odontograma} ................. odontogramas.update › OdontogramaController@update
+  DELETE          api/odontogramas/{odontograma} ............... odontogramas.destroy › OdontogramaController@destroy
+  GET|HEAD        api/odontologo-test ............................................................................... 
+  GET|HEAD        api/odontologos .................................... odontologos.index › OdontologoController@index
+  POST            api/odontologos .................................... odontologos.store › OdontologoController@store
+  GET|HEAD        api/odontologos/{id}/agenda ........................................... OdontologoController@agenda
+  POST            api/odontologos/{id}/asignar-especialidades ............ OdontologoController@asignarEspecialidades
+  GET|HEAD        api/odontologos/{odontologo} ......................... odontologos.show › OdontologoController@show
+  PUT|PATCH       api/odontologos/{odontologo} ..................... odontologos.update › OdontologoController@update
+  DELETE          api/odontologos/{odontologo} ................... odontologos.destroy › OdontologoController@destroy
+  GET|HEAD        api/paciente-test ................................................................................. 
+  GET|HEAD        api/pacientes .......................................... pacientes.index › PacienteController@index
+  POST            api/pacientes .......................................... pacientes.store › PacienteController@store
+  GET|HEAD        api/pacientes/{id}/historial-medico ............................ PacienteController@historialMedico
+  GET|HEAD        api/pacientes/{id}/piezas-dentales .............................. OdontogramaController@porPaciente
+  GET|HEAD        api/pacientes/{paciente} ................................. pacientes.show › PacienteController@show
+  PUT|PATCH       api/pacientes/{paciente} ............................. pacientes.update › PacienteController@update
+  DELETE          api/pacientes/{paciente} ........................... pacientes.destroy › PacienteController@destroy
+  GET|HEAD        api/piezas-dentales ........................... piezas-dentales.index › PiezaDentalController@index
+  POST            api/piezas-dentales ........................... piezas-dentales.store › PiezaDentalController@store
+  GET|HEAD        api/piezas-dentales/{piezas_dentale} ............ piezas-dentales.show › PiezaDentalController@show
+  PUT|PATCH       api/piezas-dentales/{piezas_dentale} ........ piezas-dentales.update › PiezaDentalController@update
+  DELETE          api/piezas-dentales/{piezas_dentale} ...... piezas-dentales.destroy › PiezaDentalController@destroy
+  GET|HEAD        api/planes .................................................... planes.index › PlanController@index
+  POST            api/planes .................................................... planes.store › PlanController@store
+  GET|HEAD        api/planes/{plane} .............................................. planes.show › PlanController@show
+  PUT|PATCH       api/planes/{plane} .......................................... planes.update › PlanController@update
+  DELETE          api/planes/{plane} ........................................ planes.destroy › PlanController@destroy
+  POST            api/register .............................................................. AuthController@register
+  GET|HEAD        api/sesiones .............................................. sesiones.index › SesionController@index
+  POST            api/sesiones .............................................. sesiones.store › SesionController@store
+  GET|HEAD        api/sesiones/{sesione} ...................................... sesiones.show › SesionController@show
+  PUT|PATCH       api/sesiones/{sesione} .................................. sesiones.update › SesionController@update
+  DELETE          api/sesiones/{sesione} ................................ sesiones.destroy › SesionController@destroy
+  GET|HEAD        api/tiene ..................................................... tiene.index › TieneController@index
+  POST            api/tiene ..................................................... tiene.store › TieneController@store
+  GET|HEAD        api/tiene/{tiene} ............................................... tiene.show › TieneController@show
+  PUT|PATCH       api/tiene/{tiene} ........................................... tiene.update › TieneController@update
+  DELETE          api/tiene/{tiene} ......................................... tiene.destroy › TieneController@destroy
+  GET|HEAD        api/tratamientos ................................. tratamientos.index › TratamientoController@index
+  POST            api/tratamientos ................................. tratamientos.store › TratamientoController@store
+  POST            api/tratamientos/{id}/asignar-piezas-dentales ......... TratamientoController@asignarPiezasDentales
+  GET|HEAD        api/tratamientos/{tratamiento} ..................... tratamientos.show › TratamientoController@show
+  PUT|PATCH       api/tratamientos/{tratamiento} ................. tratamientos.update › TratamientoController@update
+  DELETE          api/tratamientos/{tratamiento} ............... tratamientos.destroy › TratamientoController@destroy
+  GET|HEAD        api/user ...................................................................... AuthController@user
+  GET|HEAD        api/usuarios ............................................. usuarios.index › UsuarioController@index
+  POST            api/usuarios ............................................. usuarios.store › UsuarioController@store
+  GET|HEAD        api/usuarios/administradores/listar ............................. UsuarioController@administradores
+  GET|HEAD        api/usuarios/asistentes/listar ....................................... UsuarioController@asistentes
+  GET|HEAD        api/usuarios/buscar/search ............................................... UsuarioController@search
+  GET|HEAD        api/usuarios/odontologos/listar ..................................... UsuarioController@odontologos
+  GET|HEAD        api/usuarios/pacientes/listar ......................................... UsuarioController@pacientes
+  GET|HEAD        api/usuarios/{usuario} ..................................... usuarios.show › UsuarioController@show
+  PUT|PATCH       api/usuarios/{usuario} ................................. usuarios.update › UsuarioController@update
+  DELETE          api/usuarios/{usuario} ............................... usuarios.destroy › UsuarioController@destroy
+  GET|HEAD        docs ....................................................................................... scribe
+  GET|HEAD        docs.openapi ....................................................................... scribe.openapi
+  GET|HEAD        docs.postman ....................................................................... scribe.postman
+  GET|HEAD        sanctum/csrf-cookie ............. sanctum.csrf-cookie › Laravel\Sanctum › CsrfCookieController@show
+  GET|HEAD        storage/{path} ...................................................................... storage.local
+  GET|HEAD        up ................................................................................................ 
+                                                                                                 Showing [141] routes
+

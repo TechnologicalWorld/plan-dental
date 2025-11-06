@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
+use App\Models\Odontologo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -89,5 +90,16 @@ class EspecialidadController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Especialidad no encontrada'], 404);
         }
+    }
+
+    public function odontologos($id){
+        $especialidad = Especialidad::findOrFail($id);
+        if (!$especialidad) {
+            return response()->json(['error' => 'Especialidad no encontrada'], 404);
+        }
+
+        $odontologos = $especialidad->odontologos;
+
+        return response()->json(['data'=>$odontologos]);
     }
 }

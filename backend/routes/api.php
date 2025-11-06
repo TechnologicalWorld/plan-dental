@@ -10,7 +10,7 @@ use App\Http\Controllers\{
     AccionController,
     AsisteController,
     AtiendeController,
-    DetalleDentalController, 
+    DetalleDentalController,
     EfectuaController,
     HaceController,
     TieneController,
@@ -25,7 +25,7 @@ use App\Http\Controllers\{
     OdontogramaController,
     HistoriaClinicaController
 };
-
+use App\Models\Odontograma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,25 +33,25 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
+Route::apiResource('usuarios', UsuarioController::class);
 // Rutas protegidas con Sanctum
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
-    
+
     // Rutas de usuarios y roles
-    Route::apiResource('usuarios', UsuarioController::class);
     Route::apiResource('pacientes', PacienteController::class);
     Route::apiResource('odontologos', OdontologoController::class);
     Route::apiResource('asistentes', AsistenteController::class);
     Route::apiResource('administradores', AdministradorController::class);
-    
+
     // Rutas adicionales para usuarios
     Route::get('/usuarios/odontologos/listar', [UsuarioController::class, 'odontologos']);
     Route::get('/usuarios/pacientes/listar', [UsuarioController::class, 'pacientes']);
     Route::get('/usuarios/administradores/listar', [UsuarioController::class, 'administradores']);
     Route::get('/usuarios/asistentes/listar', [UsuarioController::class, 'asistentes']);
     Route::get('/usuarios/buscar/search', [UsuarioController::class, 'search']);
-    
+
     // Rutas para entidades principales
     Route::apiResource('acciones', AccionController::class);
     Route::apiResource('especialidades', EspecialidadController::class);
@@ -62,7 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('planes', PlanController::class);
     Route::apiResource('piezas-dentales', PiezaDentalController::class);
     Route::apiResource('historias-clinicas', HistoriaClinicaController::class);
-    
+
     // Rutas para relaciones 
     Route::apiResource('tiene', TieneController::class);
     Route::apiResource('atiende', AtiendeController::class);
@@ -71,41 +71,47 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('evalua', EvaluaController::class);
     Route::apiResource('efectua', EfectuaController::class);
     Route::apiResource('evoluciones', EvolucionController::class);
+<<<<<<< HEAD
     Route::apiResource('detalle-dental', DetalleDentalController::class);     
     // Citas act
+=======
+    Route::apiResource('detalle-dental', DetalleDentalController::class); // ✅ CAMBIADO: dentalle-dental → detalle-dental
+
+    // Citas
+>>>>>>> 74271f0dd54993576a313007502192c9e0ff8e24
     Route::post('/citas/{id}/cambiar-estado', [CitaController::class, 'cambiarEstado']);
     Route::get('/citas/por-fecha/{fecha}', [CitaController::class, 'porFecha']);
-    
+
     // Odontólogos
     Route::post('/odontologos/{id}/asignar-especialidades', [OdontologoController::class, 'asignarEspecialidades']);
     Route::get('/odontologos/{id}/agenda', [OdontologoController::class, 'agenda']);
-    
+
     // Pacientes
     Route::get('/pacientes/{id}/historial-medico', [PacienteController::class, 'historialMedico']);
-    Route::get('/pacientes/{id}/piezas-dentales', [PiezaDentalController::class, 'porPaciente']);
-    
+    Route::get('/pacientes/{id}/piezas-dentales', [OdontogramaController::class, 'porPaciente']);
+
     // Historias clínicas
     Route::get('/historias-clinicas/paciente/{pacienteId}', [HistoriaClinicaController::class, 'porPaciente']);
-    
+
     // Tratamientos
     Route::post('/tratamientos/{id}/asignar-piezas-dentales', [TratamientoController::class, 'asignarPiezasDentales']);
-    
+
     // Especialidades
     Route::get('/especialidades/{id}/odontologos', [EspecialidadController::class, 'odontologos']);
-    
+
     // Rutas de prueba por roles
     Route::middleware('role:paciente')->get('/paciente-test', function () {
         return response()->json(['message' => 'Eres paciente!']);
     });
-    
+
     Route::middleware('role:odontologo')->get('/odontologo-test', function () {
         return response()->json(['message' => 'Eres odontólogo!']);
     });
-    
+
     Route::middleware('role:administrador')->get('/admin-test', function () {
         return response()->json(['message' => 'Eres administrador!']);
     });
-    
+
     Route::middleware('role:asistente')->get('/asistente-test', function () {
         return response()->json(['message' => 'Eres asistente!']);
     });
@@ -114,4 +120,3 @@ Route::middleware('auth:sanctum')->group(function () {
 // Rutas públicas de información general
 Route::get('/especialidades-list', [EspecialidadController::class, 'index']);
 Route::get('/acciones-list', [AccionController::class, 'index']);
-

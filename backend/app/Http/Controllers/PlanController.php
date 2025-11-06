@@ -73,7 +73,6 @@ class PlanController extends Controller
         try {
             $plan = Plan::findOrFail($id);
             $plan->update($request->all());
-
             return response()->json([
                 'success' => true,
                 'message' => 'Plan actualizado correctamente',
@@ -82,7 +81,8 @@ class PlanController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Plan no encontrado'
+                'error' => 'Plan no encontrado',
+                'detalle'=>$e
             ], 404);
         }
     }

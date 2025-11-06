@@ -105,4 +105,9 @@ class OdontogramaController extends Controller
             ], 500);
         }
     }
+    public function porPaciente(string $id)
+    {
+        $piezaDental = Odontograma::with(['pacientes', 'piezasDentales'])->get("nombre");
+        return response()->json(["algo" => $piezaDental]);
+    }
 }

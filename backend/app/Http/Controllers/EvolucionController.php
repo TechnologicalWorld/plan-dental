@@ -20,7 +20,6 @@ class EvolucionController extends Controller
             "idTratamiento" => 'exists:tratamiento,idTratamiento',
             "idPieza" => 'exists:pieza_dental,idPieza',
             "fecha" => "nullable|date",
-            "hora" => "nullable|string",
             "diagnosticoCIE" => "nullable|string",
             "procedimientoIndicacion" => "nullable|string",
         ]);
@@ -51,7 +50,6 @@ class EvolucionController extends Controller
                 "idTratamiento" => 'exists:tratamiento,idTratamiento',
                 "idPieza" => 'exists:pieza_dental,idPieza',
                 "fecha" => "nullable|date",
-                "hora" => "nullable|string",
                 "diagnosticoCIE" => "nullable|string",
                 "procedimientoIndicacion" => "nullable|string",
             ]);

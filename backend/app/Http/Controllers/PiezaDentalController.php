@@ -16,7 +16,6 @@ class PiezaDentalController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'codigo' => 'required|string|max:20|unique:pieza_dental,codigo',
             'nombre' => 'required|string|max:100',
             'descripcion' => 'nullable|string|max:255',
             'ubicacion' => 'nullable|string|max:50',
@@ -39,7 +38,6 @@ class PiezaDentalController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'codigo' => 'string|max:20|unique:pieza_dental,codigo,' . $id,
             'nombre' => 'string|max:100',
             'descripcion' => 'nullable|string|max:255',
             'ubicacion' => 'nullable|string|max:50',
@@ -62,5 +60,9 @@ class PiezaDentalController extends Controller
         $pieza->delete();
 
         return response()->json(['message' => 'Pieza dental eliminada correctamente'], 204);
+    }
+
+    public function porPaciente(string $id){
+        
     }
 }

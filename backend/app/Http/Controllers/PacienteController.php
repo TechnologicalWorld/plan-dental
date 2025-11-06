@@ -18,7 +18,7 @@ class PacienteController extends Controller
         if ($request->filled('search')) {
             $query->whereHas('usuario', function ($q) use ($request) {
                 $q->where('nombre', 'like', "%{$request->search}%")
-                  ->orWhere('paterno', 'like', "%{$request->search}%");
+                    ->orWhere('paterno', 'like', "%{$request->search}%");
             });
         }
 
@@ -97,5 +97,14 @@ class PacienteController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Paciente no encontrado'], 404);
         }
+    }
+
+    public function historialMedico(string $id)
+    {
+        $paciente = Paciente::with(['usuario','historiasClinicas'])->findOrFail($id);
+        return response()->json([
+            'success' => true,
+            'paciente' => $paciente
+        ]);
     }
 }
