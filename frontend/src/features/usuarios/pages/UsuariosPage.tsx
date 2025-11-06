@@ -1,11 +1,21 @@
-// src/features/usuarios/pages/UsuariosPage.tsx
+// src/features/usuarios/pages/UsuariosPage.tsx  ← REEMPLAZA
 import React, { useState } from 'react';
-import type{ Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../../types/usuario';
+import type { AxiosError } from 'axios';
+import type {
+  Usuario,
+  CreateUsuarioRequest,
+  UpdateUsuarioRequest,
+} from '@/types/usuario';
 import { useUsuarios } from '../hooks/useUsuarios';
 import { UsuarioTable } from '../components/UsuarioTable';
 import { UsuarioModal } from '../components/UsuarioModal';
 
-export const UsuariosPage: React.FC = () => {
+type ValidationErrorResponse = {
+  message?: string;
+  errors?: Record<string, string[]>;
+};
+
+function UsuariosPage() {
   const {
     usuarios,
     loading,
@@ -43,21 +53,17 @@ export const UsuariosPage: React.FC = () => {
 
     try {
       if (editingUsuario) {
-        // Para actualizar, no requerimos todos los campos
         const updateData: UpdateUsuarioRequest = { ...data };
-        // Si no se proporciona contraseña, la eliminamos del objeto
-        if (!updateData.contrasena) {
-          delete updateData.contrasena;
-        }
+        if (!updateData.contrasena) delete updateData.contrasena;
         success = await updateUsuario(editingUsuario.idUsuario, updateData);
       } else {
         success = await createUsuario(data);
       }
-    } catch (err: any) {
-      // Manejar errores de validación del servidor
-      if (err.response?.data?.errors) {
-        setFormErrors(err.response.data.errors);
-      }
+    } catch (err: unknown) {
+      // Tipamos el error de Axios y extraemos los errores de validación si existen
+      const axiosErr = err as AxiosError<ValidationErrorResponse>;
+      const resp = axiosErr.response?.data;
+      if (resp?.errors) setFormErrors(resp.errors);
     } finally {
       setFormLoading(false);
     }
@@ -106,4 +112,6 @@ export const UsuariosPage: React.FC = () => {
       />
     </div>
   );
-};
+}
+
+export default UsuariosPage;

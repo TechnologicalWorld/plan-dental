@@ -58,6 +58,8 @@ class DatabaseSeeder extends Seeder
             'estado' => true,
         ]);
 
+        
+
         $pacienteUsuario = Usuario::factory()->create([
             'nombre' => 'Prueba',
             'paterno' => 'Paciente',

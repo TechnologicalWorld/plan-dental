@@ -1,35 +1,46 @@
 // src/shared/api/apiClient.ts
-import axios from 'axios';
+import axios from "axios";
+
+const BASE = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
+export const TOKEN_KEY = "pd_token";
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api',
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
+  baseURL: `${BASE}/api`,
+  headers: { "Content-Type": "application/json", Accept: "application/json" },
 });
 
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+// única fuente de verdad para manejar el token
+export function setAuthToken(token?: string) {
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+    // quitar Authorization con tipos seguros
+    const common = apiClient.defaults.headers.common as unknown as Record<string, unknown>;
+    delete common.Authorization;
   }
-);
+}
 
-// Interceptor para manejar respuestas
+// hidratar en arranque
+const persisted = localStorage.getItem(TOKEN_KEY);
+if (persisted) {
+  apiClient.defaults.headers.common.Authorization = `Bearer ${persisted}`;
+}
+
+apiClient.interceptors.request.use((config) => {
+  const t = localStorage.getItem(TOKEN_KEY);
+  if (t) config.headers.Authorization = `Bearer ${t}`;
+  return config;
+});
+
 apiClient.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('auth_token');
-    }
-    return Promise.reject(error);
+    if (error.response?.status === 401) setAuthToken(undefined);
+    const msg =
+      error.response?.data?.message || error.message || "Error de red";
+    return Promise.reject(new Error(msg));
   }
 );
 
