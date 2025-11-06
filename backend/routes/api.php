@@ -71,14 +71,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('evalua', EvaluaController::class);
     Route::apiResource('efectua', EfectuaController::class);
     Route::apiResource('evoluciones', EvolucionController::class);
-<<<<<<< HEAD
     Route::apiResource('detalle-dental', DetalleDentalController::class);     
     // Citas act
-=======
-    Route::apiResource('detalle-dental', DetalleDentalController::class); // ✅ CAMBIADO: dentalle-dental → detalle-dental
-
-    // Citas
->>>>>>> 74271f0dd54993576a313007502192c9e0ff8e24
     Route::post('/citas/{id}/cambiar-estado', [CitaController::class, 'cambiarEstado']);
     Route::get('/citas/por-fecha/{fecha}', [CitaController::class, 'porFecha']);
 
