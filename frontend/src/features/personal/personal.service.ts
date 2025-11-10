@@ -1,6 +1,7 @@
 import api from '@/shared/api/apiClient';
 import type { Odontologo } from '@/types/odontologo';
 import type { Asistente } from '@/types/asistente';
+import type { Especialidad } from '@/types/especialidad';
 
 /** ----- LISTADOS ----- */
 export async function listarOdontologos(): Promise<Odontologo[]> {
@@ -104,4 +105,50 @@ export async function updateUsuario(
 export async function deleteUsuario(idUsuario: number) {
   await api.delete(`/usuarios/${idUsuario}`);
   return true;
+}
+
+/** ======== ESPECIALIDADES ======== */
+export async function listarEspecialidades(): Promise<Especialidad[]> {
+  const { data } = await api.get('/especialidades');
+  return (data?.data ?? data) as Especialidad[];
+}
+
+export async function crearEspecialidad(payload: { nombre: string; descripcion?: string }) {
+  const { data } = await api.post('/especialidades', payload);
+  return data?.data ?? data;
+}
+
+export async function actualizarEspecialidad(
+  idEspecialidad: number,
+  payload: Partial<{ nombre: string; descripcion?: string }>
+) {
+  const { data } = await api.put(`/especialidades/${idEspecialidad}`, payload);
+  return data?.data ?? data;
+}
+
+export async function eliminarEspecialidad(idEspecialidad: number) {
+  const { data } = await api.delete(`/especialidades/${idEspecialidad}`);
+  return data;
+}
+
+// personal.service.ts
+export async function asignarEspecialidadesAOdontologo(
+  idUsuarioOdontologo: number,
+  especialidades: number[]
+) {
+  const { data } = await api.post(
+    `/odontologos/${idUsuarioOdontologo}/asignar-especialidades`,
+    { especialidades }
+  );
+  return data;
+}
+
+
+/** Obtener un odontólogo por id de usuario (para ver especialidades) */
+export async function getOdontologoByUsuario(idUsuario: number) {
+  // Si tienes GET /odontologos/{idUsuario}, úsalo directamente.
+  // Si no, obtenemos todos y filtramos (es eficiente si tu listado es pequeño).
+  const { data } = await api.get('/odontologos');
+  const arr = (data?.data ?? data) as Odontologo[];
+  return arr.find((o) => o.usuario?.idUsuario === idUsuario);
 }

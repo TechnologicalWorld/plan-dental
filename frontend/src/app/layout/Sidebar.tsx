@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import { useAuthStore } from '@/shared/hooks/useAuthStore';
 import type { RoleUpper } from '@/shared/hooks/useAuthStore';
+import { Stethoscope } from 'lucide-react'; // <-- icono para Especialidades
 
 import {
   LayoutDashboard,
@@ -55,6 +56,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
       };
       const topItems: Item[] = [
         { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { to: '/app/admin/especialidades', label: 'Especialidades', icon: Stethoscope },
         { to: '/app/admin/calendario', label: 'Calendario', icon: Calendar },
         { to: '/app/admin/reportes', label: 'Reportes', icon: FileText },
         { to: '/app/ai', label: 'Asistente IA', icon: Bot },

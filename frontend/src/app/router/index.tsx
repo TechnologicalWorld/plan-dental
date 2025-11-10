@@ -1,6 +1,8 @@
 // src/app/router/index.tsx
 import { createBrowserRouter } from 'react-router-dom';
 
+import EspecialidadesAdminPage from '@/features/especialidades/pages/EspecialidadesAdminPage';
+
 import PublicLayout from '@/app/layout/PublicLayout';
 import AppLayout from '@/app/layout/AppLayout';
 import AuthGuard from '@/app/router/guards/AuthGuard';
@@ -55,6 +57,9 @@ export const router = createBrowserRouter([
               { path: '/app/admin/usuarios/personal',  element: <PersonalListPage /> },
               { path: '/app/admin/usuarios/pacientes', element: <PacientesAdminListPage /> },
               { path: '/app/admin/usuarios/roles',     element: <RolesListPage /> },
+
+              { path: '/app/admin/especialidades',     element: <EspecialidadesAdminPage /> },
+
               { path: '/app/admin/calendario',         element: <div>Calendario (Admin)</div> },
               { path: '/app/admin/reportes',           element: <div>Reportes</div> },
             ],

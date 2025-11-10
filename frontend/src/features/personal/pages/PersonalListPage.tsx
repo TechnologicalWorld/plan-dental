@@ -6,6 +6,14 @@ import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import { getUsuario, updateUsuario, deleteUsuario } from '@/features/personal/personal.service';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 
+// 👉 imports nuevos para especialidades
+import type { Especialidad } from '@/types/especialidad';
+import {
+  listarEspecialidades,
+  asignarEspecialidadesAOdontologo,
+  getOdontologoByUsuario,
+} from '@/features/personal/personal.service';
+
 type RolListadoUsuario = {
   idUsuario: number;
   ci?: string;
@@ -66,6 +74,10 @@ export default function PersonalListPage() {
   const [fechaContratacion, setFechaContratacion] = useState('');
   const [horario, setHorario] = useState('');
   const [turno, setTurno] = useState('mañana');
+
+  // catálogo de especialidades (solo relevante para odontólogos)
+  const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
+  const [selEspecialidades, setSelEspecialidades] = useState<number[]>([]);
 
   // Ver / Editar / Eliminar
   const [viewOpen, setViewOpen] = useState(false);
@@ -152,6 +164,13 @@ export default function PersonalListPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
 
+  // cargar catálogo de especialidades cuando la pestaña es odontólogos
+  useEffect(() => {
+    if (tab === 'odontologos') {
+      listarEspecialidades().then((data) => setEspecialidades(Array.isArray(data) ? data : []));
+    }
+  }, [tab]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return items;
@@ -171,6 +190,12 @@ export default function PersonalListPage() {
     );
   }
 
+  function toggleSelEsp(id: number) {
+    setSelEspecialidades((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
+
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -184,6 +209,11 @@ export default function PersonalListPage() {
           fechaContratacion,
           horario,
         });
+
+        // asignar especialidades seleccionadas (si hay)
+        if (selEspecialidades.length) {
+          await asignarEspecialidadesAOdontologo(userId, selEspecialidades);
+        }
       } else {
         await api.post('/asistentes', {
           idUsuario_Asistente: userId,
@@ -219,6 +249,7 @@ export default function PersonalListPage() {
     setFechaContratacion('');
     setHorario('');
     setTurno('mañana');
+    setSelEspecialidades([]); // limpiar selección de especialidades
   }
 
   // ------------ VER ------------
@@ -226,7 +257,16 @@ export default function PersonalListPage() {
     if (!u.idUsuario) return;
     setSelectedId(u.idUsuario);
     const full = await getUsuario(u.idUsuario);
-    setDetail(full?.data ?? full);
+    const base = full?.data ?? full;
+
+    // si es odontólogo, traer sus especialidades
+    let esp: Especialidad[] = [];
+    if (tab === 'odontologos') {
+      const od = await getOdontologoByUsuario(u.idUsuario);
+      esp = (od?.especialidades ?? []) as any;
+    }
+
+    setDetail({ ...base, _especialidades: esp });
     setViewOpen(true);
   }
 
@@ -394,7 +434,6 @@ export default function PersonalListPage() {
       <dialog
         open={open}
         className="rounded-md w-[720px] bg-white text-slate-900"
-        // centrar en viewport
         style={{ position: 'fixed', inset: '0', margin: 'auto' }}
       >
         <form onSubmit={onCreate} className="p-5 space-y-3">
@@ -435,8 +474,36 @@ export default function PersonalListPage() {
               value={fechaContratacion} onChange={(e) => setFechaContratacion(e.target.value)} />
 
             {tab === 'odontologos' ? (
-              <input className="px-3 py-2 rounded border col-span-2" placeholder="Horario (ej. Lun-Vie 8:00-16:00)"
-                value={horario} onChange={(e) => setHorario(e.target.value)} />
+              <>
+                <input className="px-3 py-2 rounded border col-span-2" placeholder="Horario (ej. Lun-Vie 8:00-16:00)"
+                  value={horario} onChange={(e) => setHorario(e.target.value)} />
+
+                {/* Selector múltiple de especialidades */}
+                <div className="col-span-2 space-y-2">
+                  <div className="text-xs opacity-80">Especialidades (seleccione una o varias)</div>
+                  <div className="flex flex-wrap gap-2">
+                    {especialidades.map((e) => {
+                      const active = selEspecialidades.includes(e.idEspecialidad);
+                      return (
+                        <button
+                          key={e.idEspecialidad}
+                          type="button"
+                          onClick={() => toggleSelEsp(e.idEspecialidad)}
+                          className={`px-2 py-1 rounded-full border text-xs ${
+                            active ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                          }`}
+                          title={e.descripcion ?? e.nombre}
+                        >
+                          {e.nombre}
+                        </button>
+                      );
+                    })}
+                    {especialidades.length === 0 && (
+                      <span className="text-xs text-slate-500">No hay especialidades registradas aún.</span>
+                    )}
+                  </div>
+                </div>
+              </>
             ) : (
               <select className="px-3 py-2 rounded border col-span-2"
                 value={turno} onChange={(e) => setTurno(e.target.value)}>
@@ -479,6 +546,24 @@ export default function PersonalListPage() {
             <div><span className="font-medium">Correo:</span> {detail.correo ?? '-'}</div>
             <div className="col-span-2"><span className="font-medium">Dirección:</span> {detail.direccion ?? '-'}</div>
             <div><span className="font-medium">Estado:</span> {detail.estado ? 'Activo' : 'Inactivo'}</div>
+
+            {/* Especialidades del odontólogo */}
+            {tab === 'odontologos' && Array.isArray(detail?._especialidades) && (
+              <div className="col-span-2">
+                <span className="font-medium">Especialidades:</span>{' '}
+                {detail._especialidades.length ? (
+                  <span className="inline-flex flex-wrap gap-2 align-middle">
+                    {detail._especialidades.map((e: any) => (
+                      <span key={e.idEspecialidad} className="px-2 py-0.5 rounded-full bg-teal-600/15 text-teal-800 text-xs border border-teal-600/30">
+                        {e.nombre}
+                      </span>
+                    ))}
+                  </span>
+                ) : (
+                  <span>-</span>
+                )}
+              </div>
+            )}
           </div>
         )}
       </Modal>
