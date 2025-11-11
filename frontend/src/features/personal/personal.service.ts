@@ -6,7 +6,6 @@ import type { Especialidad } from '@/types/especialidad';
 /** ----- LISTADOS ----- */
 export async function listarOdontologos(): Promise<Odontologo[]> {
   const { data } = await api.get('/odontologos');
-  // tu backend suele devolver { data: [...] } o directamente [...]
   return (data?.data ?? data) as Odontologo[];
 }
 
@@ -23,7 +22,7 @@ export async function crearUsuario(payload: {
   contrasena: string; estado?: boolean;
 }) {
   const { data } = await api.post('/usuarios', payload);
-  return data; // devuelve el usuario creado (idUsuario, etc.)
+  return data; 
 }
 
 /** ----- ROLES: ODONTOLOGO / ASISTENTE ----- */
@@ -146,8 +145,6 @@ export async function asignarEspecialidadesAOdontologo(
 
 /** Obtener un odontólogo por id de usuario (para ver especialidades) */
 export async function getOdontologoByUsuario(idUsuario: number) {
-  // Si tienes GET /odontologos/{idUsuario}, úsalo directamente.
-  // Si no, obtenemos todos y filtramos (es eficiente si tu listado es pequeño).
   const { data } = await api.get('/odontologos');
   const arr = (data?.data ?? data) as Odontologo[];
   return arr.find((o) => o.usuario?.idUsuario === idUsuario);

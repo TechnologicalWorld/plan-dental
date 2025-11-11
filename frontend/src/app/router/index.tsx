@@ -13,9 +13,14 @@ import RootGate from '@/app/router/RootGate';
 import LoginPage from '@/features/auth/pages/LoginPage';
 import RegisterPage from '@/features/auth/pages/RegisterPage';
 
+import Reportes from '@/pages/Reportes';
+import AsistenteIA from '@/pages/AsistenteIA';
+
 import Dashboard from '@/pages/Dashboard';
 import NotFound from '@/shared/ui/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
+
+
 
 // 👉 NUEVAS PÁGINAS (ADMIN)
 import PersonalListPage from '@/features/personal/pages/PersonalListPage';
@@ -61,7 +66,7 @@ export const router = createBrowserRouter([
               { path: '/app/admin/especialidades',     element: <EspecialidadesAdminPage /> },
 
               { path: '/app/admin/calendario',         element: <div>Calendario (Admin)</div> },
-              { path: '/app/admin/reportes',           element: <div>Reportes</div> },
+              { path: '/app/admin/reportes',           element: <Reportes /> },
             ],
           },
 
@@ -99,7 +104,7 @@ export const router = createBrowserRouter([
           // --------- 403 explícito ---------
           { path: '/app/unauthorized', element: <Unauthorized /> },
 
-          { path: '/app/ai', element: <div>Asistente IA</div> },
+          { path: '/app/ai', element: <AsistenteIA /> },
         ],
       },
     ],

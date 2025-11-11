@@ -23,7 +23,9 @@ use App\Http\Controllers\{
     PlanController,
     EspecialidadController,
     OdontogramaController,
-    HistoriaClinicaController
+    HistoriaClinicaController,
+    DashboardController
+
 };
 use App\Models\Odontograma;
 use Illuminate\Http\Request;
@@ -109,6 +111,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:asistente')->get('/asistente-test', function () {
         return response()->json(['message' => 'Eres asistente!']);
     });
+
+    Route::prefix('dashboard')->group(function () {
+    Route::get('/citas-por-mes-anio',        [DashboardController::class, 'citasPorMesAnio']);
+    Route::get('/citas-por-dia-semana-mes',  [DashboardController::class, 'citasPorDiaSemanaMes']);        
+    Route::get('/ingresos-odonto',           [DashboardController::class, 'ingresosPorOdontoMes']);
+    Route::get('/resumen-citas-odonto',      [DashboardController::class, 'resumenCitasPorOdonto']);
+    Route::get('/citas-dias',                [DashboardController::class, 'resumenCitasDias']);        
+    Route::get('/citas-estado-odontologo',        [DashboardController::class, 'reporteCitasEstadoOdontologo']);
+    Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
+    Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
+    Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);});
+
 });
 
 // Rutas públicas de información general
