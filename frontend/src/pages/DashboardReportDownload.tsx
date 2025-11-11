@@ -1,4 +1,3 @@
-// DashboardReportDownload.tsx
 "use client";
 
 import React from "react";
@@ -10,7 +9,7 @@ async function fetchReportData(filters: ReportFilters): Promise<ReportData> {
   const { anio, mes, idUsuario } = filters;
 
   const calls: Promise<any>[] = [
-    dashboardService.citasPorMesAnio({ anio, mes }),
+    // Elimina la llamada a 'citasPorMesAnio'
     anio && mes ? dashboardService.citasPorDiaSemanaMes({ anio, mes }) : Promise.resolve([]),
     dashboardService.ingresosPorOdontoMes({ anio, mes }),
     dashboardService.resumenCitasPorOdonto({ anio, mes }),
@@ -22,7 +21,6 @@ async function fetchReportData(filters: ReportFilters): Promise<ReportData> {
   ];
 
   const [
-    citasPorMesAnio,
     citasPorDiaSemanaMes,
     ingresosPorOdontoMes,
     resumenCitasPorOdonto,
@@ -35,8 +33,7 @@ async function fetchReportData(filters: ReportFilters): Promise<ReportData> {
 
   return {
     filtros: filters,
-    citasPorMesAnio,
-    citasPorDiaSemanaMes,
+    citasPorDiaSemanaMes, // Solo esta consulta quedará
     ingresosPorOdontoMes,
     resumenCitasPorOdonto,
     resumenCitasDias,

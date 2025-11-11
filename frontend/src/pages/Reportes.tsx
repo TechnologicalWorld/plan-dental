@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { dashboardService, type MesParam } from "../entities/usuarios/dashboardservice";
-
+import DashboardReportDownload from "./DashboardReportDownload";
 // Tipos para los datos
 interface GananciaTratamiento {
   nombre: string;
@@ -244,7 +244,10 @@ export default function Reportes() {
           <p className="text-red-400">{error}</p>
         </div>
       )}
-
+      <DashboardReportDownload
+        anio={anio}
+        mes={mes}
+      />
       {/* Tabs */}
       <div className="bg-[#1A1F3A] rounded-lg shadow-lg border border-[#2A2F4A]">
         <div className="border-b border-[#2A2F4A]">

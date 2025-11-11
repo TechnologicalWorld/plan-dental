@@ -20,13 +20,6 @@ export type ReportFilters = {
 export type ReportData = {
   filtros: ReportFilters;
 
-  // 1
-  citasPorMesAnio: Array<{
-    anio: number | null;
-    mes: number | null;
-    dia_semana: string;
-    NroCitas: number;
-  }>;
 
   // 2 (requiere anio+mes)
   citasPorDiaSemanaMes: Array<{ dia_semana: string; total_citas: number }>;
@@ -217,23 +210,6 @@ export function DashboardReportPDF(
           v={`Año=${filtros.anio ?? "—"} • Mes=${monthNameEs(filtros.mes)} • Odonto=${filtros.idUsuario ?? "—"}`}
         />
 
-        {/* 1) Citas por mes/año */}
-        {data.citasPorMesAnio.length > 0 && (
-          <>
-            <SectionTitle>Citas por mes/año (día de la semana)</SectionTitle>
-            <TableHeader cols={["#", "Día", "Citas", "Año/Mes"]} />
-            {data.citasPorMesAnio.map((r, i) => (
-              <View key={i} style={styles.row}>
-                <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
-                <Text style={[styles.cell, styles.col2]}>{r.dia_semana}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>{r.NroCitas}</Text>
-                <Text style={[styles.cell, styles.col4, styles.right]}>
-                  {`${r.anio ?? "—"}/${r.mes ?? "—"}`}
-                </Text>
-              </View>
-            ))}
-          </>
-        )}
 
         {/* 2) Citas por día-semana del mes (si anio+mes) */}
         {data.citasPorDiaSemanaMes.length > 0 && (
