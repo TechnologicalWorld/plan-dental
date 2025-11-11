@@ -24,7 +24,8 @@ use App\Http\Controllers\{
     EspecialidadController,
     OdontogramaController,
     HistoriaClinicaController,
-    DashboardController
+    DashboardController,
+    ReportesController
 
 };
 use App\Models\Odontograma;
@@ -113,15 +114,24 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('dashboard')->group(function () {
-    Route::get('/citas-por-mes-anio',        [DashboardController::class, 'citasPorMesAnio']);
-    Route::get('/citas-por-dia-semana-mes',  [DashboardController::class, 'citasPorDiaSemanaMes']);        
-    Route::get('/ingresos-odonto',           [DashboardController::class, 'ingresosPorOdontoMes']);
-    Route::get('/resumen-citas-odonto',      [DashboardController::class, 'resumenCitasPorOdonto']);
-    Route::get('/citas-dias',                [DashboardController::class, 'resumenCitasDias']);        
-    Route::get('/citas-estado-odontologo',        [DashboardController::class, 'reporteCitasEstadoOdontologo']);
-    Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
-    Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
-    Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);});
+        Route::get('/citas-por-mes-anio',        [DashboardController::class, 'citasPorMesAnio']);
+        Route::get('/citas-por-dia-semana-mes',  [DashboardController::class, 'citasPorDiaSemanaMes']);        
+        Route::get('/ingresos-odonto',           [DashboardController::class, 'ingresosPorOdontoMes']);
+        Route::get('/resumen-citas-odonto',      [DashboardController::class, 'resumenCitasPorOdonto']);
+        Route::get('/citas-dias',                [DashboardController::class, 'resumenCitasDias']);        
+        Route::get('/citas-estado-odontologo',        [DashboardController::class, 'reporteCitasEstadoOdontologo']);
+        Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
+        Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
+        Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);
+    });
+    
+    Route::prefix('reportes')->group(function () {
+        Route::get('/ingresos-y-pendientes', [ReportesController::class, 'obtenerIngresosYPendientes']);
+        Route::get('/total-citas', [ReportesController::class, 'obtenerTotalCitas']);
+        Route::get('/odontologos-activos', [ReportesController::class, 'obtenerOdontologosActivos']);
+        Route::get('/citas-por-estado', [ReportesController::class, 'obtenerCitasPorEstado']);
+        Route::get('/suma-pagado', [ReportesController::class, 'obtenerSumaPagado']);
+    });
 
 });
 

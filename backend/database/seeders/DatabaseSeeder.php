@@ -794,6 +794,75 @@ class DatabaseSeeder extends Seeder
                 SET FOREIGN_KEY_CHECKS = 1;
             END
         ");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_ingresos_y_pendientes`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_ingresos_y_pendientes(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT 
+                SUM(pagado) AS ingresos,
+                SUM(costo - pagado) AS pendiente
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_total_citas`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_total_citas(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT COUNT(*) AS total_citas
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_odontologos_activos`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_odontologos_activos()
+        BEGIN
+            SELECT COUNT(*) AS odontologos_activos
+            FROM usuario u
+            INNER JOIN odontologo o ON o.idUsuario_Odontologo = u.idUsuario;
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_citas_por_estado`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_citas_por_estado(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT estado, COUNT(*) AS total
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes)
+            GROUP BY estado;
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_suma_pagado`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_suma_pagado(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT SUM(pagado) AS total_pagado
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
+        END
+        ");
+
 
         $this->command->info('✅ Procedimientos y funciones creados exitosamente!');
         
