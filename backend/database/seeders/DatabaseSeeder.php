@@ -518,53 +518,59 @@ class DatabaseSeeder extends Seeder
         // Procedimiento: citas_por_dia_semana_mes
         DB::unprepared("DROP PROCEDURE IF EXISTS `citas_por_dia_semana_mes`");
         DB::unprepared("
-            CREATE PROCEDURE `citas_por_dia_semana_mes` (IN `p_mes` VARCHAR(20), IN `p_anio` INT)
+
+            CREATE PROCEDURE citas_por_dia_semana_mes(
+            IN p_mes  VARCHAR(20),
+            IN p_anio INT
+            )
             READS SQL DATA
             BEGIN
-                DECLARE v_mes_norm VARCHAR(20);
-                DECLARE v_mes INT;
+            DECLARE v_mes_norm VARCHAR(20);
+            DECLARE v_mes INT;
 
-                SET v_mes_norm = LOWER(TRIM(p_mes));
+            /* Normaliza el mes a minúsculas y sin espacios */
+            SET v_mes_norm = LOWER(TRIM(p_mes));
 
-                SET v_mes = CASE v_mes_norm
-                    WHEN 'ene' THEN 1 WHEN 'enero' THEN 1
-                    WHEN 'feb' THEN 2 WHEN 'febrero' THEN 2
-                    WHEN 'mar' THEN 3 WHEN 'marzo' THEN 3
-                    WHEN 'abr' THEN 4 WHEN 'abril' THEN 4
-                    WHEN 'may' THEN 5 WHEN 'mayo' THEN 5
-                    WHEN 'jun' THEN 6 WHEN 'junio' THEN 6
-                    WHEN 'jul' THEN 7 WHEN 'julio' THEN 7
-                    WHEN 'ago' THEN 8 WHEN 'agosto' THEN 8
-                    WHEN 'sep' THEN 9 WHEN 'sept' THEN 9
-                    WHEN 'septiembre' THEN 9 WHEN 'setiembre' THEN 9
-                    WHEN 'oct' THEN 10 WHEN 'octubre' THEN 10
-                    WHEN 'nov' THEN 11 WHEN 'noviembre' THEN 11
-                    WHEN 'dic' THEN 12 WHEN 'diciembre' THEN 12
-                    ELSE NULL
-                END;
+            /* Soporta nombres, abreviaturas y números como texto */
+            SET v_mes = CASE v_mes_norm
+                WHEN '1' THEN 1  WHEN '01' THEN 1  WHEN 'ene' THEN 1  WHEN 'enero' THEN 1
+                WHEN '2' THEN 2  WHEN '02' THEN 2  WHEN 'feb' THEN 2  WHEN 'febrero' THEN 2
+                WHEN '3' THEN 3  WHEN '03' THEN 3  WHEN 'mar' THEN 3  WHEN 'marzo' THEN 3
+                WHEN '4' THEN 4  WHEN '04' THEN 4  WHEN 'abr' THEN 4  WHEN 'abril' THEN 4
+                WHEN '5' THEN 5  WHEN '05' THEN 5  WHEN 'may' THEN 5  WHEN 'mayo' THEN 5
+                WHEN '6' THEN 6  WHEN '06' THEN 6  WHEN 'jun' THEN 6  WHEN 'junio' THEN 6
+                WHEN '7' THEN 7  WHEN '07' THEN 7  WHEN 'jul' THEN 7  WHEN 'julio' THEN 7
+                WHEN '8' THEN 8  WHEN '08' THEN 8  WHEN 'ago' THEN 8  WHEN 'agosto' THEN 8
+                WHEN '9' THEN 9  WHEN '09' THEN 9  WHEN 'sep' THEN 9  WHEN 'sept' THEN 9
+                WHEN 'set' THEN 9
+                WHEN 'septiembre' THEN 9 WHEN 'setiembre' THEN 9
+                WHEN '10' THEN 10 WHEN 'oct' THEN 10 WHEN 'octubre' THEN 10
+                WHEN '11' THEN 11 WHEN 'nov' THEN 11 WHEN 'noviembre' THEN 11
+                WHEN '12' THEN 12 WHEN 'dic' THEN 12 WHEN 'diciembre' THEN 12
+                ELSE NULL
+            END;
 
-                IF v_mes IS NULL OR p_anio IS NULL THEN
-                    SIGNAL SQLSTATE '45000'
-                        SET MESSAGE_TEXT = 'Mes no reconocido. Usa nombres/abreviaturas en español (ej: enero, feb, setiembre) y año numérico.';
-                END IF;
+            IF v_mes IS NULL OR p_anio IS NULL THEN
+                SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'Mes no reconocido o año NULL. Usa nombres/abreviaturas en español (ej: enero, feb, set) o 1..12, y año numérico.';
+            END IF;
 
+            /* Subconsulta para cumplir ONLY_FULL_GROUP_BY y ordenar L->D */
+            SELECT
+                ELT(t.wd + 1, 'lunes','martes','miércoles','jueves','viernes','sábado','domingo') AS dia_semana,
+                t.total_citas
+            FROM (
                 SELECT
-                    CASE WEEKDAY(fecha)
-                        WHEN 0 THEN 'lunes'
-                        WHEN 1 THEN 'martes'
-                        WHEN 2 THEN 'miércoles'
-                        WHEN 3 THEN 'jueves'
-                        WHEN 4 THEN 'viernes'
-                        WHEN 5 THEN 'sábado'
-                        WHEN 6 THEN 'domingo'
-                    END AS dia_semana,
-                    COUNT(*) AS total_citas
-                FROM cita
-                WHERE YEAR(fecha) = p_anio
-                    AND MONTH(fecha) = v_mes
-                GROUP BY WEEKDAY(fecha)
-                ORDER BY WEEKDAY(fecha);
+                WEEKDAY(c.fecha) AS wd,   /* 0=Lun .. 6=Dom */
+                COUNT(*)         AS total_citas
+                FROM cita c
+                WHERE YEAR(c.fecha) = p_anio
+                AND MONTH(c.fecha) = v_mes
+                GROUP BY WEEKDAY(c.fecha)
+            ) AS t
+            ORDER BY t.wd;
             END
+
         ");
 
         // Procedimiento: citas_por_mes_anio
