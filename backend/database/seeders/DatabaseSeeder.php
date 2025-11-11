@@ -499,5 +499,302 @@ class DatabaseSeeder extends Seeder
         $this->command->info('   Asistente: asistente@clinicadental.com / 123456789');
         $this->command->info('   Otros usuarios: password123');
         $this->command->info('');
+        
+    // ==================== PROCEDIMIENTOS ALMACENADOS Y FUNCIONES ====================
+        $this->command->info('📦 Creando procedimientos almacenados y funciones...');
+        
+        // Función: nombre_dia_es
+        DB::unprepared("DROP FUNCTION IF EXISTS `nombre_dia_es`");
+        DB::unprepared("
+            CREATE FUNCTION `nombre_dia_es` (`f` DATE) 
+            RETURNS VARCHAR(10) CHARSET utf8mb4 COLLATE utf8mb4_general_ci 
+            DETERMINISTIC 
+            RETURN ELT(
+                WEEKDAY(f) + 1,
+                'Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'
+            )
+        ");
+
+        // Procedimiento: citas_por_dia_semana_mes
+        DB::unprepared("DROP PROCEDURE IF EXISTS `citas_por_dia_semana_mes`");
+        DB::unprepared("
+            CREATE PROCEDURE `citas_por_dia_semana_mes` (IN `p_mes` VARCHAR(20), IN `p_anio` INT)
+            READS SQL DATA
+            BEGIN
+                DECLARE v_mes_norm VARCHAR(20);
+                DECLARE v_mes INT;
+
+                SET v_mes_norm = LOWER(TRIM(p_mes));
+
+                SET v_mes = CASE v_mes_norm
+                    WHEN 'ene' THEN 1 WHEN 'enero' THEN 1
+                    WHEN 'feb' THEN 2 WHEN 'febrero' THEN 2
+                    WHEN 'mar' THEN 3 WHEN 'marzo' THEN 3
+                    WHEN 'abr' THEN 4 WHEN 'abril' THEN 4
+                    WHEN 'may' THEN 5 WHEN 'mayo' THEN 5
+                    WHEN 'jun' THEN 6 WHEN 'junio' THEN 6
+                    WHEN 'jul' THEN 7 WHEN 'julio' THEN 7
+                    WHEN 'ago' THEN 8 WHEN 'agosto' THEN 8
+                    WHEN 'sep' THEN 9 WHEN 'sept' THEN 9
+                    WHEN 'septiembre' THEN 9 WHEN 'setiembre' THEN 9
+                    WHEN 'oct' THEN 10 WHEN 'octubre' THEN 10
+                    WHEN 'nov' THEN 11 WHEN 'noviembre' THEN 11
+                    WHEN 'dic' THEN 12 WHEN 'diciembre' THEN 12
+                    ELSE NULL
+                END;
+
+                IF v_mes IS NULL OR p_anio IS NULL THEN
+                    SIGNAL SQLSTATE '45000'
+                        SET MESSAGE_TEXT = 'Mes no reconocido. Usa nombres/abreviaturas en español (ej: enero, feb, setiembre) y año numérico.';
+                END IF;
+
+                SELECT
+                    CASE WEEKDAY(fecha)
+                        WHEN 0 THEN 'lunes'
+                        WHEN 1 THEN 'martes'
+                        WHEN 2 THEN 'miércoles'
+                        WHEN 3 THEN 'jueves'
+                        WHEN 4 THEN 'viernes'
+                        WHEN 5 THEN 'sábado'
+                        WHEN 6 THEN 'domingo'
+                    END AS dia_semana,
+                    COUNT(*) AS total_citas
+                FROM cita
+                WHERE YEAR(fecha) = p_anio
+                    AND MONTH(fecha) = v_mes
+                GROUP BY WEEKDAY(fecha)
+                ORDER BY WEEKDAY(fecha);
+            END
+        ");
+
+        // Procedimiento: citas_por_mes_anio
+        DB::unprepared("DROP PROCEDURE IF EXISTS `citas_por_mes_anio`");
+        DB::unprepared("
+            CREATE PROCEDURE `citas_por_mes_anio` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                SELECT
+                    YEAR(fecha)  AS anio,
+                    MONTH(fecha) AS mes,
+                    nombre_dia_es(fecha) AS dia_semana,
+                    COUNT(*) AS NroCitas
+                FROM cita
+                WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(fecha) = p_mes)
+                GROUP BY anio, mes, WEEKDAY(fecha)
+                ORDER BY WEEKDAY(fecha);
+            END
+        ");
+
+        // Procedimiento: ingresos_por_odonto_mes
+        DB::unprepared("DROP PROCEDURE IF EXISTS `ingresos_por_odonto_mes`");
+        DB::unprepared("
+            CREATE PROCEDURE `ingresos_por_odonto_mes` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                SELECT
+                    u.idUsuario,
+                    SUM(t.precio) AS total,
+                    CONCAT(u.nombre,' ',u.paterno,' ',u.materno) AS nombre_completo,
+                    YEAR(c.fecha) AS anio,
+                    MONTH(c.fecha) AS mes
+                FROM cita c
+                INNER JOIN tratamiento t ON c.idCita = t.idCita
+                INNER JOIN atiende a     ON a.idCita = t.idCita
+                INNER JOIN usuario u     ON u.idUsuario = a.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY
+                    u.idUsuario, u.nombre, u.paterno, u.materno,
+                    YEAR(c.fecha), MONTH(c.fecha)
+                ORDER BY total DESC;
+            END
+        ");
+
+        // Procedimiento: resumen_citas_dias
+        DB::unprepared("DROP PROCEDURE IF EXISTS `resumen_citas_dias`");
+        DB::unprepared("
+            CREATE PROCEDURE `resumen_citas_dias` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+            BEGIN
+                SELECT
+                    t.idUsuario,
+                    t.estado,
+                    t.anio,
+                    t.mes,
+                    ELT(t.wd + 1,
+                        'lunes','martes','miércoles','jueves','viernes','sábado','domingo') AS dia,
+                    t.Nro
+                FROM (
+                    SELECT
+                        u.idUsuario,
+                        c.estado,
+                        YEAR(c.fecha)  AS anio,
+                        MONTH(c.fecha) AS mes,
+                        WEEKDAY(c.fecha) AS wd,
+                        COUNT(*) AS Nro
+                    FROM cita c
+                    JOIN atiende a ON a.idCita = c.idCita
+                    JOIN usuario u ON u.idUsuario = a.idUsuario_Odontologo
+                    WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                        AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                        AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario)
+                    GROUP BY
+                        u.idUsuario, c.estado, YEAR(c.fecha), MONTH(c.fecha), WEEKDAY(c.fecha)
+                ) AS t
+                ORDER BY
+                    t.idUsuario, t.estado, t.anio, t.mes, t.wd;
+            END
+        ");
+
+        // Procedimiento: resumen_citas_por_odonto
+        DB::unprepared("DROP PROCEDURE IF EXISTS `resumen_citas_por_odonto`");
+        DB::unprepared("
+            CREATE PROCEDURE `resumen_citas_por_odonto` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.nombre, u.paterno, u.materno) AS nombre_completo,
+                    c.estado,
+                    YEAR(c.fecha)  AS anio,
+                    MONTH(c.fecha) AS mes,
+                    COUNT(c.idCita) AS Nro
+                FROM cita c
+                JOIN hace h    ON h.idCita = c.idCita
+                JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY
+                    u.idUsuario, u.nombre, u.paterno, u.materno,
+                    c.estado, YEAR(c.fecha), MONTH(c.fecha)
+                ORDER BY
+                    h.idUsuario_Odontologo, nombre_completo, c.estado, anio, mes;
+            END
+        ");
+
+        // Procedimiento: sp_ganancia_citas_por_odontologo
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_ganancia_citas_por_odontologo`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_ganancia_citas_por_odontologo` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.paterno, u.materno, u.nombre) AS nombre_completo,
+                    SUM(c.pagado) AS Total_Ganancia_Citas
+                FROM cita c
+                INNER JOIN hace h  ON h.idCita = c.idCita
+                INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY u.idUsuario, nombre_completo
+                ORDER BY Total_Ganancia_Citas DESC;
+            END
+        ");
+
+        // Procedimiento: sp_ganancia_por_tratamiento
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_ganancia_por_tratamiento`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_ganancia_por_tratamiento` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    t.nombre,
+                    SUM(t.precio) AS total_ganancia_tratamiento
+                FROM cita c
+                INNER JOIN tratamiento t ON t.idCita = c.idCita
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY t.nombre
+                ORDER BY total_ganancia_tratamiento DESC, t.nombre;
+            END
+        ");
+
+        // Procedimiento: sp_ganancia_tratamientos_por_odontologo
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_ganancia_tratamientos_por_odontologo`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_ganancia_tratamientos_por_odontologo` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.paterno, u.materno, u.nombre) AS nombre_completo,
+                    SUM(t.precio) AS total_ganancia_tratamiento
+                FROM cita c
+                INNER JOIN tratamiento t ON t.idCita = c.idCita
+                INNER JOIN hace h        ON h.idCita = c.idCita
+                INNER JOIN usuario u     ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY u.idUsuario, nombre_completo
+                ORDER BY total_ganancia_tratamiento DESC;
+            END
+        ");
+
+        // Procedimiento: sp_reporte_citas_por_estado_odontologo
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_reporte_citas_por_estado_odontologo`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_reporte_citas_por_estado_odontologo` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.paterno, u.materno, u.nombre) AS nombre_completo,
+                    c.estado,
+                    COUNT(*) AS Nro_Citas
+                FROM cita c
+                INNER JOIN hace h  ON h.idCita = c.idCita
+                INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY u.idUsuario, nombre_completo, c.estado
+                ORDER BY u.idUsuario, c.estado;
+            END
+        ");
+
+        // Procedimiento: vaciar_bd
+        DB::unprepared("DROP PROCEDURE IF EXISTS `vaciar_bd`");
+        DB::unprepared("
+            CREATE PROCEDURE `vaciar_bd` (IN `dbname` VARCHAR(64))
+            BEGIN
+                DECLARE done INT DEFAULT FALSE;
+                DECLARE t VARCHAR(64);
+                DECLARE cur CURSOR FOR
+                    SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_schema = dbname AND table_type = 'BASE TABLE';
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+                SET FOREIGN_KEY_CHECKS = 0;
+                OPEN cur;
+                read_loop: LOOP
+                    FETCH cur INTO t;
+                    IF done THEN LEAVE read_loop; END IF;
+                    SET @s = CONCAT('DELETE FROM `', dbname, '`.`', t, '`');
+                    PREPARE stmt FROM @s;
+                    EXECUTE stmt;
+                    DEALLOCATE PREPARE stmt;
+                END LOOP;
+                CLOSE cur;
+                SET FOREIGN_KEY_CHECKS = 1;
+            END
+        ");
+
+        $this->command->info('✅ Procedimientos y funciones creados exitosamente!');
+        
+        // ==================== MENSAJES FINALES ====================
+        $this->command->info('');
+        $this->command->info('✅ Base de datos poblada exitosamente!');
+        $this->command->info('');
     }
+    
 }
