@@ -8,7 +8,7 @@ import ResumenCitasPorOdonto from "../components/resumen_citas_por_odonto";
 import ResumenCitasPorDias from "../components/resumen_citas_dias";
 import GananciaPorTratamiento from "../components/ganancia_por_tratamiento";
 import IngresosYCitasPorOdonto from "../components/ingresos_y_citas_por_odonto";
-import CitasPorDiaSemana from "../components/Citas_por_día_de_la_semana"; // renombra si tu archivo tenía tilde
+import CitasPorDiaSemana from "../components/Citas_por_día_de_la_semana"; 
 
 // ====== mapa de vistas ======
 const VIEWS: Record<string, { title: string; Component: React.ComponentType }> = {

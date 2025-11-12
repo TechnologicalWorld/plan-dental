@@ -15,7 +15,7 @@ const Placeholder: React.FC<Props> = ({ title = 'En construcción', subtitle }) 
           <p className="text-slate-300">{subtitle}</p>
         ) : (
           <p className="text-slate-300">
-            Esta pantalla aún no está implementada. Pronto estará lista. 💡
+            Esta pantalla aún no está implementada. Pronto estará lista. 
           </p>
         )}
         <div className="mt-6 text-sm">
