@@ -159,10 +159,7 @@ export default function DashboardReportDownload({
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-xl shadow-xl border border-slate-700">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-white mb-2 text-lg">📄 Generar Reporte PDF</h3>
-            <p className="text-sm text-slate-300">
-              Exporta todos los datos actuales a un documento PDF profesional
-            </p>
+            <h3 className="font-semibold text-white mb-2 text-lg"> Generar Reporte PDF</h3>
           </div>
           <button
             onClick={prepararPDF}
