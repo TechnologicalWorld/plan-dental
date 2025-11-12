@@ -12,6 +12,7 @@ import ErrorBoundary from '@/app/router/ErrorBoundary';
 import RootGate from '@/app/router/RootGate';
 import LoginPage from '@/features/auth/pages/LoginPage';
 import RegisterPage from '@/features/auth/pages/RegisterPage';
+import CalendarioGeneralAdminPage from '@/features/calendario/pages/CalendarioGeneralAdminPage';
 
 import Reportes from '@/features/reportes/pages/Reportes';
 import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
@@ -65,7 +66,7 @@ export const router = createBrowserRouter([
 
               { path: '/app/admin/especialidades',     element: <EspecialidadesAdminPage /> },
 
-              { path: '/app/admin/calendario',         element: <div>Calendario (Admin)</div> },
+              { path: '/app/admin/calendario',         element:  <CalendarioGeneralAdminPage /> },
               { path: '/app/admin/reportes',           element: <Reportes /> },
             ],
           },
