@@ -1,0 +1,77 @@
+# 🦷 Clínica Dental — Sistema de Gestión
+
+Sistema web para la **gestión de una clínica dental**, dividido en dos módulos principales:
+
+- ⚙️ **Backend:** desarrollado en **Laravel** (API REST), ubicado en la carpeta `backend/`.
+- 💻 **Frontend:** desarrollado en **React** con Node.js 18+, ubicado en la carpeta `frontend/`.
+
+---
+
+## 🚀 Requisitos previos
+
+Antes de comenzar, asegúrate de tener instalado lo siguiente:
+
+- [XAMPP](https://www.apachefriends.org/es/index.html) — PHP ≥ 8.1 y MySQL  
+- [Composer](https://getcomposer.org/) — para gestionar dependencias de Laravel  
+- [Node.js ≥ 18](https://nodejs.org/) — para ejecutar el frontend  
+- [Git](https://git-scm.com/) *(opcional)*
+
+---
+
+## 🧩 Instalación del proyecto
+## ⚙️ Configuración del Backend (Laravel)
+
+- Ir a la carpeta del backend:
+    cd backend
+
+- Instalar las dependencias de Laravel:
+    composer install
+
+- Copiar el archivo de entorno y configurarlo:
+    .env
+
+- Configurar la base de datos en el archivo .env:
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=clinica_dental
+    DB_USERNAME=root
+    DB_PASSWORD=
+
+- Generar la clave de aplicación:
+    php artisan key:generate
+
+- Ejecutar las migraciones y seeders:
+    php artisan migrate:fresh --seed
+
+- Iniciar el servidor del backend:
+    php artisan serve
+## 💻 Configuración del Frontend (React)
+
+- Ir a la carpeta del frontend:
+    cd ../frontend
+- Instalar las dependencias de Node:
+    npm install
+- Iniciar el servidor de desarrollo:
+    npm run dev
+## 🔑 Credenciales de acceso iniciales
+
+Al ejecutar php artisan migrate --seed, se crean usuarios por defecto con las siguientes credenciales:
+
+| Rol                     | Correo electrónico                                                  | Contraseña  |
+| ----------------------- | ------------------------------------------------------------------- | ----------- |
+| 🧑‍💼 **Administrador** | [admin@clinicadental.com](mailto:admin@clinicadental.com)           | admin123    |
+| 🦷 **Odontólogo**       | [odontologo@clinicadental.com](mailto:odontologo@clinicadental.com) | 123456789   |
+| 🧑‍⚕️ **Asistente**     | [asistente@clinicadental.com](mailto:asistente@clinicadental.com)   | 123456789   |
+| 👩‍🦰 **Paciente**      | [paciente@clinicadental.com](mailto:paciente@clinicadental.com)     | 123456789   |
+| 👥 **Otros usuarios**   | *(según seeder)*                                                    | password123 |
+
+## 🧠 Tecnologías utilizadas
+
+- Laravel 10+
+- MySQL
+- React 18+ (Vite)
+- Node.js 18+
+- TailwindCSS / Bootstrap (según configuración del proyecto)
+
+
