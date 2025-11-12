@@ -89,7 +89,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
       return { groups: [], items };
     }
 
-    // PACIENTE (orden que pediste)
+    // PACIENTE 
     const items: Item[] = [
       { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/app/mi-perfil', label: 'Mi perfil', icon: UserRound },

@@ -1,9 +1,7 @@
 import api from '@/shared/api/apiClient';
 
-
 export async function listarPacientes(params?: { page?: number; per_page?: number; search?: string }) {
   const { data } = await api.get('/pacientes', { params });
-  // puede venir como { data: Paciente[], meta: {...} } o directamente []
   return data;
 }
 
@@ -13,7 +11,6 @@ export async function registrarPaciente(payload: {
   telefono?: string; contrasena: string; correo: string; direccion?: string;
   codigoSeguro?: string; lugarNacimiento?: string; domicilio?: string; fechaIngreso: string;
 }) {
-  // tu backend registra con /api/register
   const body = { device_name: 'react-app', ...payload };
   const { data } = await api.post('/register', body);
   return data;
@@ -32,7 +29,6 @@ export async function eliminarPaciente(idUsuario_Paciente: number) {
   return data;
 }
 
-/** Toggle estado del USUARIO (no del paciente) */
 export async function actualizarEstadoUsuario(idUsuario: number, estado: boolean) {
   const { data } = await api.put(`/usuarios/${idUsuario}`, { estado });
   return data;
