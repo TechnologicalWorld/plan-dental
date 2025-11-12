@@ -80,8 +80,6 @@ php artisan key:generate
 # Ejecutar migraciones y seeders
 php artisan migrate:fresh --seed
 
-# Generar clave JWT (si se usa autenticación JWT)
-php artisan jwt:secret
 
 
 ### 3. Configuración del Frontend (React)
