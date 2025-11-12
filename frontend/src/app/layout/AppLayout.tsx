@@ -34,12 +34,18 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100">
-      <Topbar onToggleSidebar={() => setCollapsed((v) => !v)} />
+      {/* Topbar fijo */}
+      <div className="sticky top-0 z-40">
+        <Topbar onToggleSidebar={() => setCollapsed((v) => !v)} />
+      </div>
 
-      <div className="grid" style={{ gridTemplateColumns: `${collapsed ? '72px' : '240px'} 1fr` }}>
+      <div
+        className="grid overflow-hidden"
+        style={{ gridTemplateColumns: `${collapsed ? '72px' : '240px'} 1fr` }}
+      >
         <Sidebar collapsed={collapsed} onLogout={logout} />
 
-        <main className="min-h-[calc(100vh-56px)] p-6 bg-slate-950/50">
+        <main className="h-[calc(100vh-56px)] overflow-y-auto p-6 bg-slate-950/50">
           <Outlet />
         </main>
       </div>

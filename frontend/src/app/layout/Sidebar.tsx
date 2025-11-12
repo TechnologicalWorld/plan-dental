@@ -106,15 +106,14 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
 
   return (
     <aside
-      className={`bg-slate-900 text-slate-100 flex flex-col h-[calc(100vh-56px)] ${
-        collapsed ? 'w-[72px]' : 'w-[240px]'
-      }`}
+      className={`sticky top-[56px] bg-slate-900 text-slate-100 flex flex-col
+        ${collapsed ? 'w-[72px]' : 'w-[240px]'}
+        h-[calc(100vh-56px)]`}
     >
       
 
       {/* NAV */}
       <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-2">
-        {/* Dashboard arriba si existe */}
         {menu.items?.some((i) => i.to === '/app/dashboard') && (
           <NavItem collapsed={collapsed} to="/app/dashboard" label="Dashboard" icon={LayoutDashboard} />
         )}
