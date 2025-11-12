@@ -44,13 +44,13 @@ class DatabaseSeeder extends Seeder
             // Odontólogos
             ['idUsuario' => 6, 'ci' => '3214569', 'nombre' => 'Juan', 'paterno' => 'Torrez', 'materno' => 'Vargas', 'fechaNacimiento' => '1987-09-25', 'genero' => 'M', 'telefono' => '76789012', 'correo' => 'juan.torrez@email.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'Calacoto #789', 'estado' => true],
             ['idUsuario' => 7, 'ci' => '7412589', 'nombre' => 'Patricia', 'paterno' => 'Quisbert', 'materno' => 'Nina', 'fechaNacimiento' => '1993-12-14', 'genero' => 'F', 'telefono' => '77890123', 'correo' => 'patricia.quisbert@email.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'Miraflores #321', 'estado' => true],
-            ['idUsuario' => 8, 'ci' => '8523697', 'nombre' => 'Diego', 'paterno' => 'Limachi', 'materno' => 'Choque', 'fechaNacimiento' => '1991-04-07', 'genero' => 'M', 'telefono' => '78901234', 'correo' => 'diego.limachi@email.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'San Miguel #654', 'estado' => true],
+            ['idUsuario' => 8, 'ci' => '8523697', 'nombre' => 'Diego', 'paterno' => 'Limachi', 'materno' => 'Choque', 'fechaNacimiento' => '1991-04-07', 'genero' => 'M', 'telefono' => '78901234', 'correo' => 'odontologo@gmail.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'San Miguel #654', 'estado' => true],
             
             // Administradores
-            ['idUsuario' => 9, 'ci' => '4561237', 'nombre' => 'Sofía', 'paterno' => 'Poma', 'materno' => 'Sanchez', 'fechaNacimiento' => '1996-08-20', 'genero' => 'F', 'telefono' => '79012345', 'correo' => 'sofia.poma@email.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'Obrajes #987', 'estado' => true],
+            ['idUsuario' => 9, 'ci' => '4561237', 'nombre' => 'Sofía', 'paterno' => 'Poma', 'materno' => 'Sanchez', 'fechaNacimiento' => '1996-08-20', 'genero' => 'F', 'telefono' => '79012345', 'correo' => 'adm@gmail.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'Obrajes #987', 'estado' => true],
             
             // Asistentes
-            ['idUsuario' => 10, 'ci' => '6547893', 'nombre' => 'Miguel', 'paterno' => 'Alarcon', 'materno' => 'Rojas', 'fechaNacimiento' => '1989-02-11', 'genero' => 'M', 'telefono' => '70123456', 'correo' => 'miguel.alarcon@email.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'Achumani #147', 'estado' => true],
+            ['idUsuario' => 10, 'ci' => '6547893', 'nombre' => 'Miguel', 'paterno' => 'Alarcon', 'materno' => 'Rojas', 'fechaNacimiento' => '1989-02-11', 'genero' => 'M', 'telefono' => '70123456', 'correo' => 'asistente@gmail.com', 'contrasena' => Hash::make('password123'), 'direccion' => 'Achumani #147', 'estado' => true],
             
             // Usuarios del sistema
             ['idUsuario' => 12, 'ci' => '1234567', 'nombre' => 'Admin', 'paterno' => 'Principal', 'materno' => 'Sistema', 'fechaNacimiento' => '1980-01-01', 'genero' => 'M', 'telefono' => '77777777', 'correo' => 'admin@clinicadental.com', 'contrasena' => Hash::make('admin123'), 'direccion' => 'Av. Principal #123', 'estado' => true],
