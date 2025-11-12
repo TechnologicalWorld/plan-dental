@@ -80,8 +80,6 @@ php artisan key:generate
 # Ejecutar migraciones y seeders
 php artisan migrate:fresh --seed
 
-
-
 ### 3. Configuración del Frontend (React)
 
 ```bash
