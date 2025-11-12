@@ -471,10 +471,10 @@ class DatabaseSeeder extends Seeder
         }
 
         // ==================== MENSAJES FINALES ====================
+        /*$this->command->info('');
+        $this->command->info('Base de datos poblada exitosamente!');
         $this->command->info('');
-        $this->command->info('✅ Base de datos poblada exitosamente!');
-        $this->command->info('');
-        $this->command->info('📊 Resumen de datos creados:');
+        $this->command->info(' Resumen de datos creados:');
         $this->command->info('   - 15 Usuarios');
         $this->command->info('   - 6 Pacientes');
         $this->command->info('   - 4 Odontólogos');
@@ -491,8 +491,8 @@ class DatabaseSeeder extends Seeder
         $this->command->info('   - 9 Planes de Tratamiento');
         $this->command->info('   - 10 Detalles Dentales');
         $this->command->info('   - 9 Evoluciones');
-        $this->command->info('');
-        $this->command->info('🔑 Credenciales de acceso:');
+        $this->command->info('');*/
+        $this->command->info('   Credenciales de acceso:');
         $this->command->info('   Admin: admin@clinicadental.com / admin123');
         $this->command->info('   Odontólogo: odontologo@clinicadental.com / 123456789');
         $this->command->info('   Paciente: paciente@clinicadental.com / 123456789');
@@ -501,7 +501,6 @@ class DatabaseSeeder extends Seeder
         $this->command->info('');
         
     // ==================== PROCEDIMIENTOS ALMACENADOS Y FUNCIONES ====================
-        $this->command->info('📦 Creando procedimientos almacenados y funciones...');
         
         // Función: nombre_dia_es
         DB::unprepared("DROP FUNCTION IF EXISTS `nombre_dia_es`");
@@ -863,12 +862,10 @@ class DatabaseSeeder extends Seeder
         END
         ");
 
-
-        $this->command->info('✅ Procedimientos y funciones creados exitosamente!');
         
         // ==================== MENSAJES FINALES ====================
         $this->command->info('');
-        $this->command->info('✅ Base de datos poblada exitosamente!');
+        $this->command->info(' Base de datos cargada!');
         $this->command->info('');
     }
     
