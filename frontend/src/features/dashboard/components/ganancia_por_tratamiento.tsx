@@ -13,8 +13,7 @@ import {
 } from "recharts";
 
 // ⬅️ Ajusta esta ruta
-import { dashboardService, type MesParam } from "../../entities/usuarios/dashboardservice";
-
+import { dashboardService, type MesParam } from "../dashboardservice";
 // -------------------- Tema (oscuro) --------------------
 const theme = {
   grid: "rgba(226,232,240,0.16)",

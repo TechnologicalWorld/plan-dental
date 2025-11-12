@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import type { DocumentProps } from "@react-pdf/renderer";
-import type { MesParam } from "../entities/usuarios/dashboardservice";
+import type { MesParam } from "../../dashboard/dashboardservice";
 
 // ===== Tipos de filtros y datasets esperados =====
 export type ReportFilters = {

@@ -15,8 +15,7 @@ import {
 } from "recharts";
 
 // Ajusta esta ruta según tu estructura de carpetas
-import { dashboardService } from "../../entities/usuarios/dashboardservice";
-
+import { dashboardService, type MesParam } from "../dashboardservice";
 // ---- Paleta (oscura, consistente con lo anterior) ----
 const theme = {
   grid: "rgba(226,232,240,0.16)",

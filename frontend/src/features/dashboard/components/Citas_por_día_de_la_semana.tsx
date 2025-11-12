@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 // Ajusta esta ruta según tu estructura de carpetas
-import { dashboardService, type MesParam } from "../../entities/usuarios/dashboardservice";
+import { dashboardService, type MesParam } from "../dashboardservice";
 
 // -------------------- Tema (oscuro) --------------------
 const theme = {

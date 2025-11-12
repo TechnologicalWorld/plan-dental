@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from "react";
 
 // ====== IMPORTA TUS GRÁFICOS (sin tildes/espacios en los nombres de archivo) ======
-import IngresosPorOdontoMes from "./graficos/ingresos_por_odonto_mes";
-import ResumenCitasPorOdonto from "./graficos/resumen_citas_por_odonto";
-import ResumenCitasPorDias from "./graficos/resumen_citas_dias";
-import GananciaPorTratamiento from "./graficos/ganancia_por_tratamiento";
-import IngresosYCitasPorOdonto from "./graficos/ingresos_y_citas_por_odonto";
-import CitasPorDiaSemana from "./graficos/Citas_por_día_de_la_semana"; // renombra si tu archivo tenía tilde
+import IngresosPorOdontoMes from "../components/ingresos_por_odonto_mes";
+import ResumenCitasPorOdonto from "../components/resumen_citas_por_odonto";
+import ResumenCitasPorDias from "../components/resumen_citas_dias";
+import GananciaPorTratamiento from "../components/ganancia_por_tratamiento";
+import IngresosYCitasPorOdonto from "../components/ingresos_y_citas_por_odonto";
+import CitasPorDiaSemana from "../components/Citas_por_día_de_la_semana"; // renombra si tu archivo tenía tilde
 
 // ====== mapa de vistas ======
 const VIEWS: Record<string, { title: string; Component: React.ComponentType }> = {
