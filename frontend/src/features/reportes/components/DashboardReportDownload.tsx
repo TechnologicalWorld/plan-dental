@@ -54,9 +54,9 @@ function PDFDownloader({
     <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-xl shadow-xl border border-slate-700">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-semibold text-white mb-2 text-lg">✅ Reporte PDF Listo</h3>
+          <h3 className="font-semibold text-white mb-2 text-lg"> Reporte PDF Listo</h3>
           <p className="text-sm text-slate-300">
-            📅 Año {pdfData.filtros.anio} - {new Date(2000, (pdfData.filtros.mes as number) - 1).toLocaleString('es', { month: 'long' })}
+             Año {pdfData.filtros.anio} - {new Date(2000, (pdfData.filtros.mes as number) - 1).toLocaleString('es', { month: 'long' })}
           </p>
         </div>
         <div className="flex gap-3">
