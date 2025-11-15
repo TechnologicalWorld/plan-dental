@@ -31,6 +31,9 @@ import PersonalListPage from '@/features/personal/pages/PersonalListPage';
 import PacientesAdminListPage from '@/features/pacientes/pages/PacientesAdminListPage';
 import RolesListPage from '@/features/roles/pages/RolesListPage';
 
+//Agregando Pages de asistente
+import PacientesAsistentePage from '@/features/pacientes/pages/PacientesAsistentePage'
+
 export const router = createBrowserRouter([
   // Entrada raíz -> decide login o dashboard según sesión
   { path: '/', element: <RootGate /> },
@@ -92,7 +95,7 @@ export const router = createBrowserRouter([
             children: [
               { path: '/app/citas',      element: <div>Gestión de Citas</div> },
               { path: '/app/calendario', element: <div>Calendario General</div> },
-              { path: '/app/asistente/pacientes',  element: <div>Pacientes (Asistente)</div> },
+              { path: '/app/asistente/pacientes',  element: <div><PacientesAsistentePage/></div> },
             ],
           },
 
