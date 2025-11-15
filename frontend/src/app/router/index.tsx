@@ -92,7 +92,7 @@ export const router = createBrowserRouter([
             children: [
               { path: '/app/citas',      element: <div>Gestión de Citas</div> },
               { path: '/app/calendario', element: <div>Calendario General</div> },
-              { path: '/app/pacientes',  element: <div>Pacientes (Asistente)</div> },
+              { path: '/app/asistente/pacientes',  element: <div>Pacientes (Asistente)</div> },
             ],
           },
 

@@ -83,7 +83,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
       const items: Item[] = [
         { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { to: '/app/citas', label: 'Gestión de Citas', icon: Calendar },
-        { to: '/app/pacientes', label: 'Pacientes', icon: UserRound },
+        { to: '/app/asistente/pacientes', label: 'Pacientes', icon: UserRound },
         { to: '/app/calendario', label: 'Calendario General', icon: Calendar },
         { to: '/app/ai', label: 'Asistente IA', icon: Bot },
       ];
