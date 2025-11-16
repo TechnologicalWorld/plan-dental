@@ -53,7 +53,7 @@ export default function PacientesAdminListPage() {
     fechaIngreso: '',
   });
 
-  // ver/editar/eliminar
+
   const [viewOpen, setViewOpen] = useState(false);
   const [detail, setDetail] = useState<Paciente | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos');
@@ -150,7 +150,7 @@ export default function PacientesAdminListPage() {
       ...p,
       usuario: {
         ...p.usuario,
-        ...full?.data, // Sobreescribe con datos frescos de getUsuario
+        ...full?.data, 
       },
     };
     setDetail(combinedDetail);
