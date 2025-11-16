@@ -5,29 +5,11 @@ import { useNavigate } from "react-router-dom";
 import Modal from '@/shared/ui/Modal';
 import { getUsuario } from '@/features/personal/personal.service';
 import { Eye } from 'lucide-react';
-// importando services
-import { listarPacientes, actualizarEstadoUsuario, registrarPaciente } from '@/features/pacientes/pacientes.service';
 
-// Asumiendo que tienes este interface disponible (lo importas si es necesario)
-export interface Paciente {
-  idUsuario_Paciente: number;
-  codigoSeguro?: string | null;
-  lugarNacimiento?: string | null;
-  domicilio?: string | null;
-  fechaIngreso?: string | null;
-  usuario: {
-    idUsuario: number;
-    ci: string;
-    nombre: string;
-    paterno: string;
-    materno?: string | null;
-    correo: string;
-    telefono: string;
-    estado: boolean;
-    fechaNacimiento?: string | null;
-    genero?: 'M' | 'F' | 'Otro';
-  };
-}
+import { listarPacientes, actualizarEstadoUsuario, registrarPaciente } from '@/features/pacientes/pacientes.service';
+import type { Paciente } from "@/types/paciente";
+
+
 
 type RegisterBody = {
   nombre: string;
@@ -46,9 +28,6 @@ type RegisterBody = {
   device_name?: string;
 };
 
-function onlyDate(d?: string) {
-  return d ? String(d).split('T')[0] : d;
-}
 
 export default function PacientesAdminListPage() {
   const [items, setItems] = useState<Paciente[]>([]);
@@ -167,7 +146,6 @@ export default function PacientesAdminListPage() {
     const idU = p.usuario?.idUsuario ?? p.idUsuario_Paciente;
     if (!idU) return;
     const full = await getUsuario(idU);
-    // Combinar datos de p (paciente) con full (usuario) para incluir domicilio, etc.
     const combinedDetail: Paciente = {
       ...p,
       usuario: {
@@ -226,8 +204,8 @@ export default function PacientesAdminListPage() {
               <th className="text-left p-2">CI</th>
               <th className="text-left p-2">Nombre</th>
               <th className="text-left p-2">Fecha ingreso</th>
-              <th className="text-left p-2">Teléfono</th>
               <th className="text-left p-2">Estado</th>
+              {/*<th className="text-left p-2">Estado</th>*/}
               <th className="text-left p-2">Acciones</th>
             </tr>
           </thead>
@@ -260,6 +238,8 @@ export default function PacientesAdminListPage() {
                       Historial Clinico
                     </button>
                   </td>
+                  
+                  
                 </tr>
               );
             })}
@@ -272,7 +252,7 @@ export default function PacientesAdminListPage() {
         </table>
       </div>
 
-      {/* Modal agregar (usando Modal component para consistencia) */}
+      {/* Modal agregar */}
       <Modal open={open} onClose={() => setOpen(false)} title="Agregar Paciente">
         <form onSubmit={crearPaciente} className="p-5 space-y-3">
           <div className="grid grid-cols-2 gap-3">

@@ -33,7 +33,9 @@ import RolesListPage from '@/features/roles/pages/RolesListPage';
 
 //Agregando Pages de asistente
 import PacientesAsistentePage from '@/features/pacientes/pages/PacientesAsistentePage'
-
+import CalendarioAsistentePage from '@/features/calendario/pages/CalendarioAsistentePage'
+import CitasAsistentePage from '@/features/citas/pages/CitasAsistentePage'
+import CalendarioAsistenteCrear from '@/features/citas/pages/CitasAsistenteCrear'
 export const router = createBrowserRouter([
   // Entrada raíz -> decide login o dashboard según sesión
   { path: '/', element: <RootGate /> },
@@ -93,8 +95,9 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={['ASISTENTE']} />,
             children: [
-              { path: '/app/citas',      element: <div>Gestión de Citas</div> },
-              { path: '/app/calendario', element: <div>Calendario General</div> },
+              { path: '/app/asisitente/citas',      element: <div><CitasAsistentePage/></div> },
+              { path: '/app/asistente/calendario', element: <div><CalendarioAsistentePage/></div> },
+              { path: '/app/asistente/citas/crear', element: <div><CalendarioAsistenteCrear/></div> },
               { path: '/app/asistente/pacientes',  element: <div><PacientesAsistentePage/></div> },
             ],
           },
