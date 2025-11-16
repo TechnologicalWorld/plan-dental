@@ -429,16 +429,26 @@ const calcularHorarios = useCallback(async () => {
         </div>
       </div>
 
-      {/* GUARDAR CITA */}
-      <button
-        onClick={handleCrearCita}
-        disabled={loadingCita || !hora || !pacienteId || !fecha || !odontologoId}
-        className="w-full py-3 rounded-md text-white font-medium disabled:opacity-50 bg-teal-600 hover:bg-teal-700 transition"
-      >
-        {loadingCita ? "Guardando..." : "Crear Cita"}
-      </button>
+      {/* GUARDAR  */}
+        
+      <div className="flex gap-2">
+        <button
+          onClick={handleCrearCita}
+          disabled={loadingCita || !hora || !pacienteId || !fecha || !odontologoId}
+          className="flex-1 py-2 px-3 rounded-md text-white text-sm font-medium disabled:opacity-50 bg-teal-600 hover:bg-teal-700 transition"
+        >
+          {loadingCita ? "Guardando..." : "Crear Cita"}
+        </button>
 
-      {/* MODAL PACIENTE - CORREGIDO Y FUNCIONAL */}
+        <button
+          onClick={() => window.history.back()}
+          className="flex-1 py-2 px-3 rounded-md text-white text-sm font-medium bg-gray-600 hover:bg-gray-700 transition"
+        >
+          SALIR
+        </button>
+      </div>
+
+      {/* MODAL*/}
       <Modal
         open={showModalPaciente}
         onClose={() => setShowModalPaciente(false)}

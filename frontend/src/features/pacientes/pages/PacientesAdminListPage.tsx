@@ -308,7 +308,7 @@ export default function PacientesAdminListPage() {
         </table>
       </div>
 
-      {/* Modal agregar (centrado) */}
+      {/* Modal */}
       <dialog
         open={open}
         className="rounded-md w-[720px] bg-white text-slate-900"
@@ -367,7 +367,7 @@ export default function PacientesAdminListPage() {
         </form>
       </dialog>
 
-      {/* VER (tu Modal existente) */}
+      {/* VER  */}
       <Modal open={viewOpen} onClose={() => setViewOpen(false)} title="Detalle de paciente" widthClassName="max-w-2xl">
         {!detail ? (
           <div>Cargando…</div>
@@ -387,13 +387,11 @@ export default function PacientesAdminListPage() {
         )}
       </Modal>
 
-      {/* EDITAR (tu Modal existente) */}
-      {/* EDITAR (con acciones dentro del contenido) */}
+      {/* EDITAR */}
       <Modal
         open={editOpen}
         onClose={() => setEditOpen(false)}
         title="Editar paciente"
-        widthClassName="max-w-2xl"
       >
         <div className="grid grid-cols-2 gap-3">
           <input className="px-3 py-2 rounded border" placeholder="CI"
@@ -428,7 +426,7 @@ export default function PacientesAdminListPage() {
             value={edit.direccion ?? ''} onChange={(e) => setEdit((s) => ({ ...s, direccion: e.target.value }))} />
         </div>
 
-        {/* Botonera fija al final */}
+        {/* Botone */}
         <div className="mt-4 flex justify-end gap-2">
           <button
             onClick={() => setEditOpen(false)}
@@ -446,7 +444,7 @@ export default function PacientesAdminListPage() {
       </Modal>
 
 
-      {/* ELIMINAR (tu ConfirmDialog) */}
+      {/* ELIMINAR*/}
       <ConfirmDialog
         open={delOpen}
         onClose={() => setDelOpen(false)}
