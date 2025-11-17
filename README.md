@@ -52,7 +52,6 @@ clinicadental/
 
 # Opción 1: Descargar ZIP
 # Descomprimir y acceder a la carpeta
-```
 
 ### 2. Configuración del Backend (Laravel)
 
@@ -79,7 +78,7 @@ php artisan key:generate
 
 # Ejecutar migraciones y seeders
 php artisan migrate:fresh --seed
-
+```
 ### 3. Configuración del Frontend (React)
 
 ```bash
@@ -141,11 +140,9 @@ php artisan route:clear
 #### Frontend
 
 ```bash
-
 # Ejecutar tests
 npm test
 
 # Ejecutar en modo desarrollo
 npm run dev
-
 ```

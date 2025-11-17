@@ -6,7 +6,7 @@ export function extractHHmm(input: string): string {
 }
 
 export function combineDateAndTime(fechaIso: string, hhmm: string): Date {
-  const fechaStr = String(fechaIso).slice(0, 10); 
+  const fechaStr = String(fechaIso).slice(0, 10); // "YYYY-MM-DD"
   const [year, month, day] = fechaStr.split("-").map(Number);
   const [h, m] = hhmm.split(":").map(Number);
   
@@ -32,14 +32,12 @@ export function buildMonthGrid(date: Date): Date[] {
   return Array.from({ length: 42 }, (_, i) => addDays(start, i));
 }
 
-/** Suma días */
 export function addDays(date: Date, days: number): Date {
   const d = new Date(date);
   d.setDate(d.getDate() + days);
   return d;
 }
 
-/** Obtiene el lunes de la semana del date */
 export function getWeekStart(date: Date): Date {
   const d = new Date(date);
   const day = (d.getDay() + 6) % 7; // 0 = lunes
@@ -48,7 +46,6 @@ export function getWeekStart(date: Date): Date {
   return d;
 }
 
-/** Formateos simples */
 export const fmtDayKey = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
     d.getDate()

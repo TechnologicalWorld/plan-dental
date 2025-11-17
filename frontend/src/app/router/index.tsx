@@ -14,6 +14,9 @@ import LoginPage from '@/features/auth/pages/LoginPage';
 import RegisterPage from '@/features/auth/pages/RegisterPage';
 import CalendarioGeneralAdminPage from '@/features/calendario/pages/CalendarioGeneralAdminPage';
 
+import AgendaOdontologoPage from '@/features/agenda/pages/AgendaOdontologoPage';
+import MisPacientesPage from '@/features/odonto-pacientes/pages/MisPacientesPage';
+
 import Reportes from '@/features/reportes/pages/Reportes';
 import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
 
@@ -75,10 +78,11 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={['ODONTOLOGO']} />,
             children: [
-              { path: '/app/agenda',      element: <div>Mi agenda</div> },
-              { path: '/app/pacientes',   element: <div>Pacientes (Odontólogo)</div> },
+              { path: '/app/agenda',      element: <AgendaOdontologoPage /> },
+              { path: '/app/pacientes',   element: <MisPacientesPage /> },
               { path: '/app/historias',   element: <div>Historia clínica</div> },
               { path: '/app/odontograma', element: <div>Odontograma</div> },
+              { path: '/app/tratamientos', element: <div>Tratamientos y Diagnósticos</div> },
             ],
           },
 

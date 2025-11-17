@@ -1,4 +1,3 @@
-// src/features/auth/pages/LoginPage.tsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/shared/hooks/useAuthStore';
@@ -27,7 +26,7 @@ export default function LoginPage() {
         <div className="px-8 pt-8 text-center">
           <div className="flex items-center justify-center gap-3">
             <img
-              src="/logo.png"
+              src="src/LogoPlanDental.svg"
               alt="Plan Dental"
               className="h-9 w-9 rounded-full bg-white/80 p-1"
             />

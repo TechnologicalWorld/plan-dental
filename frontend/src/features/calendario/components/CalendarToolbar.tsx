@@ -49,12 +49,15 @@ export default function CalendarToolbar({ current, onPrev, onNext, onToday, view
 
   function selectMonthYear(month: number, year: number) {
     const newDate = new Date(year, month, 1);
+
     if (view === "week") {
       const day = (newDate.getDay() + 6) % 7;
       newDate.setDate(newDate.getDate() - day);
     }
+
     setShowPicker(false);
     
+    // Calcular cuántos meses moverse
     const currentMonth = current.getMonth();
     const currentYr = current.getFullYear();
     const targetMonth = month;

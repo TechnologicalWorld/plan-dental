@@ -1,4 +1,3 @@
-// src/app/layout/Topbar.tsx
 import { Menu } from 'lucide-react';
 
 type TopbarProps = {
@@ -18,7 +17,7 @@ export default function Topbar({ onToggleSidebar, title = 'Plan Dental' }: Topba
         <Menu size={20} />
       </button>
 
-      <img src="/logo.png" alt="Plan Dental" className="h-7 w-7 rounded-full object-contain" />
+      <img src="../../../src/LogoPlanDental.svg" alt="Plan Dental" className="h-7 w-7 rounded-full object-contain" />
       <span className="font-semibold tracking-wide">{title}</span>
 
       <div className="ml-auto text-xs opacity-80">
