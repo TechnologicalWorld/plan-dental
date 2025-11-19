@@ -9,7 +9,7 @@ export interface Hace {
   idUsuario_Asistente: number;
   idUsuario_Odontologo: number;
   fecha: string; 
-//relaciones .
+//relaciones . 
   paciente?: Paciente;
   cita?: Cita;
   asistente?: Asistente;

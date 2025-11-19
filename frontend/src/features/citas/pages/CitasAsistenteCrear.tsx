@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { useAuthStore } from "@/shared/hooks/useAuthStore";
-import { listarOdontologos } from "@/features/personal/personal.service";
-import { crearCita } from "@/features/citas/citas.service";
-import { crearHace } from "@/features/citas/hace.service";
+import { listarOdontologos ,obtenerOdontologoPorId } from "@/features/personal/personal.service";
+import { crearCita  ,obtenerCita} from "@/features/citas/citas.service";
+import { crearHace,obtenerHacePorOdontologoYFecha } from "@/features/citas/hace.service";
 import { listarPacientes, registrarPaciente } from "@/features/pacientes/pacientes.service";
-import { listarCitasPorFecha } from "@/features/citas/citas.service";
+//import type { Cita } from '@/types/cita';
+import type { Odontologo } from '@/types/odontologo';
+//import type {Asistente} from '@/types/asistente';
 import { FaTimes } from "react-icons/fa";
 
 type Paciente = {
@@ -16,15 +18,17 @@ type Paciente = {
     materno?: string | null;
   };
 };
-
+/*
 type Odontologo = {
   idUsuario_Odontologo: number;
+  fechaContratacion: string; // 'YYYY-MM-DD'
+  horario: string;
   usuario: {
     nombre: string;
     paterno?: string;
     materno?: string | null;
   };
-};
+};*/
 
 type FormPaciente = {
   nombre: string;
@@ -157,50 +161,127 @@ export default function CitasAsistenteCrear() {
     return () => clearTimeout(timeout);
   }, [searchPaciente]);
 
+  //SACANDO LOS HORARIOS
+function parseHorario(horario: string) {
+  const regex = /^(\w+) a (\w+) (\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/;
+  const match = horario.match(regex);
+
+  if (!match) {
+    throw new Error("Formato de horario no válido: " + horario);
+  }
+
+  const [, diaInicioStr, diaFinStr, horaInicio, horaFin] = match;
+
+  const mapaDias: Record<string, number> = {
+    Lunes: 1,
+    Martes: 2,
+    Miércoles: 3,
+    Miercoles: 3,
+    Jueves: 4,
+    Viernes: 5,
+    Sábado: 6,
+    Sabado: 6,
+    Domingo: 7,
+  };
+
+  return {
+    diaInicio: mapaDias[diaInicioStr],
+    diaFin: mapaDias[diaFinStr],
+    horaInicio,
+    horaFin,
+  };
+}
+
+function obtenerNumeroDia(fechaString: string): number {
+  const fecha = new Date(fechaString);
+  const dia = fecha.getDay(); 
+  return dia === 0 ? 7 : dia; // domingo = 7
+}
+
 const calcularHorarios = useCallback(async () => {
   if (!fecha || !odontologoId) {
     setHorariosDisponibles([]);
     setHorariosOcupados([]);
-    setHora("");
+    setHora(""); 
+    return;
     return;
   }
 
   setLoadingHorarios(true);
+
   try {
-    const citasDelDia = await listarCitasPorFecha(fecha);
+    // 1. Obtener odontólogo seleccionado
+    const odontologo = await obtenerOdontologoPorId(Number(odontologoId));
+    if (!odontologo || !odontologo.horario) {
+      setHorariosDisponibles([]);
+      setHorariosOcupados([]);
+      return;
+    }
+    // 2. Parsear horario del odontólogo: "Lunes a Viernes 8:00-16:00"
+    const horarioParseado = parseHorario(odontologo.horario);
+    const diaSemana = obtenerNumeroDia(fecha); // 1=Lunes ... 7=Domingo
 
-    const citasOdontologo = (citasDelDia ?? []).filter((c) =>
-      c.odontologos?.some((o) => o.idUsuario_Odontologo === Number(odontologoId))
-    );
+    // Validar si el odontólogo trabaja ese día
+    if (diaSemana < horarioParseado.diaInicio || diaSemana > horarioParseado.diaFin) {
+      setHorariosDisponibles([]);
+      setHorariosOcupados([]);
+      alert("El odontólogo no trabaja este día según su horario.");
+      setHora("");
+      setLoadingHorarios(false);
+      return;
+    }
+    // 3. Generar horarios posibles según rango 
+    const horaInicioNum = parseInt(horarioParseado.horaInicio.split(":")[0]);
+    const horaFinNum = parseInt(horarioParseado.horaFin.split(":")[0]);
 
-    const ocupados = citasOdontologo.map((c) => c.hora);
-    setHorariosOcupados(ocupados);
-
-    const inicio = 8;
-    const fin = 21;
-    const all: string[] = [];
-
-    for (let h = inicio; h < fin; h++) {
-      all.push(`${h.toString().padStart(2, "0")}:00`);
+    const horariosPosibles: string[] = [];
+    for (let h = horaInicioNum; h < horaFinNum; h++) {
+      horariosPosibles.push(`${h.toString().padStart(2, "0")}:00`);
     }
 
-    setHorariosDisponibles(all);
+    // 4. Obtener citas ocupadas del odontólogo en esa fecha
+    const haceList = await obtenerHacePorOdontologoYFecha(fecha, Number(odontologoId));
 
-    if (ocupados.includes(hora)) setHora("");
+    // Obtener solo las horas de citas activas 
+    const horasOcupadas = haceList
+      .map(h => h.idCita)
+      .filter(idCitaId => !!idCitaId) // solo si tiene cita asociada
+      .map(async (idCita) => {
+        const cita = await obtenerCita(idCita);
+        return cita?.hora.substring(0, 5); // "14:30"
+      });
+
+    const horasOcupadasResueltas = (await Promise.all(horasOcupadas)).filter(Boolean) as string[];
+
+    // 5. Calcular horarios disponibles
+    const disponibles = horariosPosibles.filter(
+      hora => !horasOcupadasResueltas.includes(hora)
+    );
+
+    setHorariosDisponibles(disponibles);
+    setHorariosOcupados(horasOcupadasResueltas);
+
+    // Si la hora actualmente seleccionada ya no está disponible, limpiarla
+    if (hora && !disponibles.includes(hora)) {
+      setHora("");
+    }
 
   } catch (error) {
-    console.error("Error calculando horarios:", error);
+    console.error("Error al calcular horarios disponibles:", error);
     setHorariosDisponibles([]);
     setHorariosOcupados([]);
+    alert("Error al cargar horarios del odontólogo");
   } finally {
     setLoadingHorarios(false);
   }
 }, [fecha, odontologoId, hora]);
 
 
+
   useEffect(() => {
     calcularHorarios();
   }, [calcularHorarios]);
+
 
   // Crear paciente
   const handleCrearPaciente = async (e: React.FormEvent) => {

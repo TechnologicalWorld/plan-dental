@@ -2,6 +2,35 @@ import api from '@/shared/api/apiClient';
 import type { Odontologo } from '@/types/odontologo';
 import type { Asistente } from '@/types/asistente';
 import type { Especialidad } from '@/types/especialidad';
+import type { Cita } from "@/types/cita";
+
+export async function obtenerOdontologoPorId(id: number): Promise<Odontologo | null> {
+  try {
+    const { data } = await api.get(`/odontologos/${id}`);
+    return data ?? null;
+  } catch (error) {
+    console.error("Error obteniendo odontólogo:", error);
+    return null;
+  }
+}
+
+export async function obtenerAgendaOdontologo(id: number): Promise<{ citas: Cita[]; horario: string } | null> {
+  try {
+    const { data } = await api.get(`/odontologos/${id}/agenda`);
+
+    const agenda = data?.agenda;
+
+    if (!agenda) return null;
+
+    return {
+      citas: agenda.citas ?? [],
+      horario: agenda.horario,
+    };
+  } catch (error) {
+    console.error("Error obteniendo agenda del odontólogo:", error);
+    return null;
+  }
+}
 
 /** ----- LISTADOS ----- */
 export async function listarOdontologos(params?: { page?: number; per_page?: number; search?: string }): Promise<Odontologo[]> {

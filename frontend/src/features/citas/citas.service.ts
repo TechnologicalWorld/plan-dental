@@ -31,7 +31,6 @@ export type CitaPaginada = {
   total: number;
 };
 
-// === SERVICIOS ===
 export async function listarCitas(params?: {
   page?: number;
   per_page?: number;

@@ -67,7 +67,7 @@ export default function CitasAsistentePage() {
       const citasRes = await listarCitas();
       const relacionesRes = await listarHace();
       const pacRes = await listarPacientes({ per_page: 100 });
-      const odontoRes = await listarOdontologos();
+      const odontoRes = await listarOdontologos({ per_page: 100 });
 
       const citasData = Array.isArray(citasRes) ? citasRes : citasRes?.data ?? [];
       const relacionesData = Array.isArray(relacionesRes) ? relacionesRes: relacionesRes?.data ?? [];
