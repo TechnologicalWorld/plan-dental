@@ -16,6 +16,10 @@ import CalendarioGeneralAdminPage from '@/features/calendario/pages/CalendarioGe
 
 import AgendaOdontologoPage from '@/features/agenda/pages/AgendaOdontologoPage';
 import MisPacientesPage from '@/features/odonto-pacientes/pages/MisPacientesPage';
+import HistoriaClinicaViewPage from '@/features/historias/pages/HistoriaClinicaViewPage';
+import HistoriasListPage from '@/features/historias/pages/HistoriasListPage';
+import HistoriaClinicaEditPage from '@/features/historias/pages/HistoriaClinicaEditPage';
+
 
 import Reportes from '@/features/reportes/pages/Reportes';
 import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
@@ -24,9 +28,6 @@ import Dashboard from '@/features/dashboard/pages/Dashboard';
 import NotFound from '@/shared/ui/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
 
-
-
-// 👉 NUEVAS PÁGINAS (ADMIN)
 import PersonalListPage from '@/features/personal/pages/PersonalListPage';
 import PacientesAdminListPage from '@/features/pacientes/pages/PacientesAdminListPage';
 import RolesListPage from '@/features/roles/pages/RolesListPage';
@@ -80,7 +81,9 @@ export const router = createBrowserRouter([
             children: [
               { path: '/app/agenda',      element: <AgendaOdontologoPage /> },
               { path: '/app/pacientes',   element: <MisPacientesPage /> },
-              { path: '/app/historias',   element: <div>Historia clínica</div> },
+              { path: '/app/historias',   element: <HistoriasListPage /> },
+              { path: '/app/historias/:pacienteId', element: <HistoriaClinicaViewPage /> },
+              { path: '/app/historias/:pacienteId/editar', element: <HistoriaClinicaEditPage /> },
               { path: '/app/odontograma', element: <div>Odontograma</div> },
               { path: '/app/tratamientos', element: <div>Tratamientos y Diagnósticos</div> },
             ],
