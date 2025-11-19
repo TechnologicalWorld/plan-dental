@@ -11,7 +11,7 @@ class DetalleDentalController extends Controller
 
     public function index()
     {
-        $detalles = DetalleDental::with(['accion', 'piezaDental'])->get();
+        $detalles = DetalleDental::with(['accion', 'pieza'])->get();
 
         return response()->json([
             'success' => true,
