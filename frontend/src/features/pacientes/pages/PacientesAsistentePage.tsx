@@ -1,6 +1,5 @@
 // src/features/pacientes/pages/PacientesAdminListPage.tsx
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 
 import Modal from '@/shared/ui/Modal';
 import { getUsuario } from '@/features/personal/personal.service';
@@ -33,7 +32,6 @@ export default function PacientesAdminListPage() {
   const [items, setItems] = useState<Paciente[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const navigate = useNavigate();
   // agregar
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -230,12 +228,6 @@ export default function PacientesAdminListPage() {
                   <td className="p-2 flex items-center gap-2">
                     <button title="Ver" onClick={() => ver(p)} className="p-1 rounded hover:bg-white/10">
                       <Eye size={16} />
-                    </button>
-                    <button
-                      onClick={() => navigate(`/pacientes/historial/${p.idUsuario_Paciente}`)}
-                      className="px-2 py-1 rounded text-xs bg-teal-700" // Color fijo, no depende de estado
-                    >
-                      Historial Clinico
                     </button>
                   </td>
                   
