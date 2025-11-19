@@ -1,18 +1,19 @@
 // src/app/router/index.tsx
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 
-import EspecialidadesAdminPage from '@/features/especialidades/pages/EspecialidadesAdminPage';
+import EspecialidadesAdminPage from "@/features/especialidades/pages/EspecialidadesAdminPage";
 
-import PublicLayout from '@/app/layout/PublicLayout';
-import AppLayout from '@/app/layout/AppLayout';
-import AuthGuard from '@/app/router/guards/AuthGuard';
-import RoleGuard from '@/app/router/guards/RoleGuard';
+import PublicLayout from "@/app/layout/PublicLayout";
+import AppLayout from "@/app/layout/AppLayout";
+import AuthGuard from "@/app/router/guards/AuthGuard";
+import RoleGuard from "@/app/router/guards/RoleGuard";
 
-import ErrorBoundary from '@/app/router/ErrorBoundary';
-import RootGate from '@/app/router/RootGate';
-import LoginPage from '@/features/auth/pages/LoginPage';
-import RegisterPage from '@/features/auth/pages/RegisterPage';
-import CalendarioGeneralAdminPage from '@/features/calendario/pages/CalendarioGeneralAdminPage';
+import ErrorBoundary from "@/app/router/ErrorBoundary";
+import RootGate from "@/app/router/RootGate";
+import LoginPage from "@/features/auth/pages/LoginPage";
+import RegisterPage from "@/features/auth/pages/RegisterPage";
+import CalendarioGeneralAdminPage from "@/features/calendario/pages/CalendarioGeneralAdminPage";
+
 
 import AgendaOdontologoPage from '@/features/agenda/pages/AgendaOdontologoPage';
 import MisPacientesPage from '@/features/odonto-pacientes/pages/MisPacientesPage';
@@ -32,18 +33,25 @@ import PersonalListPage from '@/features/personal/pages/PersonalListPage';
 import PacientesAdminListPage from '@/features/pacientes/pages/PacientesAdminListPage';
 import RolesListPage from '@/features/roles/pages/RolesListPage';
 
+
+//NUEVAS PÁGINAS (PACIENTE)
+import MiPerfilPage from "@/features/pacientes/pages/MiPerfilPage";
+import MiHistorialPage from "@/features/pacientes/pages/MiHistorialPage";
+import AgendarCitaPage from "@/features/pacientes/pages/AgendarCitaPage";
+
+
 export const router = createBrowserRouter([
   // Entrada raíz -> decide login o dashboard según sesión
-  { path: '/', element: <RootGate /> },
+  { path: "/", element: <RootGate /> },
 
   // Público
   {
     element: <PublicLayout />,
     errorElement: <ErrorBoundary />,
     children: [
-      { path: '/', element: <RootGate /> },
-      { path: '/login', element: <LoginPage /> },
-      { path: '/register', element: <RegisterPage /> },
+      { path: "/", element: <RootGate /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> },
     ],
   },
 
@@ -57,27 +65,39 @@ export const router = createBrowserRouter([
         errorElement: <ErrorBoundary />,
         children: [
           // Comunes
-          { path: '/app/dashboard', element: <Dashboard /> },
-          { path: '/app', element: <Dashboard /> },
+          { path: "/app/dashboard", element: <Dashboard /> },
+          { path: "/app", element: <Dashboard /> },
 
           // ---------- ADMIN ----------
           {
-            element: <RoleGuard allow={['ADMIN']} />,
+            element: <RoleGuard allow={["ADMIN"]} />,
             children: [
-              { path: '/app/admin/usuarios/personal',  element: <PersonalListPage /> },
-              { path: '/app/admin/usuarios/pacientes', element: <PacientesAdminListPage /> },
-              { path: '/app/admin/usuarios/roles',     element: <RolesListPage /> },
+              {
+                path: "/app/admin/usuarios/personal",
+                element: <PersonalListPage />,
+              },
+              {
+                path: "/app/admin/usuarios/pacientes",
+                element: <PacientesAdminListPage />,
+              },
+              { path: "/app/admin/usuarios/roles", element: <RolesListPage /> },
 
-              { path: '/app/admin/especialidades',     element: <EspecialidadesAdminPage /> },
+              {
+                path: "/app/admin/especialidades",
+                element: <EspecialidadesAdminPage />,
+              },
 
-              { path: '/app/admin/calendario',         element:  <CalendarioGeneralAdminPage /> },
-              { path: '/app/admin/reportes',           element: <Reportes /> },
+              {
+                path: "/app/admin/calendario",
+                element: <CalendarioGeneralAdminPage />,
+              },
+              { path: "/app/admin/reportes", element: <Reportes /> },
             ],
           },
 
           // ---------- ODONTÓLOGO ----------
           {
-            element: <RoleGuard allow={['ODONTOLOGO']} />,
+            element: <RoleGuard allow={["ODONTOLOGO"]} />,
             children: [
               { path: '/app/agenda',      element: <AgendaOdontologoPage /> },
               { path: '/app/pacientes',   element: <MisPacientesPage /> },
@@ -91,33 +111,41 @@ export const router = createBrowserRouter([
 
           // ---------- ASISTENTE ----------
           {
-            element: <RoleGuard allow={['ASISTENTE']} />,
+            element: <RoleGuard allow={["ASISTENTE"]} />,
             children: [
-              { path: '/app/citas',      element: <div>Gestión de Citas</div> },
-              { path: '/app/calendario', element: <div>Calendario General</div> },
-              { path: '/app/pacientes',  element: <div>Pacientes (Asistente)</div> },
+              { path: "/app/citas", element: <div>Gestión de Citas</div> },
+              {
+                path: "/app/calendario",
+                element: <div>Calendario General</div>,
+              },
+              {
+                path: "/app/pacientes",
+                element: <div>Pacientes (Asistente)</div>,
+              },
             ],
           },
 
           // ---------- PACIENTE ----------
           {
-            element: <RoleGuard allow={['PACIENTE']} />,
+            element: <RoleGuard allow={["PACIENTE"]} />,
             children: [
-              { path: '/app/mi-perfil',     element: <div>Mi perfil</div> },
-              { path: '/app/mi-historial',  element: <div>Mi historial</div> },
-              { path: '/app/agendar-cita',  element: <div>Agendar cita</div> },
+              { path: "/app/mi-perfil", element: <MiPerfilPage /> },
+              {
+                path: "/app/mi-historial",
+                element: <MiHistorialPage />,
+              },
+              { path: "/app/agendar-cita", element: <AgendarCitaPage /> },
             ],
           },
 
           // --------- 403 explícito ---------
-          { path: '/app/unauthorized', element: <Unauthorized /> },
+          { path: "/app/unauthorized", element: <Unauthorized /> },
 
-          { path: '/app/ai', element: <AsistenteIA /> },
+          { path: "/app/ai", element: <AsistenteIA /> },
         ],
       },
     ],
   },
 
-  { path: '*', element: <NotFound /> },
+  { path: "*", element: <NotFound /> },
 ]);
-
