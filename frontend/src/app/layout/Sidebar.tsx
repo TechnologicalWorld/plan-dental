@@ -41,7 +41,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
   const { rolesUpper, user } = useAuthStore();
 
   const has = (r: RoleUpper) => (rolesUpper ?? []).includes(r);
-
+  const idusuario = user?.idUsuario;
   const menu = useMemo(() => {
     // ADMIN
     if (has('ADMIN')) {
@@ -67,7 +67,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
     // ODONTÓLOGO
     if (has('ODONTOLOGO')) {
       const items: Item[] = [
-        { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { to: '/app/dashboardOdonto', label: 'Dashboard', icon: LayoutDashboard },
         { to: '/app/agenda', label: 'Mi agenda', icon: Calendar },
         { to: '/app/pacientes', label: 'Pacientes', icon: UserRound },
         { to: '/app/historias', label: 'Historia clínica', icon: ClipboardList },
@@ -92,7 +92,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
 
     // PACIENTE 
     const items: Item[] = [
-      { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { to: '/app/dashboardPaciente', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/app/mi-perfil', label: 'Mi perfil', icon: UserRound },
       { to: '/app/mi-historial', label: 'Mi historial', icon: History },
       { to: '/app/agendar-cita', label: 'Agendar cita', icon: Calendar },

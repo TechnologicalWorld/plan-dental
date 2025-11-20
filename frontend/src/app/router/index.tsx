@@ -27,6 +27,8 @@ import Reportes from '@/features/reportes/pages/Reportes';
 import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
 
 import Dashboard from '@/features/dashboard/pages/Dashboard';
+import DashboardOdonto from "@/features/dashboard/pages/DashboardOdonto";
+import DashboardPaciente from "@/features/dashboard/pages/DashboardPaciente";
 import NotFound from '@/shared/ui/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
 
@@ -71,13 +73,13 @@ export const router = createBrowserRouter([
         errorElement: <ErrorBoundary />,
         children: [
           // Comunes
-          { path: "/app/dashboard", element: <Dashboard /> },
-          { path: "/app", element: <Dashboard /> },
-
           // ---------- ADMIN ----------
           {
             element: <RoleGuard allow={["ADMIN"]} />,
+            
             children: [
+              { path: "/app/dashboard", element: <Dashboard /> },
+
               {
                 path: "/app/admin/usuarios/personal",
                 element: <PersonalListPage />,
@@ -105,6 +107,7 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={["ODONTOLOGO"]} />,
             children: [
+              { path: '/app/dashboardOdonto', element: <DashboardOdonto /> },
               { path: '/app/agenda',      element: <AgendaOdontologoPage /> },
               { path: '/app/pacientes',   element: <MisPacientesPage /> },
               { path: '/app/historias',   element: <HistoriasListPage /> },
@@ -130,6 +133,7 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={["PACIENTE"]} />,
             children: [
+              { path: "/app/dashboardPaciente", element: <DashboardPaciente /> }, 
               { path: "/app/mi-perfil", element: <MiPerfilPage /> },
               {
                 path: "/app/mi-historial",

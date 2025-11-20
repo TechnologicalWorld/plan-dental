@@ -342,4 +342,360 @@ class DashboardController extends Controller
         ];
         return in_array($s, $aceptados, true) ? $s : null;
     }
+        // GET /dashboard/graf-citas-por-paciente?anio=&mes=&idUsuario=
+    public function grafCitasPorPaciente(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('graf_citas_por_paciente', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar graf_citas_por_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/graf-tratamientos-realizados?anio=&mes=&idUsuario=
+    public function grafTratamientosRealizados(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('graf_tratamientos_realizados', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar graf_tratamientos_realizados.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/graf-ingresos-mensuales-odontologo?anio=&mes=&idUsuario=
+    public function grafIngresosMensualesPorOdontologo(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('graf_ingresos_mensuales_por_odontologo', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar graf_ingresos_mensuales_por_odontologo.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/nro-odontogramas-paciente?anio=&mes=&idUsuario=
+    public function dashboardNroOdontogramasPaciente(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('dashboard_nro_odontogramas_paciente', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_nro_odontogramas_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/total-citas-odontologo?anio=&mes=&idUsuario=
+    public function dashboardTotalCitasOdontologo(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('dashboard_total_citas_odontologo', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_total_citas_odontologo.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/total-ingresos-odontologo?anio=&mes=&idUsuario=
+    public function dashboardTotalIngresosOdontologo(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('dashboard_total_ingresos_odontologo', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_total_ingresos_odontologo.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/ultimo-plan-paciente?anio=&mes=&idUsuario=
+    public function dashboardUltimoPlanPaciente(Request $req)
+    {
+        $req->validate([
+            'anio'      => 'nullable|integer|min:1900|max:2100',
+            'mes'       => 'nullable',
+            'idUsuario' => 'nullable|integer|min:1',
+        ]);
+
+        $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
+
+        $mes = null;
+        if ($req->filled('mes')) {
+            $mes = $this->monthToInt((string) $req->query('mes'));
+            if ($mes === null) {
+                return response()->json([
+                    'error' => 'Mes no reconocido: usa 1..12 o nombres/abreviaturas en español'
+                ], 422);
+            }
+        }
+
+        $idUsuario = $req->filled('idUsuario')
+            ? (int) $req->query('idUsuario')
+            : null;
+
+        try {
+            $rows = $this->callSp('dashboard_ultimo_plan_paciente', [$anio, $mes, $idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_ultimo_plan_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+// GET /dashboard/paciente/piezas-por-estado?idUsuario=
+public function pacientePiezasPorEstado(Request $req)
+{
+    $req->validate([
+        'idUsuario' => 'required|integer|min:1',
+    ]);
+
+    $idUsuario = (int) $req->query('idUsuario');
+
+    try {
+        $rows = $this->callSp('dashboard_piezas_por_estado_paciente', [$idUsuario]);
+        return response()->json($rows, 200);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'error'   => 'Error al ejecutar dashboard_piezas_por_estado_paciente.',
+            'detalle' => $e->getMessage(),
+        ], 500);
+    }
+}
+
+    // GET /dashboard/paciente/ultimo-plan?idUsuario=
+    public function pacienteUltimoPlan(Request $req)
+    {
+        $req->validate([
+            'idUsuario' => 'required|integer|min:1',
+        ]);
+
+        $idUsuario = (int) $req->query('idUsuario');
+
+        try {
+            $rows = $this->callSp('dashboard_ultimo_plan_paciente', [$idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_ultimo_plan_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/paciente/historia-clinica?idUsuario=
+    public function pacienteHistoriaClinica(Request $req)
+    {
+        $req->validate([
+            'idUsuario' => 'required|integer|min:1',
+        ]);
+
+        $idUsuario = (int) $req->query('idUsuario');
+
+        try {
+            $rows = $this->callSp('dashboard_historia_clinica_paciente', [$idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_historia_clinica_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/paciente/ultima-cita?idUsuario=
+    public function pacienteUltimaCita(Request $req)
+    {
+        $req->validate([
+            'idUsuario' => 'required|integer|min:1',
+        ]);
+
+        $idUsuario = (int) $req->query('idUsuario');
+
+        try {
+            $rows = $this->callSp('dashboard_ultima_cita_paciente', [$idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_ultima_cita_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // GET /dashboard/paciente/doctores?idUsuario=
+    public function pacienteDoctores(Request $req)
+    {
+        $req->validate([
+            'idUsuario' => 'required|integer|min:1',
+        ]);
+
+        $idUsuario = (int) $req->query('idUsuario');
+
+        try {
+            $rows = $this->callSp('dashboard_doctores_paciente', [$idUsuario]);
+            return response()->json($rows, 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error'   => 'Error al ejecutar dashboard_doctores_paciente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+    
+
 }

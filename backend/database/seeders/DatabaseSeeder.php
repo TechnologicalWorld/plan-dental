@@ -861,6 +861,248 @@ class DatabaseSeeder extends Seeder
             AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
         END
         ");
+        // Procedimiento: graf_citas_por_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `graf_citas_por_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `graf_citas_por_paciente` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            up.idUsuario,
+            CONCAT_WS(' ', up.nombre, up.paterno, up.materno) AS nombre_completo,
+            COUNT(*) AS NroCitas
+        FROM hace h
+        INNER JOIN cita c      ON h.idCita = c.idCita
+        INNER JOIN usuario up  ON up.idUsuario = h.idUsuario_Paciente
+        WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+          AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+          AND (p_idUsuario IS NULL OR h.idUsuario_Odontologo = p_idUsuario)
+        GROUP BY up.idUsuario, nombre_completo
+        ORDER BY NroCitas DESC;
+    END
+");
+
+// Procedimiento: graf_tratamientos_realizados
+DB::unprepared("DROP PROCEDURE IF EXISTS `graf_tratamientos_realizados`");
+DB::unprepared("
+    CREATE PROCEDURE `graf_tratamientos_realizados` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            t.nombre,
+            COUNT(*) AS NroTratamientosRealizados
+        FROM cita c
+        INNER JOIN hace h        ON h.idCita = c.idCita
+        INNER JOIN tratamiento t ON t.idCita = h.idCita
+        INNER JOIN usuario u     ON u.idUsuario = h.idUsuario_Odontologo
+        WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+          AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+          AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario)
+        GROUP BY t.nombre
+        ORDER BY NroTratamientosRealizados DESC;
+    END
+");
+
+// Procedimiento: graf_ingresos_mensuales_por_odontologo
+DB::unprepared("DROP PROCEDURE IF EXISTS `graf_ingresos_mensuales_por_odontologo`");
+DB::unprepared("
+    CREATE PROCEDURE `graf_ingresos_mensuales_por_odontologo` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            SUM(c.costo) AS total,
+            YEAR(c.fecha) AS anio,
+            MONTH(c.fecha) AS mes,
+            u.idUsuario
+        FROM cita c
+        INNER JOIN hace h ON h.idCita = c.idCita
+        INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+        WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+          AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+          AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario)
+        GROUP BY anio, mes, u.idUsuario
+        ORDER BY anio, mes;
+    END
+");
+
+// Procedimiento: dashboard_nro_odontogramas_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_nro_odontogramas_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_nro_odontogramas_paciente` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            COUNT(*) AS NroOdontogramas
+        FROM odontograma o
+        INNER JOIN efectua e ON e.idOdontograma = o.idOdontograma
+        INNER JOIN usuario u ON u.idUsuario = e.idUsuario_Paciente
+        WHERE (p_anio IS NULL OR YEAR(o.fecha) = p_anio)
+          AND (p_mes  IS NULL OR MONTH(o.fecha) = p_mes)
+          AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario);
+    END
+");
+
+// Procedimiento: dashboard_total_citas_odontologo
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_total_citas_odontologo`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_total_citas_odontologo` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            COUNT(*) AS TotalCitas
+        FROM cita c
+        INNER JOIN hace h ON h.idCita = c.idCita
+        WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+          AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+          AND (p_idUsuario IS NULL OR h.idUsuario_Odontologo = p_idUsuario);
+    END
+");
+
+// Procedimiento: dashboard_total_ingresos_odontologo
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_total_ingresos_odontologo`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_total_ingresos_odontologo` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            SUM(c.costo) AS Total
+        FROM cita c
+        INNER JOIN hace h ON h.idCita = c.idCita
+        WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+          AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+          AND (p_idUsuario IS NULL OR h.idUsuario_Odontologo = p_idUsuario);
+    END
+");
+
+// Procedimiento: dashboard_ultimo_plan_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_ultimo_plan_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_ultimo_plan_paciente` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+    BEGIN
+        SELECT
+            idUsuario,
+            nombre_completo,
+            tipoCita,
+            observacion,
+            medicamentos,
+            duracionTotal,
+            fecha
+        FROM (
+            SELECT 
+                up.idUsuario,
+                CONCAT_WS(' ', up.nombre, up.paterno) AS nombre_completo,
+                c.tipoCita,
+                p.observacion,
+                p.medicamentos,
+                p.duracionTotal,
+                c.fecha,
+                ROW_NUMBER() OVER (
+                    PARTITION BY up.idUsuario
+                    ORDER BY c.fecha DESC
+                ) AS rn
+            FROM cita c
+            INNER JOIN hace a   ON a.idCita = c.idCita 
+            INNER JOIN usuario u   ON u.idUsuario = a.idUsuario_Odontologo 
+            INNER JOIN plan p      ON p.idUsuario_Paciente = a.idUsuario_Paciente
+            INNER JOIN usuario up  ON p.idUsuario_Paciente = up.idUsuario
+            WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+              AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+              AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario)
+        ) AS t
+        WHERE rn = 1
+        ORDER BY fecha DESC;
+    END
+");
+
+// Procedimiento: dashboard_piezas_por_estado_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_piezas_por_estado_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_piezas_por_estado_paciente` (IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            u.idUsuario,
+            p.estado,
+            COUNT(*) AS Nro
+        FROM pieza_dental p
+        INNER JOIN odontograma o ON o.idOdontograma = p.idOdontograma
+        INNER JOIN efectua e     ON e.idOdontograma = o.idOdontograma
+        INNER JOIN usuario u     ON e.idUsuario_Paciente = u.idUsuario
+        WHERE u.idUsuario = p_idUsuario
+        GROUP BY 
+            u.idUsuario,
+            p.estado;
+    END
+");
+
+
+// Procedimiento: dashboard_ultimo_plan_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_ultimo_plan_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_ultimo_plan_paciente` (IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            p.medicamentos,
+            p.observacion,
+            p.duracionTotal
+        FROM plan p
+        INNER JOIN usuario u ON u.idUsuario = p.idUsuario_Paciente
+        WHERE u.idUsuario = p_idUsuario
+          AND p.idPlan = (
+                SELECT MAX(ps.idPlan)
+                FROM plan ps
+                WHERE ps.idUsuario_Paciente = p_idUsuario
+          );
+    END
+");
+
+// Procedimiento: dashboard_historia_clinica_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_historia_clinica_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_historia_clinica_paciente` (IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            u.idUsuario,
+            h.antecedentesPatologicos,
+            h.signosVitales,
+            h.enfermedadActual
+        FROM historia_clinica h
+        INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Paciente
+        WHERE u.idUsuario = p_idUsuario;
+    END
+");
+
+// Procedimiento: dashboard_ultima_cita_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_ultima_cita_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_ultima_cita_paciente` (IN `p_idUsuario` INT)
+    BEGIN
+        SELECT 
+            c.estado,
+            c.tipoCita,
+            c.fecha,
+            c.hora
+        FROM cita c
+        INNER JOIN hace h   ON h.idCita = c.idCita
+        INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Paciente
+        WHERE c.idCita = (
+                SELECT MAX(cs.idCita)
+                FROM cita cs
+                INNER JOIN hace hs ON hs.idCita = cs.idCita
+                WHERE hs.idUsuario_Paciente = p_idUsuario
+        )
+          AND h.idUsuario_Paciente = p_idUsuario;
+    END
+");
+
+// Procedimiento: dashboard_doctores_paciente
+DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_doctores_paciente`");
+DB::unprepared("
+    CREATE PROCEDURE `dashboard_doctores_paciente` (IN `p_idUsuario` INT)
+    BEGIN
+        SELECT DISTINCT 
+            CONCAT_WS(' ', ud.nombre, ud.paterno, ud.materno) AS NombreDoctor,
+            ud.telefono,
+            ud.correo
+        FROM usuario u
+        INNER JOIN hace h  ON h.idUsuario_Paciente = u.idUsuario
+        INNER JOIN usuario ud ON ud.idUsuario = h.idUsuario_Odontologo
+        WHERE u.idUsuario = p_idUsuario;
+    END
+");
 
         
         // ==================== MENSAJES FINALES ====================

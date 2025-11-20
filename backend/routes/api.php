@@ -124,6 +124,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
         Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
         Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);
+    
+        Route::get('/graf-citas-por-paciente',             [DashboardController::class, 'grafCitasPorPaciente']);
+        Route::get('/graf-tratamientos-realizados',        [DashboardController::class, 'grafTratamientosRealizados']);
+        Route::get('/graf-ingresos-mensuales-odontologo',  [DashboardController::class, 'grafIngresosMensualesPorOdontologo']);
+
+        Route::get('/nro-odontogramas-paciente',           [DashboardController::class, 'dashboardNroOdontogramasPaciente']);
+        Route::get('/total-citas-odontologo',              [DashboardController::class, 'dashboardTotalCitasOdontologo']);
+        Route::get('/total-ingresos-odontologo',           [DashboardController::class, 'dashboardTotalIngresosOdontologo']);
+        Route::get('/ultimo-plan-paciente',                [DashboardController::class, 'dashboardUltimoPlanPaciente']);
+
+        // === Endpoints enfocados en un paciente (idUsuario obligatorio) ===
+        Route::get('/paciente/piezas-por-estado',          [DashboardController::class, 'pacientePiezasPorEstado']);
+        Route::get('/paciente/ultimo-plan',                [DashboardController::class, 'pacienteUltimoPlan']);
+        Route::get('/paciente/historia-clinica',           [DashboardController::class, 'pacienteHistoriaClinica']);
+        Route::get('/paciente/ultima-cita',                [DashboardController::class, 'pacienteUltimaCita']);
+        Route::get('/paciente/doctores',                   [DashboardController::class, 'pacienteDoctores']);
+
     });
     
     Route::prefix('reportes')->group(function () {
