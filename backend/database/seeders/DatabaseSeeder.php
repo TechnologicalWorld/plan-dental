@@ -1028,24 +1028,47 @@ DB::unprepared("
     END
 ");
 
-
 // Procedimiento: dashboard_ultimo_plan_paciente
 DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_ultimo_plan_paciente`");
 DB::unprepared("
-    CREATE PROCEDURE `dashboard_ultimo_plan_paciente` (IN `p_idUsuario` INT)
+    CREATE PROCEDURE `dashboard_ultimo_plan_paciente` (
+        IN `p_anio` INT,
+        IN `p_mes` INT,
+        IN `p_idUsuario` INT
+    )
     BEGIN
-        SELECT 
-            p.medicamentos,
-            p.observacion,
-            p.duracionTotal
-        FROM plan p
-        INNER JOIN usuario u ON u.idUsuario = p.idUsuario_Paciente
-        WHERE u.idUsuario = p_idUsuario
-          AND p.idPlan = (
-                SELECT MAX(ps.idPlan)
-                FROM plan ps
-                WHERE ps.idUsuario_Paciente = p_idUsuario
-          );
+        SELECT
+            idUsuario,
+            nombre_completo,
+            tipoCita,
+            observacion,
+            medicamentos,
+            duracionTotal,
+            fecha
+        FROM (
+            SELECT 
+                up.idUsuario,
+                CONCAT_WS(' ', up.nombre, up.paterno) AS nombre_completo,
+                c.tipoCita,
+                p.observacion,
+                p.medicamentos,
+                p.duracionTotal,
+                c.fecha,
+                ROW_NUMBER() OVER (
+                    PARTITION BY up.idUsuario
+                    ORDER BY c.fecha DESC
+                ) AS rn
+            FROM cita c
+            INNER JOIN hace a   ON a.idCita = c.idCita 
+            INNER JOIN usuario u   ON u.idUsuario = a.idUsuario_Odontologo 
+            INNER JOIN plan p      ON p.idUsuario_Paciente = a.idUsuario_Paciente
+            INNER JOIN usuario up  ON p.idUsuario_Paciente = up.idUsuario
+            WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+              AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+              AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario)
+        ) AS t
+        WHERE rn = 1
+        ORDER BY fecha DESC;
     END
 ");
 

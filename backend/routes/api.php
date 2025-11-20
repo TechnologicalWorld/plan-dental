@@ -113,7 +113,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:asistente')->get('/asistente-test', function () {
         return response()->json(['message' => 'Eres asistente!']);
     });
-
     Route::prefix('dashboard')->group(function () {
         Route::get('/citas-por-mes-anio',        [DashboardController::class, 'citasPorMesAnio']);
         Route::get('/citas-por-dia-semana-mes',  [DashboardController::class, 'citasPorDiaSemanaMes']);        
@@ -124,7 +123,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
         Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
         Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);
-    
         Route::get('/graf-citas-por-paciente',             [DashboardController::class, 'grafCitasPorPaciente']);
         Route::get('/graf-tratamientos-realizados',        [DashboardController::class, 'grafTratamientosRealizados']);
         Route::get('/graf-ingresos-mensuales-odontologo',  [DashboardController::class, 'grafIngresosMensualesPorOdontologo']);
@@ -134,6 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/total-ingresos-odontologo',           [DashboardController::class, 'dashboardTotalIngresosOdontologo']);
         Route::get('/ultimo-plan-paciente',                [DashboardController::class, 'dashboardUltimoPlanPaciente']);
 
+
         // === Endpoints enfocados en un paciente (idUsuario obligatorio) ===
         Route::get('/paciente/piezas-por-estado',          [DashboardController::class, 'pacientePiezasPorEstado']);
         Route::get('/paciente/ultimo-plan',                [DashboardController::class, 'pacienteUltimoPlan']);
@@ -142,7 +141,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/paciente/doctores',                   [DashboardController::class, 'pacienteDoctores']);
 
     });
-    
+
+
+
     Route::prefix('reportes')->group(function () {
         Route::get('/ingresos-y-pendientes', [ReportesController::class, 'obtenerIngresosYPendientes']);
         Route::get('/total-citas', [ReportesController::class, 'obtenerTotalCitas']);
@@ -153,6 +154,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
+    
 // Rutas públicas de información general
 Route::get('/especialidades-list', [EspecialidadController::class, 'index']);
 Route::get('/acciones-list', [AccionController::class, 'index']);
