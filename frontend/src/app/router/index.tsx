@@ -20,6 +20,7 @@ import MisPacientesPage from '@/features/odonto-pacientes/pages/MisPacientesPage
 import HistoriaClinicaViewPage from '@/features/historias/pages/HistoriaClinicaViewPage';
 import HistoriasListPage from '@/features/historias/pages/HistoriasListPage';
 import HistoriaClinicaEditPage from '@/features/historias/pages/HistoriaClinicaEditPage';
+import OdontogramaPage from '@/features/odontograma/pages/OdontogramaPage';
 
 
 import Reportes from '@/features/reportes/pages/Reportes';
@@ -104,7 +105,7 @@ export const router = createBrowserRouter([
               { path: '/app/historias',   element: <HistoriasListPage /> },
               { path: '/app/historias/:pacienteId', element: <HistoriaClinicaViewPage /> },
               { path: '/app/historias/:pacienteId/editar', element: <HistoriaClinicaEditPage /> },
-              { path: '/app/odontograma', element: <div>Odontograma</div> },
+              { path: '/app/odontograma', element: <OdontogramaPage /> },
               { path: '/app/tratamientos', element: <div>Tratamientos y Diagnósticos</div> },
             ],
           },
