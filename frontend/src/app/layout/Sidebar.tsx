@@ -41,7 +41,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
   const { rolesUpper, user } = useAuthStore();
 
   const has = (r: RoleUpper) => (rolesUpper ?? []).includes(r);
-
+  const idusuario = user?.idUsuario;
   const menu = useMemo(() => {
     // ADMIN
     if (has('ADMIN')) {
@@ -67,7 +67,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
     // ODONTÓLOGO
     if (has('ODONTOLOGO')) {
       const items: Item[] = [
-        { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { to: '/app/dashboardOdonto', label: 'Dashboard', icon: LayoutDashboard },
         { to: '/app/agenda', label: 'Mi agenda', icon: Calendar },
         { to: '/app/pacientes', label: 'Pacientes', icon: UserRound },
         { to: '/app/historias', label: 'Historia clínica', icon: ClipboardList },
@@ -82,9 +82,9 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
     if (has('ASISTENTE')) {
       const items: Item[] = [
         { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-        { to: '/app/citas', label: 'Gestión de Citas', icon: Calendar },
-        { to: '/app/pacientes', label: 'Pacientes', icon: UserRound },
-        { to: '/app/calendario', label: 'Calendario General', icon: Calendar },
+        { to: '/app/asisitente/citas', label: 'Gestión de Citas', icon: Calendar },
+        { to: '/app/asistente/pacientes', label: 'Pacientes', icon: UserRound },
+        { to: '/app/asistente/calendario', label: 'Calendario General', icon: Calendar },
         { to: '/app/ai', label: 'Asistente IA', icon: Bot },
       ];
       return { groups: [], items };
@@ -92,7 +92,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
 
     // PACIENTE 
     const items: Item[] = [
-      { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { to: '/app/dashboardPaciente', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/app/mi-perfil', label: 'Mi perfil', icon: UserRound },
       { to: '/app/mi-historial', label: 'Mi historial', icon: History },
       { to: '/app/agendar-cita', label: 'Agendar cita', icon: Calendar },

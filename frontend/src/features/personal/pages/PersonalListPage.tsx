@@ -121,7 +121,7 @@ export default function PersonalListPage() {
         } catch {
           /* fallback abajo */
         }
-        // 2) fallback: /usuarios/odontologos/listar (tu listado anterior)
+
         const { data: fallback } = await api.get('/usuarios/odontologos/listar');
         const arr2 = (fallback?.data ?? fallback) as RolListadoUsuario[];
         setItems(Array.isArray(arr2) ? arr2 : []);

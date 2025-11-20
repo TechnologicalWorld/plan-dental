@@ -2,16 +2,57 @@ import api from '@/shared/api/apiClient';
 import type { Odontologo } from '@/types/odontologo';
 import type { Asistente } from '@/types/asistente';
 import type { Especialidad } from '@/types/especialidad';
+import type { Cita } from "@/types/cita";
 
-/** ----- LISTADOS ----- */
-export async function listarOdontologos(): Promise<Odontologo[]> {
-  const { data } = await api.get('/odontologos');
-  return (data?.data ?? data) as Odontologo[];
+export async function obtenerOdontologoPorId(id: number): Promise<Odontologo | null> {
+  try {
+    const { data } = await api.get(`/odontologos/${id}`);
+    return data ?? null;
+  } catch (error) {
+    console.error("Error obteniendo odontólogo:", error);
+    return null;
+  }
 }
 
-export async function listarAsistentes(): Promise<Asistente[]> {
-  const { data } = await api.get('/asistentes');
-  return (data?.data ?? data) as Asistente[];
+export async function obtenerAgendaOdontologo(id: number): Promise<{ citas: Cita[]; horario: string } | null> {
+  try {
+    const { data } = await api.get(`/odontologos/${id}/agenda`);
+
+    const agenda = data?.agenda;
+
+    if (!agenda) return null;
+
+    return {
+      citas: agenda.citas ?? [],
+      horario: agenda.horario,
+    };
+  } catch (error) {
+    console.error("Error obteniendo agenda del odontólogo:", error);
+    return null;
+  }
+}
+
+/** ----- LISTADOS ----- */
+export async function listarOdontologos(params?: { page?: number; per_page?: number; search?: string }): Promise<Odontologo[]> {
+  try {
+    const { data } = await api.get('/odontologos', { params });
+    const resultado = data?.data ?? data;
+    return Array.isArray(resultado) ? resultado : [];
+  } catch (error) {
+    console.error('Error listando odontologos:', error);
+    return [];
+  }
+}
+
+export async function listarAsistentes(params?: { page?: number; per_page?: number; search?: string }): Promise<Asistente[]> {
+  try {
+    const { data } = await api.get('/asistentes', { params });
+    const resultado = data?.data ?? data;
+    return Array.isArray(resultado) ? resultado : [];
+  } catch (error) {
+    console.error('Error listando asistentes:', error);
+    return [];
+  }
 }
 
 /** ----- USUARIO BASE (común) ----- */

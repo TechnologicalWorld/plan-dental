@@ -20,12 +20,15 @@ import MisPacientesPage from '@/features/odonto-pacientes/pages/MisPacientesPage
 import HistoriaClinicaViewPage from '@/features/historias/pages/HistoriaClinicaViewPage';
 import HistoriasListPage from '@/features/historias/pages/HistoriasListPage';
 import HistoriaClinicaEditPage from '@/features/historias/pages/HistoriaClinicaEditPage';
+import OdontogramaPage from '@/features/odontograma/pages/OdontogramaPage';
 
 
 import Reportes from '@/features/reportes/pages/Reportes';
 import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
 
 import Dashboard from '@/features/dashboard/pages/Dashboard';
+import DashboardOdonto from "@/features/dashboard/pages/DashboardOdonto";
+import DashboardPaciente from "@/features/dashboard/pages/DashboardPaciente";
 import NotFound from '@/shared/ui/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
 
@@ -40,6 +43,11 @@ import MiHistorialPage from "@/features/pacientes/pages/MiHistorialPage";
 import AgendarCitaPage from "@/features/pacientes/pages/AgendarCitaPage";
 
 
+//Agregando Pages de asistente
+import PacientesAsistentePage from '@/features/pacientes/pages/PacientesAsistentePage'
+import CalendarioAsistentePage from '@/features/calendario/pages/CalendarioAsistentePage'
+import CitasAsistentePage from '@/features/citas/pages/CitasAsistentePage'
+import CalendarioAsistenteCrear from '@/features/citas/pages/CitasAsistenteCrear'
 export const router = createBrowserRouter([
   // Entrada raíz -> decide login o dashboard según sesión
   { path: "/", element: <RootGate /> },
@@ -65,13 +73,13 @@ export const router = createBrowserRouter([
         errorElement: <ErrorBoundary />,
         children: [
           // Comunes
-          { path: "/app/dashboard", element: <Dashboard /> },
-          { path: "/app", element: <Dashboard /> },
-
           // ---------- ADMIN ----------
           {
             element: <RoleGuard allow={["ADMIN"]} />,
+            
             children: [
+              { path: "/app/dashboard", element: <Dashboard /> },
+
               {
                 path: "/app/admin/usuarios/personal",
                 element: <PersonalListPage />,
@@ -99,12 +107,13 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={["ODONTOLOGO"]} />,
             children: [
+              { path: '/app/dashboardOdonto', element: <DashboardOdonto /> },
               { path: '/app/agenda',      element: <AgendaOdontologoPage /> },
               { path: '/app/pacientes',   element: <MisPacientesPage /> },
               { path: '/app/historias',   element: <HistoriasListPage /> },
               { path: '/app/historias/:pacienteId', element: <HistoriaClinicaViewPage /> },
               { path: '/app/historias/:pacienteId/editar', element: <HistoriaClinicaEditPage /> },
-              { path: '/app/odontograma', element: <div>Odontograma</div> },
+              { path: '/app/odontograma', element: <OdontogramaPage /> },
               { path: '/app/tratamientos', element: <div>Tratamientos y Diagnósticos</div> },
             ],
           },
@@ -113,15 +122,10 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={["ASISTENTE"]} />,
             children: [
-              { path: "/app/citas", element: <div>Gestión de Citas</div> },
-              {
-                path: "/app/calendario",
-                element: <div>Calendario General</div>,
-              },
-              {
-                path: "/app/pacientes",
-                element: <div>Pacientes (Asistente)</div>,
-              },
+              { path: '/app/asisitente/citas',      element: <div><CitasAsistentePage/></div> },
+              { path: '/app/asistente/calendario', element: <div><CalendarioAsistentePage/></div> },
+              { path: '/app/asistente/citas/crear', element: <div><CalendarioAsistenteCrear/></div> },
+              { path: '/app/asistente/pacientes',  element: <div><PacientesAsistentePage/></div> },
             ],
           },
 
@@ -129,6 +133,7 @@ export const router = createBrowserRouter([
           {
             element: <RoleGuard allow={["PACIENTE"]} />,
             children: [
+              { path: "/app/dashboardPaciente", element: <DashboardPaciente /> }, 
               { path: "/app/mi-perfil", element: <MiPerfilPage /> },
               {
                 path: "/app/mi-historial",
