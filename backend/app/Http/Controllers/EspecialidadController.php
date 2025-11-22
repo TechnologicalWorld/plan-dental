@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
 use App\Models\Odontologo;
+use App\Models\Tiene;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -92,14 +93,27 @@ class EspecialidadController extends Controller
         }
     }
 
-    public function odontologos($id){
-        $especialidad = Especialidad::findOrFail($id);
-        if (!$especialidad) {
-            return response()->json(['error' => 'Especialidad no encontrada'], 404);
-        }
+    // ✅ Odontólogos que tienen X especialidad
+    public function odontologos($id)
+    {
+        $especialidad = Especialidad::with('odontologos.usuario')->findOrFail($id);
 
-        $odontologos = $especialidad->odontologos;
+        return response()->json([
+            'success' => true,
+            'data' => $especialidad->odontologos
+        ], 200);
+    }
 
-        return response()->json(['data'=>$odontologos]);
+    // ✅ Todas las especialidades que tiene un odontólogo
+    public function especialidadesPorOdontologo($idOdonto)
+    {
+        // $idOdonto = idUsuario_Odontologo en la tabla odontologo
+        $odontologo = Odontologo::with(['usuario', 'especialidades'])->findOrFail($idOdonto);
+
+        return response()->json([
+            'success'      => true,
+            'odontologo'   => $odontologo->usuario,        // datos del usuario del odontólogo
+            'especialidades' => $odontologo->especialidades // lista de especialidades
+        ], 200);
     }
 }

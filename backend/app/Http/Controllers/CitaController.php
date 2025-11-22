@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cita;
+use App\Models\Hace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CitaController extends Controller
 {
+    
     public function index()
     {
         return Cita::all();
@@ -116,4 +118,15 @@ class CitaController extends Controller
 
         return $citaActual;
     }
+    public function citasPorpaciente(string $id)
+    {
+    $paciente = Paciente::with(['usuario', 'citas'])->findOrFail($id);
+
+    return response()->json([
+        'success'  => true,
+        'paciente' => $paciente->usuario, // datos básicos del usuario
+        'citas'    => $paciente->citas    // todas las citas del paciente
+    ]);
+}
+
 }

@@ -107,4 +107,22 @@ class PacienteController extends Controller
             'paciente' => $paciente
         ]);
     }
+    // citas por paciente
+    public function citasPorPaciente(string $id)
+    {
+        
+        $paciente = Paciente::with([
+            'usuario',
+            'citas' => function ($q) {
+                $q->orderBy('fecha', 'desc')
+                  ->orderBy('hora', 'desc');
+            }
+        ])
+        ->findOrFail($id);
+        return response()->json([
+        'success'  => true,
+        'paciente' => $paciente->usuario, // datos del usuario del paciente
+        'citas'    => $paciente->citas    // aquí vienen las citas + pivot (hace)
+        ], 200);
+    }
 }

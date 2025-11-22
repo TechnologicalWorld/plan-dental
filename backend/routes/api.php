@@ -25,8 +25,7 @@ use App\Http\Controllers\{
     OdontogramaController,
     HistoriaClinicaController,
     DashboardController,
-    ReportesController
-
+    ReportesController,
 };
 use App\Models\Odontograma;
 use Illuminate\Http\Request;
@@ -54,7 +53,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/usuarios/administradores/listar', [UsuarioController::class, 'administradores']);
     Route::get('/usuarios/asistentes/listar', [UsuarioController::class, 'asistentes']);
     Route::get('/usuarios/buscar/search', [UsuarioController::class, 'search']);
-
     // Rutas para entidades principales
     Route::apiResource('acciones', AccionController::class);
     Route::apiResource('especialidades', EspecialidadController::class);
@@ -78,15 +76,16 @@ Route::middleware('auth:sanctum')->group(function () {
     // Citas act
     Route::post('/citas/{id}/cambiar-estado', [CitaController::class, 'cambiarEstado']);
     Route::get('/citas/por-fecha/{fecha}', [CitaController::class, 'porFecha']);
-
+    Route::get('/pacientes/{id}/citas', [PacienteController::class, 'citasPorpaciente']);
     // Odontólogos
     Route::post('/odontologos/{id}/asignar-especialidades', [OdontologoController::class, 'asignarEspecialidades']);
     Route::get('/odontologos/{id}/agenda', [OdontologoController::class, 'agenda']);
-
+    Route::get('/odontologos/{id}/especialidades', [EspecialidadController::class, 'especialidadesPorOdontologo']);
     // Pacientes
     Route::get('/pacientes/{id}/historial-medico', [PacienteController::class, 'historialMedico']);
     Route::get('/pacientes/{id}/piezas-dentales', [OdontogramaController::class, 'porPaciente']);
-    
+    //Citas por paciente 
+    Route::get('/pacientes/{id}/citas', [PacienteController::class, 'citasPorPaciente']);
 
     // Historias clínicas
     Route::get('/historias-clinicas/paciente/{pacienteId}', [HistoriaClinicaController::class, 'porPaciente']);
