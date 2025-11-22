@@ -135,4 +135,54 @@ class OdontologoController extends Controller
             ]
         );
     }
+    // cITAS POR ODONTOLOGO
+    public function citasPorOdontologo(string $id)
+{
+    $odontologo = Odontologo::with([
+            'usuario',
+            'citas' => function ($q) {
+                $q->orderBy('fecha', 'desc')
+                  ->orderBy('hora', 'desc');
+            }
+        ])->findOrFail($id);
+
+    return response()->json([
+        'success'    => true,
+        'odontologo' => $odontologo->usuario, // datos del usuario del odontólogo
+        'citas'      => $odontologo->citas    // aquí van las citas
+    ]);
+}
+// citas por fecha y odontologo 
+    public function citasPorOdontologoYFecha(Request $request, $id, $fecha)
+    {
+        $validator = Validator::make(['fecha' => $fecha], [
+            'fecha' => 'required|date_format:Y-m-d',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $odontologo = Odontologo::with([
+                'usuario',
+                'citas' => function ($q) use ($fecha) {
+                    $q->whereDate('cita.fecha', $fecha)  
+                    ->orderBy('cita.hora', 'asc');
+                }
+            ])
+            ->findOrFail($id);
+
+        $citas = $odontologo->citas;
+
+        return response()->json([
+            'success'    => true,
+            'odontologo' => $odontologo->usuario,
+            'fecha'      => $fecha,
+            'total'      => $citas->count(),
+            'citas'      => $citas,
+        ], 200);
+    }
 }

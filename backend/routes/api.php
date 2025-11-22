@@ -81,6 +81,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/odontologos/{id}/asignar-especialidades', [OdontologoController::class, 'asignarEspecialidades']);
     Route::get('/odontologos/{id}/agenda', [OdontologoController::class, 'agenda']);
     Route::get('/odontologos/{id}/especialidades', [EspecialidadController::class, 'especialidadesPorOdontologo']);
+    Route::get('/odontologos/{id}/citas', [OdontologoController::class, 'citasPorOdontologo']);
+    Route::get('/odontologos/{id}/citas-por-fecha/{fecha}', [OdontologoController::class, 'citasPorOdontologoYFecha']);
     // Pacientes
     Route::get('/pacientes/{id}/historial-medico', [PacienteController::class, 'historialMedico']);
     Route::get('/pacientes/{id}/piezas-dentales', [OdontogramaController::class, 'porPaciente']);

@@ -120,12 +120,12 @@ class CitaController extends Controller
     }
     public function citasPorpaciente(string $id)
     {
-    $paciente = Paciente::with(['usuario', 'citas'])->findOrFail($id);
+    $paciente = Paciente::with(['usuario', 'citas' ])->findOrFail($id);
 
     return response()->json([
         'success'  => true,
-        'paciente' => $paciente->usuario, // datos básicos del usuario
-        'citas'    => $paciente->citas    // todas las citas del paciente
+        'paciente' => $paciente->usuario, 
+        'citas'    => $paciente->citas    
     ]);
 }
 
