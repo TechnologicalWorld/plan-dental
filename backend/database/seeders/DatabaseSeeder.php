@@ -1127,6 +1127,440 @@ DB::unprepared("
     END
 ");
 
+// Procedimiento: ingresos_por_odonto_mes
+        DB::unprepared("DROP PROCEDURE IF EXISTS `ingresos_por_odonto_mes`");
+        DB::unprepared("
+            CREATE PROCEDURE `ingresos_por_odonto_mes` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                SELECT
+                    u.idUsuario,
+                    SUM(t.precio) AS total,
+                    CONCAT(u.nombre,' ',u.paterno,' ',u.materno) AS nombre_completo,
+                    YEAR(c.fecha) AS anio,
+                    MONTH(c.fecha) AS mes
+                FROM cita c
+                INNER JOIN tratamiento t ON c.idCita = t.idCita
+                INNER JOIN atiende a     ON a.idCita = t.idCita
+                INNER JOIN usuario u     ON u.idUsuario = a.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY
+                    u.idUsuario, u.nombre, u.paterno, u.materno,
+                    YEAR(c.fecha), MONTH(c.fecha)
+                ORDER BY total DESC;
+            END
+        ");
+
+        // Procedimiento: resumen_citas_dias
+        DB::unprepared("DROP PROCEDURE IF EXISTS `resumen_citas_dias`");
+        DB::unprepared("
+            CREATE PROCEDURE `resumen_citas_dias` (IN `p_anio` INT, IN `p_mes` INT, IN `p_idUsuario` INT)
+            BEGIN
+                SELECT
+                    t.idUsuario,
+                    t.nombre_completo,
+                    t.estado,
+                    t.anio,
+                    t.mes,
+                    ELT(t.wd + 1,
+                        'lunes','martes','miércoles','jueves','viernes','sábado','domingo') AS dia,
+                    t.Nro
+                FROM (
+                    SELECT
+                        u.idUsuario,
+                        concaT_WS(' ', u.nombre, u.paterno, u.materno) AS nombre_completo,
+                        c.estado,
+                        YEAR(c.fecha)  AS anio,
+                        MONTH(c.fecha) AS mes,
+                        WEEKDAY(c.fecha) AS wd,
+                        COUNT(*) AS Nro
+                    FROM cita c
+                    JOIN atiende a ON a.idCita = c.idCita
+                    JOIN usuario u ON u.idUsuario = a.idUsuario_Odontologo
+                    WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                        AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                        AND (p_idUsuario IS NULL OR u.idUsuario = p_idUsuario)
+                    GROUP BY
+                        u.idUsuario, c.estado, YEAR(c.fecha), MONTH(c.fecha), WEEKDAY(c.fecha)
+                ) AS t
+                ORDER BY
+                    t.idUsuario, t.estado, t.anio, t.mes, t.wd;
+            END
+        ");
+
+        // Procedimiento: resumen_citas_por_odonto
+        DB::unprepared("DROP PROCEDURE IF EXISTS `resumen_citas_por_odonto`");
+        DB::unprepared("
+            CREATE PROCEDURE `resumen_citas_por_odonto` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.nombre, u.paterno, u.materno) AS nombre_completo,
+                    c.estado,
+                    YEAR(c.fecha)  AS anio,
+                    MONTH(c.fecha) AS mes,
+                    COUNT(c.idCita) AS Nro
+                FROM cita c
+                JOIN hace h    ON h.idCita = c.idCita
+                JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY
+                    u.idUsuario, u.nombre, u.paterno, u.materno,
+                    c.estado, YEAR(c.fecha), MONTH(c.fecha)
+                ORDER BY
+                    h.idUsuario_Odontologo, nombre_completo, c.estado, anio, mes;
+            END
+        ");
+
+        // Procedimiento: sp_ganancia_citas_por_odontologo
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_ganancia_citas_por_odontologo`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_ganancia_citas_por_odontologo` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.paterno, u.materno, u.nombre) AS nombre_completo,
+                    SUM(c.pagado) AS Total_Ganancia_Citas
+                FROM cita c
+                INNER JOIN hace h  ON h.idCita = c.idCita
+                INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY u.idUsuario, nombre_completo
+                ORDER BY Total_Ganancia_Citas DESC;
+            END
+        ");
+
+        // Procedimiento: sp_ganancia_por_tratamiento
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_ganancia_por_tratamiento`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_ganancia_por_tratamiento` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    t.nombre,
+                    SUM(t.precio) AS total_ganancia_tratamiento
+                FROM cita c
+                INNER JOIN tratamiento t ON t.idCita = c.idCita
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY t.nombre
+                ORDER BY total_ganancia_tratamiento DESC, t.nombre;
+            END
+        ");
+
+        // Procedimiento: sp_ganancia_tratamientos_por_odontologo
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_ganancia_tratamientos_por_odontologo`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_ganancia_tratamientos_por_odontologo` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.paterno, u.materno, u.nombre) AS nombre_completo,
+                    SUM(t.precio) AS total_ganancia_tratamiento
+                FROM cita c
+                INNER JOIN tratamiento t ON t.idCita = c.idCita
+                INNER JOIN hace h        ON h.idCita = c.idCita
+                INNER JOIN usuario u     ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY u.idUsuario, nombre_completo
+                ORDER BY total_ganancia_tratamiento DESC;
+            END
+        ");
+
+        // Procedimiento: sp_reporte_citas_por_estado_odontologo
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_reporte_citas_por_estado_odontologo`");
+        DB::unprepared("
+            CREATE PROCEDURE `sp_reporte_citas_por_estado_odontologo` (IN `p_anio` INT, IN `p_mes` INT)
+            BEGIN
+                IF p_mes IS NOT NULL AND (p_mes < 1 OR p_mes > 12) THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_mes debe estar entre 1..12';
+                END IF;
+
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.paterno, u.materno, u.nombre) AS nombre_completo,
+                    c.estado,
+                    COUNT(*) AS Nro_Citas
+                FROM cita c
+                INNER JOIN hace h  ON h.idCita = c.idCita
+                INNER JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY u.idUsuario, nombre_completo, c.estado
+                ORDER BY u.idUsuario, c.estado;
+            END
+        ");
+
+        // Procedimiento: vaciar_bd
+        DB::unprepared("DROP PROCEDURE IF EXISTS `vaciar_bd`");
+        DB::unprepared("
+            CREATE PROCEDURE `vaciar_bd` (IN `dbname` VARCHAR(64))
+            BEGIN
+                DECLARE done INT DEFAULT FALSE;
+                DECLARE t VARCHAR(64);
+                DECLARE cur CURSOR FOR
+                    SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_schema = dbname AND table_type = 'BASE TABLE';
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+                SET FOREIGN_KEY_CHECKS = 0;
+                OPEN cur;
+                read_loop: LOOP
+                    FETCH cur INTO t;
+                    IF done THEN LEAVE read_loop; END IF;
+                    SET @s = CONCAT('DELETE FROM `', dbname, '`.`', t, '`');
+                    PREPARE stmt FROM @s;
+                    EXECUTE stmt;
+                    DEALLOCATE PREPARE stmt;
+                END LOOP;
+                CLOSE cur;
+                SET FOREIGN_KEY_CHECKS = 1;
+            END
+        ");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_ingresos_y_pendientes`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_ingresos_y_pendientes(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT 
+                SUM(pagado) AS ingresos,
+                SUM(costo - pagado) AS pendiente
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_total_citas`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_total_citas(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT COUNT(*) AS total_citas
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_odontologos_activos`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_odontologos_activos()
+        BEGIN
+            SELECT COUNT(*) AS odontologos_activos
+            FROM usuario u
+            INNER JOIN odontologo o ON o.idUsuario_Odontologo = u.idUsuario;
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_citas_por_estado`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_citas_por_estado(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT estado, COUNT(*) AS total
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes)
+            GROUP BY estado;
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `obtener_suma_pagado`");
+        DB::unprepared("
+        CREATE PROCEDURE obtener_suma_pagado(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT SUM(pagado) AS total_pagado
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes);
+        END
+        ");
+
+        
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_odontologos_citas_proporcion`");
+        DB::unprepared("
+            CREATE PROCEDURE sp_odontologos_citas_proporcion(
+                IN p_anio INT,
+                IN p_mes INT
+            )
+            BEGIN
+                SELECT
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.nombre, u.paterno, u.materno) AS nombre_completo,
+                    COUNT(DISTINCT h.idCita) AS NroCitas,
+                    COUNT(DISTINCT h.idCita) / NULLIF(t.total_citas, 0) AS ProporcionGlobal
+                FROM hace h
+                JOIN usuario u ON u.idUsuario = h.idUsuario_Odontologo
+                JOIN cita c   ON c.idCita     = h.idCita
+                CROSS JOIN (
+                    SELECT COUNT(*) AS total_citas 
+                    FROM cita 
+                    WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(fecha) = p_mes)
+                ) t
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY 
+                    u.idUsuario,
+                    nombre_completo,
+                    t.total_citas
+                ORDER BY NroCitas DESC;
+            END
+        ");
+
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_facturacion_diaria`");
+        DB::unprepared("
+        CREATE PROCEDURE sp_facturacion_diaria(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT
+                DAY(fecha) AS fecha,
+                SUM(costo) AS facturado,
+                SUM(pagado) AS cobrado,
+                SUM(costo - pagado) AS saldo
+            FROM cita
+            WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(fecha) = p_mes)
+            GROUP BY DAY(fecha)
+            ORDER BY fecha;
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_estados_cita_proporcion`");
+        DB::unprepared("
+            CREATE PROCEDURE sp_estados_cita_proporcion(
+                IN p_anio INT,
+                IN p_mes INT
+            )
+            BEGIN
+                SELECT 
+                    c.estado,
+                    COUNT(*) AS NroCitas,
+                    COUNT(*) / NULLIF(t.total_citas, 0) AS Proporcion  
+                FROM cita c
+                CROSS JOIN (
+                    SELECT COUNT(*) AS total_citas 
+                    FROM cita 
+                    WHERE (p_anio IS NULL OR YEAR(fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(fecha) = p_mes)
+                ) t 
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY 
+                    c.estado,
+                    t.total_citas;
+            END
+        ");
+
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_resumen_administrativo`");
+        DB::unprepared("
+        CREATE PROCEDURE sp_resumen_administrativo(
+            IN p_anio INT,
+            IN p_mes INT
+        )
+        BEGIN
+            SELECT
+                SUM(CASE WHEN c.estado = 'cancelada' THEN 1 ELSE 0 END) AS NroCitasCanceladas,
+                SUM(CASE WHEN c.estado = 'confirmada' THEN 1 ELSE 0 END) AS NroCitasConfirmadas,
+                SUM(CASE WHEN c.estado = 'pendiente' THEN 1 ELSE 0 END) AS NroCitasPendiente,
+                SUM(CASE WHEN c.estado = 'completada' THEN 1 ELSE 0 END) AS NroCitasCompletadas,
+                COUNT(DISTINCT h.idUsuario_Paciente) AS NroPacientes
+            FROM cita c
+            INNER JOIN hace h ON h.idCita = c.idCita
+            WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+            AND (p_mes IS NULL OR MONTH(c.fecha) = p_mes);
+        END
+        ");
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_tratamientos_proporcion`");
+        DB::unprepared("
+            CREATE PROCEDURE sp_tratamientos_proporcion(
+                IN p_anio INT,
+                IN p_mes INT
+            )
+            BEGIN
+                SELECT 
+                    t.nombre,
+                    COUNT(*) AS NroTratamientos,
+                    COUNT(*) / NULLIF(k.NroTotalTratamiento, 0) AS Proporcion 
+                FROM tratamiento t
+                INNER JOIN cita c ON c.idCita = t.idCita
+                CROSS JOIN (
+                    SELECT COUNT(*) AS NroTotalTratamiento 
+                    FROM tratamiento tr
+                    INNER JOIN cita ci ON ci.idCita = tr.idCita
+                    WHERE (p_anio IS NULL OR YEAR(ci.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(ci.fecha) = p_mes)
+                ) k
+                WHERE (p_anio IS NULL OR YEAR(c.fecha) = p_anio)
+                AND (p_mes  IS NULL OR MONTH(c.fecha) = p_mes)
+                GROUP BY 
+                    t.nombre,
+                    k.NroTotalTratamiento;
+            END
+        ");
+
+
+        DB::unprepared("DROP PROCEDURE IF EXISTS `sp_odontogramas_odontologos`");
+        DB::unprepared("
+            CREATE PROCEDURE sp_odontogramas_odontologos(
+                IN p_anio INT,
+                IN p_mes INT
+            )
+            BEGIN
+                SELECT 
+                    u.idUsuario,
+                    CONCAT_WS(' ', u.nombre, u.paterno) AS nombre_completo,
+                    COUNT(*) AS NroOdontogramasRealizados,
+                    COUNT(*) / NULLIF(t.total_odontogramas, 0) AS proporcion
+                FROM efectua e 
+                INNER JOIN usuario u    ON u.idUsuario = e.idUsuario_Odontologo
+                INNER JOIN odontograma o ON o.idOdontograma = e.idOdontograma
+                CROSS JOIN (
+                    SELECT COUNT(*) AS total_odontogramas 
+                    FROM odontograma ou 
+                    WHERE (p_anio IS NULL OR YEAR(ou.fecha) = p_anio)
+                    AND (p_mes  IS NULL OR MONTH(ou.fecha) = p_mes)
+                ) t
+                WHERE (p_anio IS NULL OR YEAR(o.fecha) = p_anio)
+                AND (p_mes  IS NULL OR MONTH(o.fecha) = p_mes)
+                GROUP BY 
+                    u.idUsuario,
+                    nombre_completo,
+                    t.total_odontogramas;
+            END
+        ");
+
+
         
         // ==================== MENSAJES FINALES ====================
         $this->command->info('');

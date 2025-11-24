@@ -296,6 +296,229 @@ export const dashboardService = {
       );
     },
 
+        /**
+     * GET /dashboard/cd-ingresos-odonto-mes?anio=&mes=
+     */
+    cdIngresosPorOdontoMes<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-ingresos-odonto-mes${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-resumen-citas-dias?anio=&mes=&idUsuario=
+     */
+    cdResumenCitasDias<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+      idUsuario?: number;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-resumen-citas-dias${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-resumen-citas-odonto?anio=&mes=
+     */
+    cdResumenCitasPorOdonto<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-resumen-citas-odonto${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-ganancia-citas-odontologo?anio=&mes=
+     */
+    cdGananciaCitasPorOdontologo<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-ganancia-citas-odontologo${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-ganancia-por-tratamiento?anio=&mes=
+     */
+    cdGananciaPorTratamiento<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-ganancia-por-tratamiento${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-ganancia-tratamientos-odontologo?anio=&mes=
+     */
+    cdGananciaTratamientosPorOdontologo<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-ganancia-tratamientos-odontologo${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-reporte-citas-estado-odontologo?anio=&mes=
+     */
+    cdReporteCitasEstadoOdontologo<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-reporte-citas-estado-odontologo${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-vaciar-bd?dbname=
+     * (OJO: este devuelve { message: string }, no array)
+     */
+    cdVaciarBd(params: { dbname: string }) {
+      return unwrap<{ message: string }>(
+        api.get(`/dashboard/cd-vaciar-bd${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-ingresos-y-pendientes?anio=&mes=
+     */
+    cdIngresosYPendientes<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-ingresos-y-pendientes${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-total-citas?anio=&mes=
+     */
+    cdTotalCitas<T = any>(params: { anio?: number; mes?: MesParam }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-total-citas${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-odontologos-activos
+     */
+    cdOdontologosActivos<T = any>() {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-odontologos-activos`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-citas-por-estado?anio=&mes=
+     */
+    cdCitasPorEstado<T = any>(params: { anio?: number; mes?: MesParam }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-citas-por-estado${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-suma-pagado?anio=&mes=
+     */
+    cdSumaPagado<T = any>(params: { anio?: number; mes?: MesParam }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-suma-pagado${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-odontologos-citas-proporcion?anio=&mes=
+     */
+    cdOdontologosCitasProporcion<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-odontologos-citas-proporcion${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-facturacion-diaria?anio=&mes=
+     */
+    cdFacturacionDiaria<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-facturacion-diaria${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-estados-cita-proporcion?anio=&mes=
+     */
+    cdEstadosCitaProporcion<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-estados-cita-proporcion${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-resumen-administrativo?anio=&mes=
+     */
+    cdResumenAdministrativo<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-resumen-administrativo${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-tratamientos-proporcion?anio=&mes=
+     */
+    cdTratamientosProporcion<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-tratamientos-proporcion${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-odontogramas-odontologos?anio=&mes=
+     */
+    cdOdontogramasOdontologos<T = any>(params: {
+      anio?: number;
+      mes?: MesParam;
+    }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-odontogramas-odontologos${qs(params)}`)
+      );
+    },
+
+    /**
+     * GET /dashboard/cd-paciente-doctores?idUsuario=
+     */
+    cdPacienteDoctores<T = any>(params: { idUsuario: number }) {
+      return unwrap<Rows<T>>(
+        api.get(`/dashboard/cd-paciente-doctores${qs(params)}`)
+      );
+    },
     // ======================================================
     // ================== OTROS SERVICIOS ===================
     // ======================================================

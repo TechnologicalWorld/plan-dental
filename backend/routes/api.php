@@ -114,34 +114,56 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:asistente')->get('/asistente-test', function () {
         return response()->json(['message' => 'Eres asistente!']);
     });
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/citas-por-mes-anio',        [DashboardController::class, 'citasPorMesAnio']);
-        Route::get('/citas-por-dia-semana-mes',  [DashboardController::class, 'citasPorDiaSemanaMes']);        
-        Route::get('/ingresos-odonto',           [DashboardController::class, 'ingresosPorOdontoMes']);
-        Route::get('/resumen-citas-odonto',      [DashboardController::class, 'resumenCitasPorOdonto']);
-        Route::get('/citas-dias',                [DashboardController::class, 'resumenCitasDias']);        
-        Route::get('/citas-estado-odontologo',        [DashboardController::class, 'reporteCitasEstadoOdontologo']);
-        Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
-        Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
-        Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);
-        Route::get('/graf-citas-por-paciente',             [DashboardController::class, 'grafCitasPorPaciente']);
-        Route::get('/graf-tratamientos-realizados',        [DashboardController::class, 'grafTratamientosRealizados']);
-        Route::get('/graf-ingresos-mensuales-odontologo',  [DashboardController::class, 'grafIngresosMensualesPorOdontologo']);
+Route::prefix('dashboard')->group(function () {
+    // === Rutas actuales ===
+    Route::get('/citas-por-mes-anio',        [DashboardController::class, 'citasPorMesAnio']);
+    Route::get('/citas-por-dia-semana-mes',  [DashboardController::class, 'citasPorDiaSemanaMes']);        
+    Route::get('/ingresos-odonto',           [DashboardController::class, 'ingresosPorOdontoMes']);
+    Route::get('/resumen-citas-odonto',      [DashboardController::class, 'resumenCitasPorOdonto']);
+    Route::get('/citas-dias',                [DashboardController::class, 'resumenCitasDias']);        
+    Route::get('/citas-estado-odontologo',        [DashboardController::class, 'reporteCitasEstadoOdontologo']);
+    Route::get('/ganancia-citas-odontologo',      [DashboardController::class, 'gananciaCitasPorOdontologo']);
+    Route::get('/ganancia-tratamientos-odontologo',[DashboardController::class, 'gananciaTratamientosPorOdontologo']);
+    Route::get('/ganancia-por-tratamiento',       [DashboardController::class, 'gananciaPorTratamiento']);
+    Route::get('/graf-citas-por-paciente',             [DashboardController::class, 'grafCitasPorPaciente']);
+    Route::get('/graf-tratamientos-realizados',        [DashboardController::class, 'grafTratamientosRealizados']);
+    Route::get('/graf-ingresos-mensuales-odontologo',  [DashboardController::class, 'grafIngresosMensualesPorOdontologo']);
 
-        Route::get('/nro-odontogramas-paciente',           [DashboardController::class, 'dashboardNroOdontogramasPaciente']);
-        Route::get('/total-citas-odontologo',              [DashboardController::class, 'dashboardTotalCitasOdontologo']);
-        Route::get('/total-ingresos-odontologo',           [DashboardController::class, 'dashboardTotalIngresosOdontologo']);
-        Route::get('/ultimo-plan-paciente',                [DashboardController::class, 'dashboardUltimoPlanPaciente']);
+    Route::get('/nro-odontogramas-paciente',           [DashboardController::class, 'dashboardNroOdontogramasPaciente']);
+    Route::get('/total-citas-odontologo',              [DashboardController::class, 'dashboardTotalCitasOdontologo']);
+    Route::get('/total-ingresos-odontologo',           [DashboardController::class, 'dashboardTotalIngresosOdontologo']);
+    Route::get('/ultimo-plan-paciente',                [DashboardController::class, 'dashboardUltimoPlanPaciente']);
 
+    // === Endpoints enfocados en un paciente (idUsuario obligatorio) ===
+    Route::get('/paciente/piezas-por-estado',          [DashboardController::class, 'pacientePiezasPorEstado']);
+    Route::get('/paciente/ultimo-plan',                [DashboardController::class, 'pacienteUltimoPlan']);
+    Route::get('/paciente/historia-clinica',           [DashboardController::class, 'pacienteHistoriaClinica']);
+    Route::get('/paciente/ultima-cita',                [DashboardController::class, 'pacienteUltimaCita']);
+    Route::get('/paciente/doctores',                   [DashboardController::class, 'pacienteDoctores']);
 
-        // === Endpoints enfocados en un paciente (idUsuario obligatorio) ===
-        Route::get('/paciente/piezas-por-estado',          [DashboardController::class, 'pacientePiezasPorEstado']);
-        Route::get('/paciente/ultimo-plan',                [DashboardController::class, 'pacienteUltimoPlan']);
-        Route::get('/paciente/historia-clinica',           [DashboardController::class, 'pacienteHistoriaClinica']);
-        Route::get('/paciente/ultima-cita',                [DashboardController::class, 'pacienteUltimaCita']);
-        Route::get('/paciente/doctores',                   [DashboardController::class, 'pacienteDoctores']);
+    // === Nuevos endpoints que llaman a los cd_* (procedimientos almacenados) ===
+    Route::get('/cd-ingresos-odonto-mes',              [DashboardController::class, 'cd_ingresos_por_odonto_mes']);
+    Route::get('/cd-resumen-citas-dias',               [DashboardController::class, 'cd_resumen_citas_dias']);
+    Route::get('/cd-resumen-citas-odonto',             [DashboardController::class, 'cd_resumen_citas_por_odonto']);
+    Route::get('/cd-ganancia-citas-odontologo',        [DashboardController::class, 'cd_ganancia_citas_por_odontologo']);
+    Route::get('/cd-ganancia-por-tratamiento',         [DashboardController::class, 'cd_ganancia_por_tratamiento']);
+    Route::get('/cd-ganancia-tratamientos-odontologo', [DashboardController::class, 'cd_ganancia_tratamientos_por_odontologo']);
+    Route::get('/cd-reporte-citas-estado-odontologo',  [DashboardController::class, 'cd_reporte_citas_por_estado_odontologo']);
 
-    });
+    Route::get('/cd-vaciar-bd',                        [DashboardController::class, 'cd_vaciar_bd']);
+    Route::get('/cd-ingresos-y-pendientes',            [DashboardController::class, 'cd_obtener_ingresos_y_pendientes']);
+    Route::get('/cd-total-citas',                      [DashboardController::class, 'cd_obtener_total_citas']);
+    Route::get('/cd-odontologos-activos',              [DashboardController::class, 'cd_obtener_odontologos_activos']);
+    Route::get('/cd-citas-por-estado',                 [DashboardController::class, 'cd_obtener_citas_por_estado']);
+    Route::get('/cd-suma-pagado',                      [DashboardController::class, 'cd_obtener_suma_pagado']);
+    Route::get('/cd-odontologos-citas-proporcion',     [DashboardController::class, 'cd_odontologos_citas_proporcion']);
+    Route::get('/cd-facturacion-diaria',               [DashboardController::class, 'cd_facturacion_diaria']);
+    Route::get('/cd-estados-cita-proporcion',          [DashboardController::class, 'cd_estados_cita_proporcion']);
+    Route::get('/cd-resumen-administrativo',           [DashboardController::class, 'cd_resumen_administrativo']);
+    Route::get('/cd-tratamientos-proporcion',          [DashboardController::class, 'cd_tratamientos_proporcion']);
+    Route::get('/cd-odontogramas-odontologos',         [DashboardController::class, 'cd_odontogramas_odontologos']);
+    Route::get('/cd-paciente-doctores',                [DashboardController::class, 'cd_paciente_doctores']);
+});
 
 
 
