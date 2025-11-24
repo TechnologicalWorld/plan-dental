@@ -1,19 +1,23 @@
-// src/app/router/index.tsx
 import { createBrowserRouter } from "react-router-dom";
-
-import EspecialidadesAdminPage from "@/features/especialidades/pages/EspecialidadesAdminPage";
 
 import PublicLayout from "@/app/layout/PublicLayout";
 import AppLayout from "@/app/layout/AppLayout";
 import AuthGuard from "@/app/router/guards/AuthGuard";
 import RoleGuard from "@/app/router/guards/RoleGuard";
-
 import ErrorBoundary from "@/app/router/ErrorBoundary";
 import RootGate from "@/app/router/RootGate";
+
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
-import CalendarioGeneralAdminPage from "@/features/calendario/pages/CalendarioGeneralAdminPage";
 
+import Dashboard from '@/features/dashboard/pages/Dashboard';
+import PersonalListPage from '@/features/personal/pages/PersonalListPage';
+import PacientesAdminListPage from '@/features/pacientes/pages/PacientesAdminListPage';
+import RolesListPage from '@/features/roles/pages/RolesListPage';
+import CalendarioGeneralAdminPage from "@/features/calendario/pages/CalendarioGeneralAdminPage";
+import EspecialidadesAdminPage from "@/features/especialidades/pages/EspecialidadesAdminPage";
+import Reportes from '@/features/reportes/pages/Reportes';
+import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
 
 import AgendaOdontologoPage from '@/features/agenda/pages/AgendaOdontologoPage';
 import MisPacientesPage from '@/features/odonto-pacientes/pages/MisPacientesPage';
@@ -23,32 +27,26 @@ import HistoriaClinicaEditPage from '@/features/historias/pages/HistoriaClinicaE
 import OdontogramaPage from '@/features/odontograma/pages/OdontogramaPage';
 import TratamientosListPage from '@/features/tratamientos/pages/TratamientosListPage';
 
-
-import Reportes from '@/features/reportes/pages/Reportes';
-import AsistenteIA from '@/features/asistenteia/pages/AsistenteIA';
-
-import Dashboard from '@/features/dashboard/pages/Dashboard';
 import DashboardOdonto from "@/features/dashboard/pages/DashboardOdonto";
 import DashboardPaciente from "@/features/dashboard/pages/DashboardPaciente";
 import NotFound from '@/shared/ui/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
-
-import PersonalListPage from '@/features/personal/pages/PersonalListPage';
-import PacientesAdminListPage from '@/features/pacientes/pages/PacientesAdminListPage';
-import RolesListPage from '@/features/roles/pages/RolesListPage';
-
 
 //NUEVAS PÁGINAS (PACIENTE)
 import MiPerfilPage from "@/features/pacientes/pages/MiPerfilPage";
 import MiHistorialPage from "@/features/pacientes/pages/MiHistorialPage";
 import AgendarCitaPage from "@/features/pacientes/pages/AgendarCitaPage";
 
-
 //Agregando Pages de asistente
 import PacientesAsistentePage from '@/features/pacientes/pages/PacientesAsistentePage'
 import CalendarioAsistentePage from '@/features/calendario/pages/CalendarioAsistentePage'
 import CitasAsistentePage from '@/features/citas/pages/CitasAsistentePage'
 import CalendarioAsistenteCrear from '@/features/citas/pages/CitasAsistenteCrear'
+
+
+
+
+
 export const router = createBrowserRouter([
   // Entrada raíz -> decide login o dashboard según sesión
   { path: "/", element: <RootGate /> },

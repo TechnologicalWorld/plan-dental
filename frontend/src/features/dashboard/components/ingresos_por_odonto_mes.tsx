@@ -10,9 +10,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// ⬅️ Ajusta esta ruta
 import { dashboardService, type MesParam } from "../dashboardservice";
-// -------------------- Paleta (dark) --------------------
+
 const theme = {
   grid: "rgba(226,232,240,0.16)",
   axis: "rgba(226,232,240,0.28)",
@@ -26,13 +25,12 @@ const theme = {
   tooltipText: "#E2E8F0",
 };
 
-// -------------------- Tipos --------------------
 type ServerRow = {
   idUsuario: number;
-  total: number | string;        // viene como número (o string desde SQL)
+  total: number | string;        
   nombre_completo: string;
   anio: number;
-  mes: number;                   // 1..12
+  mes: number;                  
 };
 
 type ChartRow = {
@@ -56,7 +54,6 @@ const MESES_ES = [
   { value: 12, label: "Diciembre" },
 ] as const;
 
-// -------------------- Helpers --------------------
 const money = new Intl.NumberFormat("es-BO", {
   style: "currency",
   currency: "BOB",
@@ -69,7 +66,6 @@ function mapRowsToChart(rows: ServerRow[]): ChartRow[] {
     odontologo: r.nombre_completo,
     total: Number(r.total) || 0,
   }));
-  // ranking descendente
   data.sort((a, b) => b.total - a.total);
   return data;
 }
@@ -79,9 +75,8 @@ function yAxisWidthForLabels(labels: string[], base = 140, pxPerChar = 7) {
   return Math.max(base, Math.min(320, Math.round(maxLen * pxPerChar)));
 }
 
-// -------------------- Componente --------------------
 export default function IngresosPorOdontoMes() {
-  // Por tu ejemplo: Octubre 2024
+  
   const [anio, setAnio] = useState<number | null>(2024);
   const [mes, setMes] = useState<number | null>(10);
 
@@ -96,7 +91,7 @@ export default function IngresosPorOdontoMes() {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    // Si quieres permitir "Todos", puedes no enviar el filtro que sea null/undefined
+    
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -122,7 +117,6 @@ export default function IngresosPorOdontoMes() {
     anio ? ` — ${anio}` : ""
   }${mes ? ` / ${MESES_ES.find((m) => m.value === mes)?.label}` : ""}`;
 
-  // Altura dinámica (una barra ~48px)
   const chartHeight = Math.max(320, chartData.length * 48);
   const yWidth = yAxisWidthForLabels(chartData.map((d) => d.odontologo));
 
@@ -174,7 +168,7 @@ export default function IngresosPorOdontoMes() {
         <div className="text-sm text-gray-400">Sin datos para el filtro seleccionado.</div>
       )}
 
-      {/* ====== Gráfico (horizontal) ====== */}
+      {/* ====== Gráfico ====== */}
       <div
         className="w-full min-w-0 rounded-md p-2"
         style={{ border: `1px solid ${theme.axis}`, height: chartHeight }}

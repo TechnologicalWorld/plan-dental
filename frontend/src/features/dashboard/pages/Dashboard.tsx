@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-// ====== IMPORTA TUS GRÁFICOS (sin tildes/espacios en los nombres de archivo) ======
 import IngresosPorOdontoMes from "../components/ingresos_por_odonto_mes";
 import ResumenCitasPorOdonto from "../components/resumen_citas_por_odonto";
 import ResumenCitasPorDias from "../components/resumen_citas_dias";
@@ -22,7 +21,6 @@ const VIEWS: Record<string, { title: string; Component: React.ComponentType }> =
 
 const DEFAULT_KEY = "ingresos-citas";
 
-// Lee la clave desde la URL: /dashboard/<clave>
 function getKeyFromPath(): string {
   if (typeof window === "undefined") return DEFAULT_KEY;
   const m = window.location.pathname.match(/\/dashboard\/([^\/]+)\/?$/i);
@@ -34,7 +32,6 @@ export default function DashboardView() {
   const [key, setKey] = useState<string>(() => getKeyFromPath());
   const Active = (VIEWS[key]?.Component ?? VIEWS[DEFAULT_KEY].Component) as React.ComponentType;
 
-  // Sin recargar: navega y actualiza la URL
   const navigate = (k: string) => {
     if (typeof window === "undefined") return;
     const url = `/dashboard/${k}`;
@@ -44,11 +41,9 @@ export default function DashboardView() {
     setKey(k);
   };
 
-  // Soporta Back/Forward del navegador
   useEffect(() => {
     const onPop = () => setKey(getKeyFromPath());
     window.addEventListener("popstate", onPop);
-    // Si entras a /dashboard sin vista, reescribe a la default
     if (!window.location.pathname.match(/\/dashboard\/[^/]+/)) {
       window.history.replaceState({}, "", `/dashboard/${DEFAULT_KEY}`);
     }
@@ -59,7 +54,7 @@ export default function DashboardView() {
     <div className="w-full max-w-full min-w-0 p-4 overflow-x-hidden">
       <h1 className="text-2xl font-semibold mb-3">Dashboard</h1>
 
-      {/* Navbar (anchors con pushState) */}
+      {/* Navbar */}
       <nav className="flex flex-wrap gap-2 mb-4">
         {Object.entries(VIEWS).map(([k, v]) => {
           const active = k === key;

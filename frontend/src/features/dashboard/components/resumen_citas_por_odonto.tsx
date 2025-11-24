@@ -11,9 +11,8 @@ import {
   Legend,
 } from "recharts";
 
-// ⬅️ Ajusta esta ruta a donde esté tu archivo
 import { dashboardService, type MesParam } from "../dashboardservice";
-// ---------- Tema ----------
+
 const theme = {
   grid: "rgba(226,232,240,0.16)",
   axis: "rgba(226,232,240,0.28)",
@@ -24,24 +23,23 @@ const theme = {
   tooltipText: "#E2E8F0",
 };
 
-// Colores por estado (puedes ajustar)
+
 const ESTADO_COLORS: Record<string, string> = {
-  Confirmada: "#60A5FA",   // azul
-  Completada: "#34D399",   // verde
-  Pendiente:  "#F59E0B",   // ámbar
-  Cancelada:  "#F87171",   // rojo
-  Reprogramada: "#A78BFA", // violeta
-  "No asistió": "#93C5FD", // celeste
+  Confirmada: "#60A5FA",   
+  Completada: "#34D399",   
+  Pendiente:  "#F59E0B",   
+  Cancelada:  "#F87171",   
+  Reprogramada: "#A78BFA", 
+  "No asistió": "#93C5FD", 
 };
 const FALLBACK_COLORS = ["#22D3EE", "#38BDF8", "#7DD3FC", "#67E8F9", "#93C5FD", "#5EEAD4"];
 
-// ---------- Tipos ----------
 type ServerRow = {
   idUsuario: number;
   nombre_completo: string;
-  estado: string;      // e.g. "confirmada", "completada", "pendiente"
+  estado: string;      
   anio: number;
-  mes: number;         // 1..12
+  mes: number;         
   Nro: number | string;
 };
 
@@ -49,7 +47,6 @@ type ChartRow = {
   idUsuario: number;
   odontologo: string;
   total: number;
-  // claves dinámicas por estado
   [estado: string]: number | string;
 };
 
@@ -68,12 +65,10 @@ const MESES_ES = [
   { value: 12, label: "Diciembre" },
 ] as const;
 
-// ---------- Helpers ----------
 function stripAccents(s: string) {
   return s.normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
 
-// Normaliza: "confirmada" -> "Confirmada", "no asistio" -> "No asistió", etc.
 function normalizeEstado(estadoRaw: string): string {
   const k = stripAccents(estadoRaw.trim().toLowerCase());
   const map: Record<string, string> = {
@@ -83,7 +78,7 @@ function normalizeEstado(estadoRaw: string): string {
     cancelada: "Cancelada",
     reprogramada: "Reprogramada",
     "no asistio": "No asistió",
-    atendida: "Completada", // opcional: mapea "Atendida" a Completada si aplica en tu dominio
+    atendida: "Completada", 
   };
   return map[k] ?? estadoRaw.charAt(0).toUpperCase() + estadoRaw.slice(1);
 }
@@ -97,9 +92,8 @@ function yAxisWidthForLabels(labels: string[], base = 200, pxPerChar = 7) {
   return Math.max(base, Math.min(360, Math.round(maxLen * pxPerChar)));
 }
 
-// Pivot del formato del SP → filas por odontólogo con columnas por estado
 function prepararChart(rows: ServerRow[]) {
-  const map = new Map<number, ChartRow>(); // por idUsuario
+  const map = new Map<number, ChartRow>(); 
   const estadosSet = new Set<string>();
 
   for (const r of rows) {
@@ -119,12 +113,10 @@ function prepararChart(rows: ServerRow[]) {
     row.total = (row.total as number) + (Number(r.Nro) || 0);
   }
 
-  // Ordena odontólogos por total DESC
   const data = Array.from(map.values()).sort(
     (a, b) => (b.total as number) - (a.total as number)
   );
 
-  // Orden sugerido para la pila; añade cualquier estado extra al final
   const preferredOrder = ["Confirmada", "Completada", "Pendiente", "Cancelada", "Reprogramada", "No asistió"];
   const estados = [
     ...preferredOrder.filter((e) => estadosSet.has(e)),
@@ -136,7 +128,6 @@ function prepararChart(rows: ServerRow[]) {
 
 // ---------- Componente ----------
 export default function ResumenCitasPorOdonto() {
-  // Por tu ejemplo: Octubre 2024
   const [anio, setAnio] = useState<number | null>(2024);
   const [mes, setMes] = useState<number | null>(10);
 
@@ -161,7 +152,6 @@ export default function ResumenCitasPorOdonto() {
         if (anio != null) params.anio = anio;
         if (mes != null) params.mes = mes as MesParam;
 
-        // GET /dashboard/resumen-citas-odonto?anio=&mes=
         const rows = await dashboardService.resumenCitasPorOdonto<ServerRow>(params);
 
         const { data, estados } = prepararChart(rows);

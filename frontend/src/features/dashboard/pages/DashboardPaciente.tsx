@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/shared/hooks/useAuthStore";
-// AJUSTA ESTA RUTA SI ES NECESARIO
 import { dashboardService } from "../../dashboard/dashboardService";
 import {
   PieChart,
@@ -13,7 +12,6 @@ import {
   Legend,
 } from "recharts";
 
-// Tipos de datos que vienen del backend
 type RowPiezaEstado = {
   idUsuario: number;
   estado: string;
@@ -46,7 +44,6 @@ type RowDoctor = {
   correo: string;
 };
 
-// Paleta para el gráfico de piezas
 const piezaColors = [
   "#38BDF8",
   "#22D3EE",

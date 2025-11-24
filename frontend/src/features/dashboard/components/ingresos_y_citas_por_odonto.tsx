@@ -14,9 +14,8 @@ import {
   Line,
 } from "recharts";
 
-// Ajusta esta ruta según tu estructura de carpetas
 import { dashboardService, type MesParam } from "../dashboardservice";
-// ---- Paleta (oscura, consistente con lo anterior) ----
+
 const theme = {
   grid: "rgba(226,232,240,0.16)",
   axis: "rgba(226,232,240,0.28)",
@@ -25,7 +24,7 @@ const theme = {
   barFrom: "#38BDF8",
   barTo: "#22D3EE",
   barHover: "#0EA5E9",
-  line: "#A78BFA", // violeta
+  line: "#A78BFA", 
   tooltipBg: "#0B1220",
   tooltipBorder: "#1F2937",
   tooltipText: "#E2E8F0",
@@ -37,7 +36,6 @@ const money = new Intl.NumberFormat("es-BO", {
   maximumFractionDigits: 2,
 });
 
-// ---- Tipos de los SP ----
 type RowCitas = {
   nombre_completo: string;
   estado: string;
@@ -72,7 +70,6 @@ const MESES_ES = [
   { value: 12, label: "Diciembre" },
 ] as const;
 
-// ========================= Helpers =========================
 const DAY_NUM_TO_NAME: Record<number, string> = {
   1: "Lunes",
   2: "Martes",
@@ -83,16 +80,14 @@ const DAY_NUM_TO_NAME: Record<number, string> = {
   7: "Domingo",
 };
 
-
-// ========================= Componente =========================
 export default function IngresosYCitasPorOdonto() {
   const [anio, setAnio] = useState<number | null>(2024);
-  const [mes, setMes] = useState<number | null>(10); // Octubre por defecto
-  const [odontologos, setOdontologos] = useState<any[]>([]); // Asegúrate de que esto sea un array
+  const [mes, setMes] = useState<number | null>(10); 
+  const [odontologos, setOdontologos] = useState<any[]>([]); 
   const [selectedOdontologo, setSelectedOdontologo] = useState<number | null>(null);
 
-  const [chartDataCitas, setChartDataCitas] = useState<ChartRow[]>([]); // Datos para gráfico de citas
-  const [chartDataIngresos, setChartDataIngresos] = useState<ChartRow[]>([]); // Datos para gráfico de ingresos
+  const [chartDataCitas, setChartDataCitas] = useState<ChartRow[]>([]); 
+  const [chartDataIngresos, setChartDataIngresos] = useState<ChartRow[]>([]); 
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -100,9 +95,9 @@ export default function IngresosYCitasPorOdonto() {
   useEffect(() => {
     const fetchOdontologos = async () => {
       try {
-        const data = await dashboardService.getodontologos(); // Obtener odontólogos
-        setOdontologos(data.data || []); // Aquí tomamos la propiedad "data" que tiene los odontólogos
-        setSelectedOdontologo(data.data[0]?.idUsuario_Odontologo || null); // Establecer un odontólogo por defecto
+        const data = await dashboardService.getodontologos(); 
+        setOdontologos(data.data || []); 
+        setSelectedOdontologo(data.data[0]?.idUsuario_Odontologo || null); 
       } catch (error) {
         console.error("Error al obtener odontólogos", error);
       }
@@ -119,13 +114,11 @@ export default function IngresosYCitasPorOdonto() {
         setLoading(true);
         setErrorMsg(null);
 
-        // Obtenemos los datos de ingresos y citas por odontologo
         const [citas, ganancia] = await Promise.all([
           dashboardService.resumenCitasPorOdonto({ anio, mes }),
           dashboardService.gananciaCitasPorOdontologo({ anio, mes }),
         ]);
 
-        // Fusionamos los datos de citas y ganancias por odontólogo
         const mergedDataCitas = citas.map((c: RowCitas) => ({
           odontologo: c.nombre_completo,
           citas: c.Nro,
@@ -211,7 +204,7 @@ export default function IngresosYCitasPorOdonto() {
       {loading && <div className="text-sm text-gray-400">Cargando…</div>}
       {errorMsg && <div className="text-sm text-red-400">Error: {errorMsg}</div>}
 
-      {/* ====== Gráfico de Citas (BarChart) ====== */}
+      {/* ====== Gráfico de Citas ====== */}
       <div className="w-full min-w-0 h-96 border rounded-md p-2" style={{ borderColor: theme.axis }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartDataCitas} barCategoryGap={18}>
@@ -284,7 +277,7 @@ export default function IngresosYCitasPorOdonto() {
         </table>
       </div>
 
-      {/* ====== Gráfico de Ingresos (LineChart) ====== */}
+      {/* ====== Gráfico de Ingresos ====== */}
       <div className="w-full min-w-0 h-96 border rounded-md p-2" style={{ borderColor: theme.axis }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartDataIngresos} margin={{ top: 16, right: 32, bottom: 24, left: 8 }}>

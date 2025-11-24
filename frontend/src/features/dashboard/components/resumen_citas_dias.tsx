@@ -12,7 +12,6 @@ import {
   Legend,
 } from "recharts";
 
-// ---------- Tema dark (combina con tu dashboard) ----------
 const theme = {
   grid: "rgba(226,232,240,0.16)",
   axis: "rgba(226,232,240,0.28)",
@@ -23,17 +22,15 @@ const theme = {
   tooltipText: "#E2E8F0",
 };
 
-// Colores por estado
 const estadoColor: Record<string, string> = {
-  Atendida: "#34D399",   // verde
-  Pendiente: "#F59E0B",  // ámbar
-  Cancelada: "#F87171",  // rojo
+  Atendida: "#34D399",   
+  Pendiente: "#F59E0B",  
+  Cancelada: "#F87171",  
   Reprogramada: "#A78BFA",
   "No Asistió": "#60A5FA",
 };
 const fallbackColors = ["#22D3EE", "#38BDF8", "#7DD3FC", "#67E8F9", "#93C5FD"];
 
-// ---------- Días (orden L->D) ----------
 const DIAS_TITULO = [
   "Lunes",
   "Martes",
@@ -56,17 +53,15 @@ const DIA_MAP: Record<string, string> = {
 };
 const normalizeDia = (raw: string) => DIA_MAP[raw.trim().toLowerCase()] || raw;
 
-// ---------- Tipos del SP ----------
 type RowSP = {
-  idUsuario: number | null; // SP puede traer NULL si agregas "Todos" desde backend; aquí no lo usamos
+  idUsuario: number | null; 
   estado: string;
   anio: number;
-  mes: number; // 1..12
-  dia: string; // 'lunes'...'domingo'
+  mes: number; 
+  dia: string; 
   Nro: number;
 };
 
-// Fila para el chart: 'dia' string + claves dinámicas por estado (number) + 'total'
 type ChartRow = {
   dia: string;
   total: number;
@@ -88,9 +83,6 @@ const MESES_ES = [
   { value: 12, label: "Diciembre" },
 ] as const;
 
-/* =======================
-   MOCK: emula el SP
-   ======================= */
 const ODONTO_IDS = [101, 102, 103, 104, 105, 106];
 function generarMockResumenDias(fromYear = 2024, toYear = 2026): RowSP[] {
   const rows: RowSP[] = [];
@@ -100,7 +92,6 @@ function generarMockResumenDias(fromYear = 2024, toYear = 2026): RowSP[] {
       const estacional = m === 4 || m === 11 ? 1.1 : m === 1 ? 0.9 : 1;
       for (const uid of ODONTO_IDS) {
         diasLower.forEach((dl, wd) => {
-          // pesos por día (más citas de mié-jue)
           const pesoDia = [0.8, 0.9, 1.2, 1.25, 1.0, 0.85, 0.7][wd];
           const base = 20 * estacional * pesoDia * (0.9 + Math.random() * 0.4);
           const atendida = Math.max(0, Math.round(base + Math.random() * 15));
@@ -118,9 +109,6 @@ function generarMockResumenDias(fromYear = 2024, toYear = 2026): RowSP[] {
   return rows;
 }
 
-/* =======================
-   Pivot + filtros
-   ======================= */
 function prepararChartDias(
   spRows: RowSP[],
   p_anio: number | null,
@@ -145,7 +133,6 @@ function prepararChartDias(
   filtrado.forEach((r) => estadosSet.add(r.estado));
   const estados = Array.from(estadosSet.values());
 
-  // mapa por día (construimos todos para que no falte ninguno)
   const map = new Map<string, ChartRow>();
   DIAS_TITULO.forEach((d) => map.set(d, { dia: d, total: 0 }));
 
@@ -157,15 +144,11 @@ function prepararChartDias(
     row.total = (row.total as number) + r.Nro;
   }
 
-  // salida ordenada L->D
   const data = DIAS_TITULO.map((d) => map.get(d)!).filter(Boolean);
 
   return { data, estados, odontologos };
 }
 
-/* =======================
-   Componente
-   ======================= */
 export default function ResumenCitasDias() {
   const anios = useMemo(() => {
     const ys: number[] = [];
@@ -195,28 +178,6 @@ export default function ResumenCitasDias() {
     setOdontologos(odontologos);
     setLoading(false);
 
-    // ---- Fetch real (descomenta y ajusta ruta si tu endpoint es otro) ----
-    /*
-    (async () => {
-      try {
-        const params = new URLSearchParams();
-        if (anio != null) params.set("anio", String(anio));
-        if (mes != null) params.set("mes", String(mes));
-        if (idUsuario != null) params.set("idUsuario", String(idUsuario));
-        const res = await fetch(`/dashboard/resumen-citas-dias?${params.toString()}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const rows: RowSP[] = await res.json();
-        const { data, estados, odontologos } = prepararChartDias(rows, anio, mes, idUsuario);
-        setChartData(data);
-        setEstados(estados);
-        setOdontologos(odontologos);
-      } catch (e: any) {
-        setErr(e.message || "Error de red");
-      } finally {
-        setLoading(false);
-      }
-    })();
-    */
   }, [anio, mes, idUsuario, mockRows]);
 
   const titulo = `Citas por día de la semana${

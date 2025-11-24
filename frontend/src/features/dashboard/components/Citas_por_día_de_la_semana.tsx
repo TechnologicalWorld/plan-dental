@@ -11,10 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Ajusta esta ruta según tu estructura de carpetas
 import { dashboardService, type MesParam } from "../dashboardservice";
 
-// -------------------- Tema (oscuro) --------------------
 const theme = {
   grid: "rgba(226,232,240,0.16)",
   axis: "rgba(226,232,240,0.28)",
@@ -44,16 +42,13 @@ const MESES_ES = [
 ];
 
 type ServerRow = {
-  dia_semana: string | number; // Ejemplo: "martes", "miércoles", 1..7
+  dia_semana: string | number; 
   total_citas?: number;
-  NroCitas?: number; // Soporte retroactivo para la API anterior
+  NroCitas?: number; 
 };
 
 type ChartRow = { dia: string; NroCitas: number };
 
-// -------------------------------------
-// Helpers para la API
-// -------------------------------------
 const DAY_NUM_TO_NAME: Record<number, string> = {
   1: "Lunes",
   2: "Martes",
@@ -80,14 +75,11 @@ const fillAndSortByWeekday = (rows: Array<{ dia: string; NroCitas: number }>): C
   return ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"].map((d) => ({ dia: d, NroCitas: acc.get(d) || 0 }));
 };
 
-// -------------------------------------
-// UI
-// -------------------------------------
 export default function Dashboard() {
   const [anio, setAnio] = useState<number | null>(2024);
-  const [mes, setMes] = useState<number | null>(10); // Octubre por defecto
+  const [mes, setMes] = useState<number | null>(10); // 
 
-  const [odontologos, setOdontologos] = useState<any[]>([]); // Asegúrate de que esto sea un array
+  const [odontologos, setOdontologos] = useState<any[]>([]); 
   const [selectedOdontologo, setSelectedOdontologo] = useState<number | null>(null);
 
   const [chartData, setChartData] = useState<ChartRow[]>([]);
@@ -97,9 +89,9 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchOdontologos = async () => {
       try {
-        const data = await dashboardService.getodontologos(); // Obtener odontólogos
-        setOdontologos(data.data || []); // Aquí tomamos la propiedad "data" que tiene los odontólogos
-        setSelectedOdontologo(data.data[0]?.idUsuario_Odontologo || null); // Establecer un odontólogo por defecto
+        const data = await dashboardService.getodontologos(); 
+        setOdontologos(data.data || []); 
+        setSelectedOdontologo(data.data[0]?.idUsuario_Odontologo || null); 
       } catch (error) {
         console.error("Error al obtener odontólogos", error);
       }

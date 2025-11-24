@@ -12,9 +12,7 @@ import {
   Legend,
 } from "recharts";
 
-// ⬅️ Ajusta esta ruta
 import { dashboardService, type MesParam } from "../dashboardservice";
-// -------------------- Tema (oscuro) --------------------
 const theme = {
   grid: "rgba(226,232,240,0.16)",
   axis: "rgba(226,232,240,0.28)",
@@ -31,7 +29,6 @@ const money = new Intl.NumberFormat("es-BO", {
   maximumFractionDigits: 2,
 });
 
-// -------------------- Tipos --------------------
 type ServerRow = {
   idUsuario: number;
   nombre_completo: string;
@@ -77,7 +74,6 @@ function yAxisWidthForLabels(labels: string[], base = 180, pxPerChar = 7) {
 
 // -------------------- Componente --------------------
 export default function GananciaTratamientosPorOdontologo() {
-  // Por tu ejemplo: Octubre 2024
   const [anio, setAnio] = useState<number | null>(2024);
   const [mes, setMes] = useState<number | null>(10);
 
@@ -123,7 +119,7 @@ export default function GananciaTratamientosPorOdontologo() {
     <div className="w-full min-w-0 p-4 space-y-6">
       <h2 className="text-2xl font-semibold">{titulo}</h2>
 
-      {/* Filtros (texto negro + fondo que encaja) */}
+      {/* Filtros */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
           <label className="text-sm">Año:</label>
@@ -162,7 +158,7 @@ export default function GananciaTratamientosPorOdontologo() {
         <div className="text-sm text-gray-400">Sin datos para el filtro seleccionado.</div>
       )}
 
-      {/* ====== Gráfico (horizontal) ====== */}
+      {/* ====== Gráfico ====== */}
       <div
         className="w-full min-w-0 rounded-md p-2"
         style={{ border: `1px solid ${theme.axis}`, height: chartHeight }}

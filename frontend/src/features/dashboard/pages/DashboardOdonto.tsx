@@ -16,7 +16,6 @@ import {
 } from "recharts";
 import { dashboardService, type MesParam } from "../dashboardservice"; // ajusta ruta si es necesario
 
-// Paleta (coherente con tu tema oscuro)
 const chartTheme = {
   grid: "rgba(148, 163, 184, 0.25)",
   axis: "#E2E8F0",
@@ -30,7 +29,6 @@ const chartTheme = {
   tooltipText: "#E5E7EB",
 };
 
-// Tipos básicos (puedes afinarlos si quieres)
 type RowCitasPorPaciente = {
   idUsuario: number;
   nombre_completo: string;
@@ -97,7 +95,6 @@ export default function DashboardOdonto() {
   const [kpiOdontogramas, setKpiOdontogramas] = useState<RowKpiOdontogramas | null>(null);
   const [ultimosPlanes, setUltimosPlanes] = useState<RowUltimoPlan[]>([]);
 
-  // Mes a enviar al backend (puede ser undefined si el usuario elige "todos")
   const mesParam: MesParam | undefined = useMemo(() => {
     if (mes === "todos") return undefined;
     return mes;
@@ -182,7 +179,6 @@ export default function DashboardOdonto() {
     );
   }
 
-  // Datos transformados para los gráficos
   const dataCitasBar = citasPorPaciente.map((row) => ({
     nombre: row.nombre_completo,
     citas: row.NroCitas,
