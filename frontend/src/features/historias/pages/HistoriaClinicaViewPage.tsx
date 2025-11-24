@@ -109,30 +109,7 @@ export default function HistoriaClinicaViewPage() {
         </div>
       </section>
 
-      {/* Columna derecha: sesiones/odontogramas/planes */}
-      <aside className="col-span-12 xl:col-span-4 space-y-4">
-        <div className="bg-white/5 rounded p-4">
-          <h3 className="font-semibold mb-2">Odontogramas del paciente</h3>
-          {odontogramas.length === 0 && <div className="text-sm opacity-70">Sin odontogramas.</div>}
-          <ul className="text-sm space-y-2">
-            {odontogramas.map((o) => (
-              <li key={o.idOdontograma} className="border-b border-white/10 pb-2">
-                <div className="font-medium">{o.nombre}</div>
-                <div className="opacity-70">Fecha: {String(o.fecha).slice(0,10)}</div>
-                <div className="opacity-70">Planes: {o.planes?.length ?? 0}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="bg-white/5 rounded p-4">
-          <h3 className="font-semibold mb-2">Atajos</h3>
-          <div className="flex flex-col gap-2 text-sm">
-            <Link to={`/app/odontograma?paciente=${pacienteId}`} className="px-3 py-1.5 rounded bg-white/10 hover:bg-white/20">Abrir odontograma</Link>
-            <Link to={`/app/tratamientos?paciente=${pacienteId}`} className="px-3 py-1.5 rounded bg-white/10 hover:bg-white/20">Planes y tratamientos</Link>
-          </div>
-        </div>
-      </aside>
+      
     </div>
   );
 }
