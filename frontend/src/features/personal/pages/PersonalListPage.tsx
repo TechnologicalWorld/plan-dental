@@ -1,4 +1,3 @@
-// src/features/personal/pages/PersonalListPage.tsx
 import { useEffect, useMemo, useState } from 'react';
 import api from '@/shared/api/apiClient';
 import Modal from '@/shared/ui/Modal';
@@ -6,7 +5,6 @@ import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import { getUsuario, updateUsuario, deleteUsuario } from '@/features/personal/personal.service';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 
-// 👉 imports nuevos para especialidades
 import type { Especialidad } from '@/types/especialidad';
 import {
   listarEspecialidades,
@@ -43,7 +41,6 @@ type CrearUsuarioBase = {
   estado?: boolean;
 };
 
-// —— helpers de normalización (soporta ambos shapes de tus endpoints) ——
 function onlyDate(iso?: string | null) {
   if (!iso) return undefined;
   return String(iso).split('T')[0];
@@ -75,7 +72,6 @@ export default function PersonalListPage() {
   const [horario, setHorario] = useState('');
   const [turno, setTurno] = useState('mañana');
 
-  // catálogo de especialidades (solo relevante para odontólogos)
   const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
   const [selEspecialidades, setSelEspecialidades] = useState<number[]>([]);
 
@@ -98,7 +94,6 @@ export default function PersonalListPage() {
     setLoading(true);
     try {
       if (tab === 'odontologos') {
-        // 1) forma real: GET /odontologos (paginado con { data: [] } y usuario embebido)
         try {
           const { data } = await api.get('/odontologos');
           const arr = (data?.data ?? data) as any[];
@@ -126,7 +121,6 @@ export default function PersonalListPage() {
         const arr2 = (fallback?.data ?? fallback) as RolListadoUsuario[];
         setItems(Array.isArray(arr2) ? arr2 : []);
       } else {
-        // 1) forma real: GET /asistentes ({ success: true, data: [] } y usuario embebido)
         try {
           const { data } = await api.get('/asistentes');
           const arr = (data?.data ?? data) as any[];
@@ -149,7 +143,6 @@ export default function PersonalListPage() {
         } catch {
           /* fallback abajo */
         }
-        // 2) fallback: /usuarios/asistentes/listar
         const { data: fallback } = await api.get('/usuarios/asistentes/listar');
         const arr2 = (fallback?.data ?? fallback) as RolListadoUsuario[];
         setItems(Array.isArray(arr2) ? arr2 : []);
@@ -249,7 +242,7 @@ export default function PersonalListPage() {
     setFechaContratacion('');
     setHorario('');
     setTurno('mañana');
-    setSelEspecialidades([]); // limpiar selección de especialidades
+    setSelEspecialidades([]); 
   }
 
   // ------------ VER ------------
@@ -430,7 +423,7 @@ export default function PersonalListPage() {
         </table>
       </div>
 
-      {/* Modal agregar — centrado sin cambiar tu flujo */}
+      {/* Modal agregar*/}
       <dialog
         open={open}
         className="rounded-md w-[720px] bg-white text-slate-900"
@@ -525,7 +518,7 @@ export default function PersonalListPage() {
         </form>
       </dialog>
 
-      {/* ----- Modal VER (tu componente existente) ----- */}
+      {/* ----- Modal VER ----- */}
       <Modal
         open={viewOpen}
         onClose={() => setViewOpen(false)}
@@ -568,7 +561,7 @@ export default function PersonalListPage() {
         )}
       </Modal>
 
-      {/* ----- Modal EDITAR (tu componente existente) ----- */}
+      {/* ----- Modal EDITAR ----- */}
       <Modal
         open={editOpen}
         onClose={() => setEditOpen(false)}
@@ -605,7 +598,7 @@ export default function PersonalListPage() {
         </div>
       </Modal>
 
-      {/* ----- Confirmar ELIMINAR (tu componente existente) ----- */}
+      {/* ----- Confirmar ELIMINAR ----- */}
       <ConfirmDialog
         open={delOpen}
         onClose={() => setDelOpen(false)}

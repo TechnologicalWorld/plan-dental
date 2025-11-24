@@ -1,7 +1,7 @@
-// src/features/roles/pages/RolesListPage.tsx
 import { useEffect, useState } from 'react';
 import api from '@/shared/api/apiClient';
 import { useNavigate } from 'react-router-dom';
+import { Eye } from 'lucide-react';
 
 type RolRow = { clave: string; nombre: string; descripcion: string; cantidad: number };
 
@@ -73,9 +73,11 @@ export default function RolesListPage() {
                 <td className="p-2">{r.descripcion}</td>
                 <td className="p-2">{r.cantidad}</td>
                 <td className="p-2 space-x-2">
-                  <button className="underline" onClick={() => goTo(r.clave)}>Ver</button>
-                  <button className="underline opacity-40 cursor-not-allowed" title="No editable">Editar</button>
-                  <button className="underline opacity-40 cursor-not-allowed" title="No eliminable">Borrar</button>
+                  
+                  <button title='Ver' onClick={() => goTo(r.clave)} className="p-1 rounded hover:bg-white/10">
+                    <Eye size={16} />
+                  </button>
+
                 </td>
               </tr>
             ))}
