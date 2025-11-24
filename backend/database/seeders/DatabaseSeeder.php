@@ -57,6 +57,8 @@ class DatabaseSeeder extends Seeder
             ['idUsuario' => 13, 'ci' => '7654321', 'nombre' => 'Joe', 'paterno' => 'Tancara', 'materno' => 'Mendez', 'fechaNacimiento' => '1985-05-15', 'genero' => 'M', 'telefono' => '77777778', 'correo' => 'odontologo@clinicadental.com', 'contrasena' => Hash::make('123456789'), 'direccion' => 'Av. Odontologos #456', 'estado' => true],
             ['idUsuario' => 14, 'ci' => '1122334', 'nombre' => 'Prueba', 'paterno' => 'Paciente', 'materno' => 'Test', 'fechaNacimiento' => '1990-08-20', 'genero' => 'F', 'telefono' => '77777779', 'correo' => 'paciente@clinicadental.com', 'contrasena' => Hash::make('123456789'), 'direccion' => 'Calle Pacientes #789', 'estado' => true],
             ['idUsuario' => 15, 'ci' => '4433221', 'nombre' => 'Kae', 'paterno' => 'Apellido', 'materno' => 'Asistente', 'fechaNacimiento' => '1992-03-10', 'genero' => 'F', 'telefono' => '77777780', 'correo' => 'asistente@clinicadental.com', 'contrasena' => Hash::make('123456789'), 'direccion' => 'Av. Asistentes #321', 'estado' => true],
+            ['idUsuario' => 16, 'ci' => '1111111', 'nombre' => 'Kaeron', 'paterno' => 'W', 'materno' => 'Asistente', 'fechaNacimiento' => '1992-03-10', 'genero' => 'F', 'telefono' => '77772780', 'correo' => 'asistente2@clinicadental.com', 'contrasena' => Hash::make('123456789'), 'direccion' => 'Av. Asistentes #321', 'estado' => true],
+            
         ];
 
         foreach ($usuarios as $usuario) {
@@ -82,7 +84,8 @@ class DatabaseSeeder extends Seeder
         // Asistentes
         Asistente::create(['idUsuario_Asistente' => 10, 'turno' => 'Mañana', 'fechaContratacion' => '2023-02-01']);
         Asistente::create(['idUsuario_Asistente' => 15, 'turno' => 'mañana', 'fechaContratacion' => '2022-06-01']);
-
+        Asistente::create(['idUsuario_Asistente' => 16, 'turno' => 'mañana', 'fechaContratacion' => '2022-06-01']);
+        
         // Pacientes
         $pacientes = [
             ['idUsuario_Paciente' => 1, 'codigoSeguro' => 'SEG-001-2024', 'lugarNacimiento' => 'La Paz', 'domicilio' => 'Av. Arce #1234', 'fechaIngreso' => '2024-01-15'],
