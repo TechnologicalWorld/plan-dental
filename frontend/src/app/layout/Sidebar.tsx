@@ -72,7 +72,7 @@ export default function Sidebar({ collapsed, onLogout }: SidebarProps) {
         { to: '/app/pacientes', label: 'Pacientes', icon: UserRound },
         { to: '/app/historias', label: 'Historia clínica', icon: ClipboardList },
         { to: '/app/odontograma', label: 'Odontograma', icon: FileText },
-        { to: '/app/tratamientos', label: 'Tratamientos y Diagnósticos', icon: ListChecks },
+        { to: '/app/tratamientos', label: 'Tratamientos', icon: ListChecks },
         { to: '/app/ai', label: 'Asistente IA', icon: Bot },
       ];
       return { groups: [], items };

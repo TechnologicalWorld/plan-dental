@@ -21,6 +21,7 @@ import HistoriaClinicaViewPage from '@/features/historias/pages/HistoriaClinicaV
 import HistoriasListPage from '@/features/historias/pages/HistoriasListPage';
 import HistoriaClinicaEditPage from '@/features/historias/pages/HistoriaClinicaEditPage';
 import OdontogramaPage from '@/features/odontograma/pages/OdontogramaPage';
+import TratamientosListPage from '@/features/tratamientos/pages/TratamientosListPage';
 
 
 import Reportes from '@/features/reportes/pages/Reportes';
@@ -114,7 +115,7 @@ export const router = createBrowserRouter([
               { path: '/app/historias/:pacienteId', element: <HistoriaClinicaViewPage /> },
               { path: '/app/historias/:pacienteId/editar', element: <HistoriaClinicaEditPage /> },
               { path: '/app/odontograma', element: <OdontogramaPage /> },
-              { path: '/app/tratamientos', element: <div>Tratamientos y Diagnósticos</div> },
+              { path: '/app/tratamientos', element: <TratamientosListPage /> },
             ],
           },
 
