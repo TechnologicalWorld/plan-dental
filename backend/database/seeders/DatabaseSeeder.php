@@ -147,14 +147,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== CITAS ====================
         $citas = [
-            ['idCita' => 1, 'hora' => '09:00:00', 'fecha' => '2024-10-01', 'estado' => 'completada', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 150.00],
-            ['idCita' => 2, 'hora' => '10:30:00', 'fecha' => '2024-10-02', 'estado' => 'completada', 'tipoCita' => 'Limpieza', 'costo' => 200.00, 'pagado' => 200.00],
-            ['idCita' => 3, 'hora' => '14:00:00', 'fecha' => '2024-10-05', 'estado' => 'completada', 'tipoCita' => 'Endodoncia', 'costo' => 800.00, 'pagado' => 400.00],
-            ['idCita' => 4, 'hora' => '15:30:00', 'fecha' => '2024-10-08', 'estado' => 'completada', 'tipoCita' => 'Extracción', 'costo' => 300.00, 'pagado' => 300.00],
-            ['idCita' => 5, 'hora' => '09:00:00', 'fecha' => '2024-10-12', 'estado' => 'completada', 'tipoCita' => 'Ortodoncia', 'costo' => 1500.00, 'pagado' => 1500.00],
-            ['idCita' => 6, 'hora' => '11:00:00', 'fecha' => '2024-10-15', 'estado' => 'confirmada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
-            ['idCita' => 7, 'hora' => '16:00:00', 'fecha' => '2024-10-18', 'estado' => 'confirmada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
-            ['idCita' => 8, 'hora' => '10:00:00', 'fecha' => '2024-10-20', 'estado' => 'pendiente', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
+            ['idCita' => 1, 'hora' => '09:00:00', 'fecha' => '2025-10-01', 'estado' => 'completada', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 150.00],
+            ['idCita' => 2, 'hora' => '10:30:00', 'fecha' => '2025-10-02', 'estado' => 'completada', 'tipoCita' => 'Limpieza', 'costo' => 200.00, 'pagado' => 200.00],
+            ['idCita' => 3, 'hora' => '14:00:00', 'fecha' => '2025-10-05', 'estado' => 'completada', 'tipoCita' => 'Endodoncia', 'costo' => 800.00, 'pagado' => 400.00],
+            ['idCita' => 4, 'hora' => '15:30:00', 'fecha' => '2025-11-08', 'estado' => 'completada', 'tipoCita' => 'Extracción', 'costo' => 300.00, 'pagado' => 300.00],
+            ['idCita' => 5, 'hora' => '09:00:00', 'fecha' => '2025-11-12', 'estado' => 'completada', 'tipoCita' => 'Ortodoncia', 'costo' => 1500.00, 'pagado' => 1500.00],
+            ['idCita' => 6, 'hora' => '11:00:00', 'fecha' => '2025-11-15', 'estado' => 'confirmada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
+            ['idCita' => 7, 'hora' => '16:00:00', 'fecha' => '2025-11-18', 'estado' => 'confirmada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
+            ['idCita' => 8, 'hora' => '10:00:00', 'fecha' => '2025-11-20', 'estado' => 'pendiente', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
             ['idCita' => 9, 'hora' => '10:00:00', 'fecha' => '2025-11-14', 'estado' => 'confirmada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
         ];
         foreach ($citas as $cita) {
