@@ -35,6 +35,10 @@ export default function LoginPage() {
       navigate('/app/dashboardPaciente', { replace: true });
 
     }
+
+    if(firstRole=="ASISTENTE"){
+      navigate('/app/asisitente/citas', { replace: true });
+    }
   switch (firstRole) {
     case 'ADMIN':
       return <Navigate to="/app/dashboard" replace />;
