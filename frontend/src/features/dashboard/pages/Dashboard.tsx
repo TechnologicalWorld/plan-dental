@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DollarSign, Users, Calendar, TrendingUp, Activity, FileText } from 'lucide-react';
+import { DollarSign, Users, Calendar, TrendingUp, Activity, FileText, Filter } from 'lucide-react';
 import { dashboardService } from "../dashboardservice";
 
 const COLORS = ['#4ade80', '#60a5fa', '#fbbf24', '#f87171', '#a78bfa'];
@@ -37,58 +37,92 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [dashboardData, setDashboardData] = useState<any>(null);
   
-  const anio = 2024;
-  const mes = 10;
+  // Filtros aplicados (los que se usan para cargar datos)
+  const [anio, setAnio] = useState(2024);
+  const [mes, setMes] = useState(10);
+  
+  const meses = [
+    { value: 1, label: 'Enero' },
+    { value: 2, label: 'Febrero' },
+    { value: 3, label: 'Marzo' },
+    { value: 4, label: 'Abril' },
+    { value: 5, label: 'Mayo' },
+    { value: 6, label: 'Junio' },
+    { value: 7, label: 'Julio' },
+    { value: 8, label: 'Agosto' },
+    { value: 9, label: 'Septiembre' },
+    { value: 10, label: 'Octubre' },
+    { value: 11, label: 'Noviembre' },
+    { value: 12, label: 'Diciembre' }
+  ];
+  
+  // Generar años dinámicamente (año actual - 5 años)
+  const currentYear = new Date().getFullYear();
+  const anios = Array.from({ length: 6 }, (_, i) => currentYear - i);
+
+  const aplicarFiltros = () => {
+    setLoading(true); // Activar loading al aplicar nuevos filtros
+    fetchData();
+  };
+
+  const handleMesChange = (nuevoMes: number) => {
+    setMes(nuevoMes);
+  };
+
+  const handleAnioChange = (nuevoAnio: number) => {
+    setAnio(nuevoAnio);
+  };
+
+  const fetchData = async () => {
+    setError(null);
+    
+    try {
+      console.log(`Cargando datos para: ${mes}/${anio}`);
+      
+      const [
+        ingresosPorOdonto,
+        gananciaTratamientos,
+        ingresosYPendientes,
+        totalCitas,
+        odontologosActivos,
+        citasPorEstado,
+        facturacionDiaria,
+        odontologosCitas,
+        resumenAdmin
+      ] = await Promise.all([
+        dashboardService.cdIngresosPorOdontoMes({ anio, mes }),
+        dashboardService.cdGananciaPorTratamiento({ anio, mes }),
+        dashboardService.cdIngresosYPendientes({ anio, mes }),
+        dashboardService.cdTotalCitas({ anio, mes }),
+        dashboardService.cdOdontologosActivos(),
+        dashboardService.cdCitasPorEstado({ anio, mes }),
+        dashboardService.cdFacturacionDiaria({ anio, mes }),
+        dashboardService.cdOdontologosCitasProporcion({ anio, mes }),
+        dashboardService.cdResumenAdministrativo({ anio, mes })
+      ]);
+
+      setDashboardData({
+        ingresosPorOdonto,
+        gananciaTratamientos,
+        ingresosYPendientes: ingresosYPendientes[0],
+        totalCitas: totalCitas[0],
+        odontologosActivos: odontologosActivos[0],
+        citasPorEstado,
+        facturacionDiaria,
+        odontologosCitas,
+        resumenAdmin: resumenAdmin[0]
+      });
+    } catch (err: any) {
+      console.error('Error cargando datos:', err);
+      setError(err?.message || 'Error desconocido al cargar los datos');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        const [
-          ingresosPorOdonto,
-          gananciaTratamientos,
-          ingresosYPendientes,
-          totalCitas,
-          odontologosActivos,
-          citasPorEstado,
-          facturacionDiaria,
-          odontologosCitas,
-          resumenAdmin
-        ] = await Promise.all([
-          dashboardService.cdIngresosPorOdontoMes({ anio, mes }),
-          dashboardService.cdGananciaPorTratamiento({ anio, mes }),
-          dashboardService.cdIngresosYPendientes({ anio, mes }),
-          dashboardService.cdTotalCitas({ anio, mes }),
-          dashboardService.cdOdontologosActivos(),
-          dashboardService.cdCitasPorEstado({ anio, mes }),
-          dashboardService.cdFacturacionDiaria({ anio, mes }),
-          dashboardService.cdOdontologosCitasProporcion({ anio, mes }),
-          dashboardService.cdResumenAdministrativo({ anio, mes })
-        ]);
-
-        setDashboardData({
-          ingresosPorOdonto,
-          gananciaTratamientos,
-          ingresosYPendientes: ingresosYPendientes[0],
-          totalCitas: totalCitas[0],
-          odontologosActivos: odontologosActivos[0],
-          citasPorEstado,
-          facturacionDiaria,
-          odontologosCitas,
-          resumenAdmin: resumenAdmin[0]
-        });
-      } catch (err: any) {
-        console.error('Error cargando datos:', err);
-        setError(err?.message || 'Error desconocido al cargar los datos');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [anio, mes]);
+  }, []); // Cargar datos iniciales solo una vez
 
   if (loading) {
     return (
@@ -166,8 +200,50 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold" style={{ color: '#e2e8f0' }}>Dashboard Clínica Dental</h1>
-          <p className="mt-1" style={{ color: '#94a3b8' }}>Octubre 2024 - Resumen General</p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold" style={{ color: '#e2e8f0' }}>Dashboard Clínica Dental</h1>
+              <p className="mt-1" style={{ color: '#94a3b8' }}>
+                {meses.find(m => m.value === mes)?.label} {anio} - Resumen General
+              </p>
+            </div>
+            
+            {/* Filtros */}
+            <div className="rounded-lg shadow-lg p-4" style={{ backgroundColor: '#2c3e50' }}>
+              <div className="flex items-center gap-3">
+                <Filter size={20} style={{ color: '#94a3b8' }} />
+                <select
+                  value={mes}
+                  onChange={(e) => handleMesChange(Number(e.target.value))}
+                  className="px-3 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{ backgroundColor: '#1e293b', color: '#e2e8f0', border: '1px solid #374151' }}
+                >
+                  {meses.map(m => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+                
+                <select
+                  value={anio}
+                  onChange={(e) => handleAnioChange(Number(e.target.value))}
+                  className="px-3 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{ backgroundColor: '#1e293b', color: '#e2e8f0', border: '1px solid #374151' }}
+                >
+                  {anios.map(a => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </select>
+                
+                <button
+                  onClick={aplicarFiltros}
+                  className="px-4 py-2 rounded-lg font-medium transition-all hover:shadow-lg"
+                  style={{ backgroundColor: '#3b82f6', color: '#ffffff' }}
+                >
+                  Aplicar Filtros
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Tabs */}
