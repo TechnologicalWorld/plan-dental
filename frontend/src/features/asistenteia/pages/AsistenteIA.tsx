@@ -18,7 +18,7 @@ const AsistenteIA = () => {
 
             try {
                 const response = await fetch(
-                    'https://n8n-service-oz9h.onrender.com/webhook/fdc54c85-a288-4a3b-b0ee-5cfb4a6ae5fd',                    {
+                    'https://n8n-service-zx0d.onrender.com/webhook/6165b310-9ab1-41df-b427-0d91f1c37ac4',                    {
                         method: 'POST',
                         headers: {
                             'Authorization': 'Bearer 5|2dPY9MlKFjyNQWzgFCxI4JbiJNyyJGGhchVLZnOK62503a17',
