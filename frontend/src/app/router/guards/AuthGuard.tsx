@@ -4,7 +4,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/shared/hooks/useAuthStore';
 
 export default function AuthGuard() {
-  const { token, user, hydrate } = useAuthStore();
+  const { token, user, hydrate, rolesUpper } = useAuthStore();
   const [checking, setChecking] = useState(true);
   const location = useLocation();
 
@@ -12,7 +12,11 @@ export default function AuthGuard() {
     let mounted = true;
     (async () => {
       if (token && !user) {
-        try { await hydrate(); } finally { if (mounted) setChecking(false); }
+        try { 
+          await hydrate(); 
+        } finally { 
+          if (mounted) setChecking(false); 
+        }
       } else {
         setChecking(false);
       }
@@ -20,7 +24,22 @@ export default function AuthGuard() {
     return () => { mounted = false; };
   }, [token, user, hydrate]);
 
-  if (checking) return <div className="min-h-screen grid place-items-center text-white">Cargando sesión…</div>;
-  if (!token) return <Navigate to="/login" replace state={{ from: location }} />;
+  if (checking) {
+    return (
+      <div className="min-h-screen grid place-items-center text-white">
+        Cargando sesión…
+      </div>
+    );
+  }
+
+  if (!token) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  // Si no tiene roles válidos después de hidratar
+  if (!rolesUpper || rolesUpper.length === 0) {
+    return <Navigate to="/app/unauthorized" replace />;
+  }
+
   return <Outlet />;
 }

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/shared/hooks/useAuthStore";
-import { dashboardService } from "../../dashboard/dashboardService";
 import {
   PieChart,
   Pie,
@@ -11,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { dashboardService } from "../dashboardservice";
 
 type RowPiezaEstado = {
   idUsuario: number;

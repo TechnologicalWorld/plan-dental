@@ -36,8 +36,8 @@ type AuthState = {
   loading: boolean;
   error: string | null;
 
-  login: (p: { correo: string; contrasena: string }) => Promise<void>;
-  register: (p: RegisterPayload) => Promise<void>;      // <-- nuevo
+  login: (p: { correo: string; contrasena: string }) => Promise<{token:string, roleUpper:RoleUpper[]}>;
+  register: (p: RegisterPayload) => Promise<void>;      // <-- nuevo]
   fetchMe: () => Promise<void>;
   logout: () => Promise<void>;
   hydrate: () => Promise<void>;
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const { token, usuario, roles } = await apiLogin({ correo, contrasena });
-
+      
       setAuthToken(token);
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(USER_KEY, JSON.stringify(usuario));
@@ -69,6 +69,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         .filter((r): r is RoleUpper => r !== null);
 
       set({ token, user: usuario, roles: rolesLower, rolesUpper, loading: false });
+
+      return {token, roleUpper: rolesUpper}
     } catch (e: unknown) {
       const resp = (typeof e === 'object' && e !== null && 'response' in e)
         ? (e as Record<string, unknown>)['response']
@@ -147,29 +149,49 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   // === HIDRATAR EN RECARGA ===
   hydrate: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) return;
+    if (!token) {
+      // Si no hay token, limpiar todo
+      set({ user: null, token: null, roles: [], rolesUpper: [] });
+      return;
+    }
+
     setAuthToken(token);
 
     try {
       const cachedUser  = localStorage.getItem(USER_KEY);
       const cachedRoles = localStorage.getItem(ROLES_KEY);
 
+      let user: AuthUser | null = null;
+      let roles: RoleLower[] = [];
+      let rolesUpper: RoleUpper[] = [];
+
       if (cachedUser) {
-        set({ user: JSON.parse(cachedUser) as AuthUser });
-      }
-      if (cachedRoles) {
-        const roles = JSON.parse(cachedRoles) as RoleLower[];
-        const rolesUpper = roles
-          .map((r) => toUpperRole(r))
-          .filter((r): r is RoleUpper => r !== null);
-        set({ roles, rolesUpper });
+        user = JSON.parse(cachedUser) as AuthUser;
       }
 
-      // Opcional: refrescar contra el backend
-      // const me = await apiMe();
-      // set({ user: me.user });
-    } catch {
+      if (cachedRoles) {
+        roles = JSON.parse(cachedRoles) as RoleLower[];
+        rolesUpper = roles
+          .map((r) => toUpperRole(r))
+          .filter((r): r is RoleUpper => r !== null);
+      }
+
+      // ✅ CRÍTICO: Actualizar el token en el estado
+      set({ 
+        token,      // ← ESTO FALTABA
+        user, 
+        roles, 
+        rolesUpper 
+      });
+
+      console.log('✅ Sesión hidratada:', { user: user?.nombre, roles, rolesUpper });
+
+    } catch (error) {
+      console.error('❌ Error al hidratar sesión:', error);
       setAuthToken(undefined);
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(ROLES_KEY);
       set({ user: null, token: null, roles: [], rolesUpper: [] });
     }
   },

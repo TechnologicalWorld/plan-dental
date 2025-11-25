@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/shared/hooks/useAuthStore';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 
@@ -14,8 +14,43 @@ export default function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await login({ correo, contrasena });
+      const {roleUpper} = await login({ correo, contrasena });
       navigate('/app/dashboard', { replace: true });
+        const firstRole = roleUpper?.[0];
+
+        console.log(roleUpper)
+  console.log('GuestGuard - firstRole:', firstRole);
+
+  if (firstRole==="ADMIN"){
+      navigate('/app/dashboard', { replace: true });
+  }
+  if(firstRole==="ODONTOLOGO")
+    
+    {
+      navigate('/app/dashboardOdonto', { replace: true });
+
+    }
+
+    if(firstRole==="PACIENTE"){
+      navigate('/app/dashboardPaciente', { replace: true });
+
+    }
+  switch (firstRole) {
+    case 'ADMIN':
+      return <Navigate to="/app/dashboard" replace />;
+    
+    case 'ODONTOLOGO':
+      return <Navigate to="/app/dashboardOdonto" replace />;
+    
+    case 'ASISTENTE':
+      return <Navigate to="/app/asisitente/citas" replace />;
+    
+    case 'PACIENTE':
+      return <Navigate to="/app/dashboardPaciente" replace />;
+    
+    default:
+      return <Navigate to="/app/dashboard" replace />;
+  }
     } catch {/* manejado por store */}
   }
 
