@@ -1010,6 +1010,24 @@ DB::unprepared("
         ORDER BY fecha DESC;
     END
 ");
+    DB::unprepared("DROP PROCEDURE IF EXISTS `g_dashboard_ultimo_plan_paciente`");
+    DB::unprepared("
+        CREATE PROCEDURE `g_dashboard_ultimo_plan_paciente` (IN `p_idUsuario` INT)
+        BEGIN
+            SELECT 
+                p.medicamentos,
+                p.observacion,
+                p.duracionTotal
+            FROM plan p
+            INNER JOIN usuario u ON u.idUsuario = p.idUsuario_Paciente
+            WHERE u.idUsuario = p_idUsuario
+            AND p.idPlan = (
+                    SELECT MAX(ps.idPlan)
+                    FROM plan ps
+                    WHERE ps.idUsuario_Paciente = p_idUsuario
+            );
+        END
+    ");
 
 // Procedimiento: dashboard_piezas_por_estado_paciente
 DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_piezas_por_estado_paciente`");

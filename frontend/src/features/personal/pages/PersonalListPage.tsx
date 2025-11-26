@@ -52,6 +52,8 @@ export default function PersonalListPage() {
   const [items, setItems] = useState<RolListadoUsuario[]>([]);
   const [search, setSearch] = useState('');
 
+  const [estadoFilter, setEstadoFilter] = useState<'todos' | 'activos' | 'inactivos'>('todos');
+
   // modal agregar
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -89,6 +91,25 @@ export default function PersonalListPage() {
     correo?: string; direccion?: string; estado?: boolean;
     contrasena?: string;
   }>>({});
+
+  useEffect(() => {
+    const anyModalOpen = open || viewOpen || editOpen || delOpen;
+
+    if (anyModalOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [open, viewOpen, editOpen, delOpen]);
+
+  const inputClass =
+    'w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm text-slate-100 ' +
+    'placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent';
+
+  const labelClass = 'text-xs font-medium text-slate-300';
 
   async function cargar() {
     setLoading(true);
@@ -152,27 +173,42 @@ export default function PersonalListPage() {
     }
   }
 
+  
+
   useEffect(() => {
     cargar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
 
-  // cargar catálogo de especialidades cuando la pestaña es odontólogos
   useEffect(() => {
     if (tab === 'odontologos') {
-      listarEspecialidades().then((data) => setEspecialidades(Array.isArray(data) ? data : []));
+      listarEspecialidades().then((data) =>
+        setEspecialidades(Array.isArray(data) ? data : [])
+      );
     }
   }, [tab]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((x) =>
+
+    let base = items;
+
+    if (tab === 'odontologos') {
+      if (estadoFilter === 'activos') {
+        base = base.filter((x) => x.estado === true);
+      } else if (estadoFilter === 'inactivos') {
+        base = base.filter((x) => x.estado === false);
+      }
+    }
+
+    if (!q) return base;
+
+    return base.filter((x) =>
       [x.ci, x.nombre, x.paterno, x.materno, x.correo, x.telefono]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q))
     );
-  }, [items, search]);
+  }, [items, search, estadoFilter, tab]);
 
   async function toggleEstado(u: RolListadoUsuario) {
     if (!u.idUsuario) return;
@@ -203,7 +239,6 @@ export default function PersonalListPage() {
           horario,
         });
 
-        // asignar especialidades seleccionadas (si hay)
         if (selEspecialidades.length) {
           await asignarEspecialidadesAOdontologo(userId, selEspecialidades);
         }
@@ -242,7 +277,7 @@ export default function PersonalListPage() {
     setFechaContratacion('');
     setHorario('');
     setTurno('mañana');
-    setSelEspecialidades([]); 
+    setSelEspecialidades([]);
   }
 
   // ------------ VER ------------
@@ -252,7 +287,6 @@ export default function PersonalListPage() {
     const full = await getUsuario(u.idUsuario);
     const base = full?.data ?? full;
 
-    // si es odontólogo, traer sus especialidades
     let esp: Especialidad[] = [];
     if (tab === 'odontologos') {
       const od = await getOdontologoByUsuario(u.idUsuario);
@@ -327,28 +361,38 @@ export default function PersonalListPage() {
     <div className="space-y-4">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Gestión de Personal</h1>
-          <p className="text-sm opacity-70">Odontólogos y asistentes. Usa el interruptor para activar/desactivar.</p>
+          <h1 className="text-2xl font-semibold text-slate-100">Gestión de Personal</h1>
+          <p className="text-sm text-slate-400">
+            Odontólogos y asistentes. Usa el interruptor para activar/desactivar.
+          </p>
         </div>
 
         <button
           onClick={() => setOpen(true)}
-          className="px-3 py-2 rounded bg-teal-600 hover:bg-teal-700 text-white"
+          className="px-3 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium shadow-sm"
         >
           Agregar {tab === 'odontologos' ? 'Odontólogo' : 'Asistente'}
         </button>
       </header>
 
       {/* Tabs */}
-      <div className="inline-flex rounded overflow-hidden border border-white/10">
+      <div className="inline-flex rounded-lg overflow-hidden border border-white/10 bg-slate-900/60">
         <button
-          className={`px-3 py-1.5 text-sm ${tab === 'odontologos' ? 'bg-white/10' : 'hover:bg-white/5'}`}
+          className={`px-3 py-1.5 text-sm ${
+            tab === 'odontologos'
+              ? 'bg-teal-600 text-white'
+              : 'text-slate-200 hover:bg-white/5'
+          }`}
           onClick={() => setTab('odontologos')}
         >
           Odontólogos
         </button>
         <button
-          className={`px-3 py-1.5 text-sm ${tab === 'asistentes' ? 'bg-white/10' : 'hover:bg-white/5'}`}
+          className={`px-3 py-1.5 text-sm ${
+            tab === 'asistentes'
+              ? 'bg-teal-600 text-white'
+              : 'text-slate-200 hover:bg-white/5'
+          }`}
           onClick={() => setTab('asistentes')}
         >
           Asistentes
@@ -356,46 +400,69 @@ export default function PersonalListPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col md:flex-row md:items-center gap-3">
         <input
-          className="px-3 py-2 rounded bg-white text-slate-900 w-72"
+          className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder:text-slate-500 w-full md:w-72 text-sm"
           placeholder="Buscar por CI, nombre o correo…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        {loading && <span className="text-sm opacity-70">Cargando…</span>}
+
+        {tab === 'odontologos' && (
+          <select
+            className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 text-sm w-full md:w-56"
+            value={estadoFilter}
+            onChange={(e) => setEstadoFilter(e.target.value as any)}
+          >
+            <option value="todos">Todos los estados</option>
+            <option value="activos">Solo activos</option>
+            <option value="inactivos">Solo inactivos</option>
+          </select>
+        )}
+
+        {loading && (
+          <span className="text-sm text-slate-400">Cargando…</span>
+        )}
       </div>
 
       {/* Tabla */}
-      <div className="overflow-auto rounded border border-white/10">
-        <table className="w-full text-sm">
-          <thead className="bg-white/5">
+      <div className="overflow-auto rounded-lg border border-white/10 bg-slate-900/40">
+        <table className="w-full text-sm text-slate-100">
+          <thead className="bg-slate-900/80">
             <tr>
-              <th className="text-left p-2">CI</th>
-              <th className="text-left p-2">Nombre</th>
-              <th className="text-left p-2">{tab === 'odontologos' ? 'Horario' : 'Turno'}</th>
-              <th className="text-left p-2">Contratación</th>
-              <th className="text-left p-2">Correo</th>
-              <th className="text-left p-2">Teléfono</th>
-              <th className="text-left p-2">Estado</th>
-              <th className="text-left p-2">Acciones</th>
+              <th className="text-left p-2 font-medium">CI</th>
+              <th className="text-left p-2 font-medium">Nombre</th>
+              <th className="text-left p-2 font-medium">
+                {tab === 'odontologos' ? 'Horario' : 'Turno'}
+              </th>
+              <th className="text-left p-2 font-medium">Contratación</th>
+              <th className="text-left p-2 font-medium">Correo</th>
+              <th className="text-left p-2 font-medium">Teléfono</th>
+              <th className="text-left p-2 font-medium">Estado</th>
+              <th className="text-left p-2 font-medium">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((u) => (
-              <tr key={u.idUsuario} className="border-t border-white/10">
+              <tr key={u.idUsuario} className="border-t border-white/10 hover:bg-slate-900/60">
                 <td className="p-2">{u.ci ?? '-'}</td>
                 <td className="p-2">
                   {u.nombre} {u.paterno ?? ''} {u.materno ?? ''}
                 </td>
-                <td className="p-2">{tab === 'odontologos' ? u.horario ?? '-' : u.turno ?? '-'}</td>
+                <td className="p-2">
+                  {tab === 'odontologos' ? u.horario ?? '-' : u.turno ?? '-'}
+                </td>
                 <td className="p-2">{u.fechaContratacion ?? '-'}</td>
                 <td className="p-2">{u.correo ?? '-'}</td>
                 <td className="p-2">{u.telefono ?? '-'}</td>
                 <td className="p-2">
                   <button
                     onClick={() => toggleEstado(u)}
-                    className={`px-2 py-1 rounded text-xs ${u.estado ? 'bg-green-600' : 'bg-slate-600'}`}
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      u.estado
+                        ? 'bg-emerald-600/90 text-white'
+                        : 'bg-slate-600 text-slate-100'
+                    }`}
                     title="Cambiar estado"
                   >
                     {u.estado ? 'Activo' : 'Inactivo'}
@@ -408,7 +475,11 @@ export default function PersonalListPage() {
                   <button title="Editar" onClick={() => abrirEditar(u)} className="p-1 rounded hover:bg-white/10">
                     <Pencil size={16} />
                   </button>
-                  <button title="Eliminar" onClick={() => abrirEliminar(u)} className="p-1 rounded hover:bg-white/10 text-red-300">
+                  <button
+                    title="Eliminar"
+                    onClick={() => abrirEliminar(u)}
+                    className="p-1 rounded hover:bg-white/10 text-red-300"
+                  >
                     <Trash2 size={16} />
                   </button>
                 </td>
@@ -416,74 +487,172 @@ export default function PersonalListPage() {
             ))}
             {filtered.length === 0 && !loading && (
               <tr>
-                <td className="p-3 opacity-70" colSpan={8}>Sin resultados.</td>
+                <td className="p-3 opacity-70 text-slate-400" colSpan={8}>
+                  Sin resultados.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Modal agregar*/}
-      <dialog
+      {/* ----- Modal AGREGAR ----- */}
+      <Modal
         open={open}
-        className="rounded-md w-[720px] bg-white text-slate-900"
-        style={{ position: 'fixed', inset: '0', margin: 'auto' }}
+        onClose={() => {
+          setOpen(false);
+          resetForm();
+        }}
+        title={`Agregar ${tab === 'odontologos' ? 'Odontólogo' : 'Asistente'}`}
+        widthClass="w-full max-w-3xl"
       >
-        <form onSubmit={onCreate} className="p-5 space-y-3">
-          <h2 className="text-lg font-semibold">
-            Agregar {tab === 'odontologos' ? 'Odontólogo' : 'Asistente'}
-          </h2>
+        <form
+          onSubmit={onCreate}
+          className="space-y-4 max-h-[75vh] overflow-y-auto bg-slate-900 border border-slate-700 rounded-xl p-4"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              className={inputClass}
+              placeholder="CI"
+              value={formBase.ci}
+              onChange={(e) =>
+                setFormBase({ ...formBase, ci: e.target.value })
+              }
+            />
+            <input
+              className={inputClass}
+              placeholder="Nombre"
+              value={formBase.nombre}
+              onChange={(e) =>
+                setFormBase({ ...formBase, nombre: e.target.value })
+              }
+            />
+            <input
+              className={inputClass}
+              placeholder="Paterno"
+              value={formBase.paterno ?? ''}
+              onChange={(e) =>
+                setFormBase({ ...formBase, paterno: e.target.value })
+              }
+            />
+            <input
+              className={inputClass}
+              placeholder="Materno"
+              value={formBase.materno ?? ''}
+              onChange={(e) =>
+                setFormBase({ ...formBase, materno: e.target.value })
+              }
+            />
 
-          <div className="grid grid-cols-2 gap-3">
-            <input className="px-3 py-2 rounded border" placeholder="CI"
-              value={formBase.ci} onChange={(e) => setFormBase({ ...formBase, ci: e.target.value })} />
-            <input className="px-3 py-2 rounded border" placeholder="Nombre"
-              value={formBase.nombre} onChange={(e) => setFormBase({ ...formBase, nombre: e.target.value })} />
-            <input className="px-3 py-2 rounded border" placeholder="Paterno"
-              value={formBase.paterno ?? ''} onChange={(e) => setFormBase({ ...formBase, paterno: e.target.value })} />
-            <input className="px-3 py-2 rounded border" placeholder="Materno"
-              value={formBase.materno ?? ''} onChange={(e) => setFormBase({ ...formBase, materno: e.target.value })} />
+            {/* Fecha nacimiento */}
+            <div className="md:col-span-2 space-y-1">
+              <label className={labelClass}>Fecha de nacimiento</label>
+              <input
+                type="date"
+                className={inputClass}
+                value={formBase.fechaNacimiento}
+                onChange={(e) =>
+                  setFormBase({
+                    ...formBase,
+                    fechaNacimiento: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-            <label className="text-xs opacity-80 col-span-2">Fecha de nacimiento</label>
-            <input type="date" className="px-3 py-2 rounded border col-span-2"
-              value={formBase.fechaNacimiento} onChange={(e) => setFormBase({ ...formBase, fechaNacimiento: e.target.value })} />
-
-            <select className="px-3 py-2 rounded border"
-              value={formBase.genero} onChange={(e) => setFormBase({ ...formBase, genero: e.target.value as 'M' | 'F' })}>
+            {/* Género / Teléfono */}
+            <select
+              className={inputClass}
+              value={formBase.genero}
+              onChange={(e) =>
+                setFormBase({
+                  ...formBase,
+                  genero: e.target.value as 'M' | 'F',
+                })
+              }
+            >
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
             </select>
-            <input className="px-3 py-2 rounded border" placeholder="Teléfono"
-              value={formBase.telefono ?? ''} onChange={(e) => setFormBase({ ...formBase, telefono: e.target.value })} />
-            <input className="px-3 py-2 rounded border" placeholder="Correo"
-              value={formBase.correo} onChange={(e) => setFormBase({ ...formBase, correo: e.target.value })} />
-            <input type="password" className="px-3 py-2 rounded border" placeholder="Contraseña"
-              value={formBase.contrasena} onChange={(e) => setFormBase({ ...formBase, contrasena: e.target.value })} />
-            <input className="px-3 py-2 rounded border" placeholder="Dirección"
-              value={formBase.direccion ?? ''} onChange={(e) => setFormBase({ ...formBase, direccion: e.target.value })} />
+            <input
+              className={inputClass}
+              placeholder="Teléfono"
+              value={formBase.telefono ?? ''}
+              onChange={(e) =>
+                setFormBase({ ...formBase, telefono: e.target.value })
+              }
+            />
 
-            <label className="text-xs opacity-80 col-span-2">Fecha de contratación</label>
-            <input type="date" className="px-3 py-2 rounded border col-span-2"
-              value={fechaContratacion} onChange={(e) => setFechaContratacion(e.target.value)} />
+            {/* Correo */}
+            <input
+              className={`${inputClass} md:col-span-2`}
+              placeholder="Correo"
+              value={formBase.correo}
+              onChange={(e) =>
+                setFormBase({ ...formBase, correo: e.target.value })
+              }
+            />
 
+            {/* Contraseña */}
+            <input
+              type="password"
+              className={inputClass}
+              placeholder="Contraseña"
+              value={formBase.contrasena}
+              onChange={(e) =>
+                setFormBase({ ...formBase, contrasena: e.target.value })
+              }
+            />
+            <input
+              className={inputClass}
+              placeholder="Dirección"
+              value={formBase.direccion ?? ''}
+              onChange={(e) =>
+                setFormBase({ ...formBase, direccion: e.target.value })
+              }
+            />
+
+            {/* Fecha contratación */}
+            <div className="md:col-span-2 space-y-1">
+              <label className={labelClass}>Fecha de contratación</label>
+              <input
+                type="date"
+                className={inputClass}
+                value={fechaContratacion}
+                onChange={(e) => setFechaContratacion(e.target.value)}
+              />
+            </div>
+
+            {/* Datos específicos por rol */}
             {tab === 'odontologos' ? (
               <>
-                <input className="px-3 py-2 rounded border col-span-2" placeholder="Horario (ej. Lun-Vie 8:00-16:00)"
-                  value={horario} onChange={(e) => setHorario(e.target.value)} />
+                {/* Horario */}
+                <input
+                  className={`${inputClass} md:col-span-2`}
+                  placeholder="Horario (ej. Lun-Vie 8:00-16:00)"
+                  value={horario}
+                  onChange={(e) => setHorario(e.target.value)}
+                />
 
-                {/* Selector múltiple de especialidades */}
-                <div className="col-span-2 space-y-2">
-                  <div className="text-xs opacity-80">Especialidades (seleccione una o varias)</div>
+                {/* Especialidades */}
+                <div className="md:col-span-2 space-y-2">
+                  <div className={labelClass}>
+                    Especialidades (seleccione una o varias)
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {especialidades.map((e) => {
-                      const active = selEspecialidades.includes(e.idEspecialidad);
+                      const active = selEspecialidades.includes(
+                        e.idEspecialidad
+                      );
                       return (
                         <button
                           key={e.idEspecialidad}
                           type="button"
                           onClick={() => toggleSelEsp(e.idEspecialidad)}
-                          className={`px-2 py-1 rounded-full border text-xs ${
-                            active ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                          className={`px-2 py-1 rounded-full border text-xs transition-colors ${
+                            active
+                              ? 'bg-teal-600 border-teal-600 text-white'
+                              : 'bg-slate-900 border-slate-600 text-slate-200 hover:bg-slate-800'
                           }`}
                           title={e.descripcion ?? e.nombre}
                         >
@@ -492,14 +661,19 @@ export default function PersonalListPage() {
                       );
                     })}
                     {especialidades.length === 0 && (
-                      <span className="text-xs text-slate-500">No hay especialidades registradas aún.</span>
+                      <span className="text-xs text-slate-500">
+                        No hay especialidades registradas aún.
+                      </span>
                     )}
                   </div>
                 </div>
               </>
             ) : (
-              <select className="px-3 py-2 rounded border col-span-2"
-                value={turno} onChange={(e) => setTurno(e.target.value)}>
+              <select
+                className={`${inputClass} md:col-span-2`}
+                value={turno}
+                onChange={(e) => setTurno(e.target.value)}
+              >
                 <option value="mañana">Turno mañana</option>
                 <option value="tarde">Turno tarde</option>
                 <option value="noche">Turno noche</option>
@@ -507,56 +681,74 @@ export default function PersonalListPage() {
             )}
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setOpen(false)} className="px-3 py-2 rounded bg-slate-200 hover:bg-slate-300">
+          {/* Botones */}
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                resetForm();
+              }}
+              className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 text-sm w-full sm:w-auto"
+            >
               Cancelar
             </button>
-            <button disabled={saving} className="px-3 py-2 rounded bg-teal-600 hover:bg-teal-700 text-white">
+            <button
+              disabled={saving}
+              className="px-3 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-sm w-full sm:w-auto disabled:opacity-60"
+            >
               {saving ? 'Guardando…' : 'Guardar'}
             </button>
           </div>
         </form>
-      </dialog>
+      </Modal>
 
       {/* ----- Modal VER ----- */}
       <Modal
         open={viewOpen}
         onClose={() => setViewOpen(false)}
         title="Detalle del usuario"
-        widthClass="max-w-2xl"
+        widthClass="max-w-2xl w-full"
       >
         {!detail ? (
-          <div>Cargando…</div>
+          <div className="text-slate-200">Cargando…</div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div><span className="font-medium">CI:</span> {detail.ci ?? '-'}</div>
-            <div><span className="font-medium">Nombre:</span> {detail.nombre ?? '-'}</div>
-            <div><span className="font-medium">Paterno:</span> {detail.paterno ?? '-'}</div>
-            <div><span className="font-medium">Materno:</span> {detail.materno ?? '-'}</div>
-            <div><span className="font-medium">Nacimiento:</span> {detail.fechaNacimiento?.slice(0,10) ?? '-'}</div>
-            <div><span className="font-medium">Género:</span> {detail.genero ?? '-'}</div>
-            <div><span className="font-medium">Teléfono:</span> {detail.telefono ?? '-'}</div>
-            <div><span className="font-medium">Correo:</span> {detail.correo ?? '-'}</div>
-            <div className="col-span-2"><span className="font-medium">Dirección:</span> {detail.direccion ?? '-'}</div>
-            <div><span className="font-medium">Estado:</span> {detail.estado ? 'Activo' : 'Inactivo'}</div>
-
-            {/* Especialidades del odontólogo */}
-            {tab === 'odontologos' && Array.isArray(detail?._especialidades) && (
-              <div className="col-span-2">
-                <span className="font-medium">Especialidades:</span>{' '}
-                {detail._especialidades.length ? (
-                  <span className="inline-flex flex-wrap gap-2 align-middle">
-                    {detail._especialidades.map((e: any) => (
-                      <span key={e.idEspecialidad} className="px-2 py-0.5 rounded-full bg-teal-600/15 text-teal-800 text-xs border border-teal-600/30">
-                        {e.nombre}
-                      </span>
-                    ))}
-                  </span>
-                ) : (
-                  <span>-</span>
-                )}
+          <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 max-h-[70vh] overflow-y-auto text-sm text-slate-100 space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div><span className="font-medium text-slate-300">CI:</span> {detail.ci ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Nombre:</span> {detail.nombre ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Paterno:</span> {detail.paterno ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Materno:</span> {detail.materno ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Nacimiento:</span> {detail.fechaNacimiento?.slice(0,10) ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Género:</span> {detail.genero ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Teléfono:</span> {detail.telefono ?? '-'}</div>
+              <div><span className="font-medium text-slate-300">Correo:</span> {detail.correo ?? '-'}</div>
+              <div className="md:col-span-2">
+                <span className="font-medium text-slate-300">Dirección:</span> {detail.direccion ?? '-'}
               </div>
-            )}
+              <div><span className="font-medium text-slate-300">Estado:</span> {detail.estado ? 'Activo' : 'Inactivo'}</div>
+
+              {/* Especialidades del odontólogo */}
+              {tab === 'odontologos' && Array.isArray(detail?._especialidades) && (
+                <div className="md:col-span-2">
+                  <span className="font-medium text-slate-300">Especialidades:</span>{' '}
+                  {detail._especialidades.length ? (
+                    <span className="inline-flex flex-wrap gap-2 align-middle mt-1">
+                      {detail._especialidades.map((e: any) => (
+                        <span
+                          key={e.idEspecialidad}
+                          className="px-2 py-0.5 rounded-full bg-teal-600/20 text-teal-300 text-xs border border-teal-500/40"
+                        >
+                          {e.nombre}
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span>-</span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </Modal>
@@ -566,39 +758,90 @@ export default function PersonalListPage() {
         open={editOpen}
         onClose={() => setEditOpen(false)}
         title="Editar usuario"
-        widthClass="max-w-2xl"
+        widthClass="max-w-2xl w-full"
       >
-        <div className="grid grid-cols-2 gap-3">
-          <input className="px-3 py-2 rounded border" placeholder="CI"
-            value={edit.ci ?? ''} onChange={(e) => setEdit((s) => ({ ...s, ci: e.target.value }))} />
-          <input className="px-3 py-2 rounded border" placeholder="Nombre"
-            value={edit.nombre ?? ''} onChange={(e) => setEdit((s) => ({ ...s, nombre: e.target.value }))} />
-          <input className="px-3 py-2 rounded border" placeholder="Paterno"
-            value={edit.paterno ?? ''} onChange={(e) => setEdit((s) => ({ ...s, paterno: e.target.value }))} />
-          <input className="px-3 py-2 rounded border" placeholder="Materno"
-            value={edit.materno ?? ''} onChange={(e) => setEdit((s) => ({ ...s, materno: e.target.value }))} />
-          <label className="text-xs opacity-70 col-span-2">Fecha de nacimiento</label>
-          <input type="date" className="px-3 py-2 rounded border col-span-2"
-            value={edit.fechaNacimiento ?? ''} onChange={(e) => setEdit((s) => ({ ...s, fechaNacimiento: e.target.value }))} />
-          <select className="px-3 py-2 rounded border"
-            value={edit.genero ?? 'M'} onChange={(e) => setEdit((s) => ({ ...s, genero: e.target.value as 'M'|'F' }))}>
-            <option value="M">Masculino</option>
-            <option value="F">Femenino</option>
-          </select>
-          <input className="px-3 py-2 rounded border" placeholder="Teléfono"
-            value={edit.telefono ?? ''} onChange={(e) => setEdit((s) => ({ ...s, telefono: e.target.value }))} />
-          <input className="px-3 py-2 rounded border col-span-2" placeholder="Correo"
-            value={edit.correo ?? ''} onChange={(e) => setEdit((s) => ({ ...s, correo: e.target.value }))} />
-          <input className="px-3 py-2 rounded border col-span-2" placeholder="Dirección"
-            value={edit.direccion ?? ''} onChange={(e) => setEdit((s) => ({ ...s, direccion: e.target.value }))} />
-        </div>
-        <div className="flex justify-end gap-2 mt-4">
-          <button onClick={() => setEditOpen(false)} className="px-3 py-2 rounded bg-slate-200 hover:bg-slate-300">Cancelar</button>
-          <button onClick={guardarEdicion} className="px-3 py-2 rounded bg-teal-600 hover:bg-teal-700 text-white">Guardar</button>
+        <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 max-h-[70vh] overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              className={inputClass}
+              placeholder="CI"
+              value={edit.ci ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, ci: e.target.value }))}
+            />
+            <input
+              className={inputClass}
+              placeholder="Nombre"
+              value={edit.nombre ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, nombre: e.target.value }))}
+            />
+            <input
+              className={inputClass}
+              placeholder="Paterno"
+              value={edit.paterno ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, paterno: e.target.value }))}
+            />
+            <input
+              className={inputClass}
+              placeholder="Materno"
+              value={edit.materno ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, materno: e.target.value }))}
+            />
+
+            <div className="md:col-span-2 space-y-1">
+              <label className={labelClass}>Fecha de nacimiento</label>
+              <input
+                type="date"
+                className={inputClass}
+                value={edit.fechaNacimiento ?? ''}
+                onChange={(e) => setEdit((s) => ({ ...s, fechaNacimiento: e.target.value }))}
+              />
+            </div>
+
+            <select
+              className={inputClass}
+              value={edit.genero ?? 'M'}
+              onChange={(e) => setEdit((s) => ({ ...s, genero: e.target.value as 'M'|'F' }))}
+            >
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+            </select>
+            <input
+              className={inputClass}
+              placeholder="Teléfono"
+              value={edit.telefono ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, telefono: e.target.value }))}
+            />
+            <input
+              className={`${inputClass} md:col-span-2`}
+              placeholder="Correo"
+              value={edit.correo ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, correo: e.target.value }))}
+            />
+            <input
+              className={`${inputClass} md:col-span-2`}
+              placeholder="Dirección"
+              value={edit.direccion ?? ''}
+              onChange={(e) => setEdit((s) => ({ ...s, direccion: e.target.value }))}
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 mt-4">
+            <button
+              onClick={() => setEditOpen(false)}
+              className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 text-sm"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={guardarEdicion}
+              className="px-3 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-sm"
+            >
+              Guardar
+            </button>
+          </div>
         </div>
       </Modal>
 
-      {/* ----- Confirmar ELIMINAR ----- */}
       <ConfirmDialog
         open={delOpen}
         onClose={() => setDelOpen(false)}
