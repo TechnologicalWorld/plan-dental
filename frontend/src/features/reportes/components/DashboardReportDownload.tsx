@@ -5,7 +5,6 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { DashboardReportPDF, type ReportData, type ReportFilters } from "./DashboardReportPDF";
 import type { MesParam } from "../../dashboard/dashboardservice";
 
-// Props actualizadas para recibir los datos ya cargados
 interface DashboardReportDownloadProps {
   datos?: { [key: string]: any[] };
   filtros: {
@@ -16,7 +15,6 @@ interface DashboardReportDownloadProps {
   titulo?: string;
 }
 
-// Función para transformar los datos del formato de Reportes.tsx al formato esperado por el PDF
 function transformarDatosParaPDF(
   datos: { [key: string]: any[] },
   filtros: { anio: number; mes: number }
@@ -38,7 +36,6 @@ function transformarDatosParaPDF(
   };
 }
 
-// Componente separado para el PDFDownloadLink que se puede montar/desmontar completamente
 function PDFDownloader({ 
   pdfData, 
   titulo, 
@@ -117,11 +114,9 @@ export default function DashboardReportDownload({
 }: DashboardReportDownloadProps) {
   const [pdfData, setPdfData] = React.useState<ReportData | null>(null);
   const [error, setError] = React.useState<string | null>(null);
-  // Usamos una key única basada en los filtros para forzar re-render completo
   const filtroKey = `${filtros.anio}-${filtros.mes}`;
   const [currentKey, setCurrentKey] = React.useState(filtroKey);
 
-  // Función para preparar los datos para el PDF
   const prepararPDF = () => {
     try {
       setError(null);
@@ -144,16 +139,13 @@ export default function DashboardReportDownload({
     setPdfData(null);
   };
 
-  // Resetear cuando cambien los filtros
   React.useEffect(() => {
-    // Solo resetear si realmente cambiaron los filtros
     if (filtroKey !== currentKey) {
       setPdfData(null);
       setError(null);
     }
   }, [filtroKey, currentKey]);
 
-  // Si no hay datos preparados o los filtros cambiaron, mostrar botón para generar
   if (!pdfData || filtroKey !== currentKey) {
     return (
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-xl shadow-xl border border-slate-700">
@@ -183,7 +175,6 @@ export default function DashboardReportDownload({
     );
   }
 
-  // Renderizar el componente PDFDownloader separado con key única
   return (
     <PDFDownloader
       key={currentKey}

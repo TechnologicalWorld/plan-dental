@@ -10,7 +10,6 @@ import type {
 
 export async function fetchHistoriaPorPaciente(pacienteId: number) {
   const { data } = await api.get(`/historias-clinicas/paciente/${pacienteId}`);
-  // el backend envía { success, paciente: { usuario, historias_clinicas: {...} } }
   const paciente: PacienteMin = data.paciente;
   const historia: HistoriaClinica | null = data.paciente?.historias_clinicas ?? null;
   return { paciente, historia };
@@ -36,7 +35,6 @@ export async function fetchPaciente(id: number) {
   return data as PacienteMin;
 }
 
-// --- Mini Odontograma (readonly en Historia Clínica) ---
 export async function fetchOdontogramas(): Promise<OdontogramaMin[]> {
   const { data } = await api.get('/odontogramas');
   return (data.data ?? []) as OdontogramaMin[];

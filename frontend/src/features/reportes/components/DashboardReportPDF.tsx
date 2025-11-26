@@ -1,4 +1,3 @@
-// DashboardReportPDF.tsx
 import React from "react";
 import {
   Document,
@@ -10,21 +9,18 @@ import {
 import type { DocumentProps } from "@react-pdf/renderer";
 import type { MesParam } from "../../dashboard/dashboardservice";
 
-// ===== Tipos de filtros y datasets esperados =====
 export type ReportFilters = {
   anio?: number;
   mes?: MesParam;
-  idUsuario?: number | null; // si prefieres, puedes quitar el null
+  idUsuario?: number | null; 
 };
 
 export type ReportData = {
   filtros: ReportFilters;
 
-
-  // 2 (requiere anio+mes)
   citasPorDiaSemanaMes: Array<{ dia_semana: string; total_citas: number }>;
 
-  // 3
+
   ingresosPorOdontoMes: Array<{
     idUsuario: number;
     total: number;
@@ -33,7 +29,6 @@ export type ReportData = {
     mes: number | null;
   }>;
 
-  // 4
   resumenCitasPorOdonto: Array<{
     idUsuario: number;
     nombre_completo: string;
@@ -43,7 +38,6 @@ export type ReportData = {
     Nro: number;
   }>;
 
-  // 5
   resumenCitasDias: Array<{
     idUsuario: number | null;
     estado: string;
@@ -53,7 +47,6 @@ export type ReportData = {
     Nro: number;
   }>;
 
-  // 6
   reporteCitasEstadoOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
@@ -61,21 +54,18 @@ export type ReportData = {
     Nro_Citas: number;
   }>;
 
-  // 7
   gananciaCitasPorOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     Total_Ganancia_Citas: number;
   }>;
 
-  // 8
   gananciaTratamientosPorOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     total_ganancia_tratamiento: number;
   }>;
 
-  // 9
   gananciaPorTratamiento: Array<{ nombre: string; total_ganancia_tratamiento: number }>;
 };
 
@@ -90,7 +80,7 @@ export function DashboardReportPDF(
       fontSize: 10,
     },
     header: {
-      position: "absolute", // "fixed" es prop, no valor de style
+      position: "absolute", 
       top: 20,
       left: 28,
       right: 28,
@@ -210,8 +200,6 @@ export function DashboardReportPDF(
           v={`Año=${filtros.anio ?? "—"} • Mes=${monthNameEs(filtros.mes)} • Odonto=${filtros.idUsuario ?? "—"}`}
         />
 
-
-        {/* 2) Citas por día-semana del mes (si anio+mes) */}
         {data.citasPorDiaSemanaMes.length > 0 && (
           <>
             <SectionTitle>Citas por día de la semana (mes seleccionado)</SectionTitle>

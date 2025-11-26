@@ -1,4 +1,3 @@
-// src/features/odontograma/odontograma.service.ts
 import api from "@/shared/api/apiClient";
 
 export type PacienteLite = {
@@ -119,7 +118,6 @@ export async function upsertPieza(pieza: Partial<PiezaDental>) {
     idOdontograma: pieza.idOdontograma,
   };
 
-  // Solo agrega observacion si existe
   if (pieza.observacion) {
     (payload as any).observacion = pieza.observacion;
   }
@@ -150,7 +148,6 @@ export async function listarAcciones() {
 
 export async function asignarPiezasATratamiento(idTratamiento: number, piezasIds: number[]) {
   try {
-    // Crear registros en la tabla evolucion con valores por defecto
     const promises = piezasIds.map(idPieza => 
       api.post('/evoluciones', {
         idTratamiento,
@@ -181,7 +178,7 @@ export async function crearDetalleDental(payload: {
   return data?.data ?? data;
 }
 
-// ---------- COLOREARDO ZONAS ----------
+// ---------- COLOREADO DE ZONAS ----------
 export type DetalleDental = {
   idAccion: number;
   idPiezaDental: number;

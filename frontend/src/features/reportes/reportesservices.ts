@@ -19,7 +19,6 @@ export type MesParam =
 
 export type Rows<T = any> = T[];
 
-// Normaliza y arma querystring ignorando undefined/null
 function qs(params: Record<string, unknown>) {
   const p = new URLSearchParams();
   Object.entries(params).forEach(([k, v]) => {
@@ -30,7 +29,6 @@ function qs(params: Record<string, unknown>) {
   return s ? `?${s}` : "";
 }
 
-// Manejo de error uniforme
 function unwrap<T>(promise: Promise<{ data: T }>): Promise<T> {
   return promise
     .then((r) => r.data)
@@ -44,7 +42,6 @@ function unwrap<T>(promise: Promise<{ data: T }>): Promise<T> {
     });
 }
 
-/** Si usas token Bearer, expón un setter opcional */
 export function setAuthToken(token?: string) {
   if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;

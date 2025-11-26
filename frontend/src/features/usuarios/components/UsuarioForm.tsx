@@ -1,4 +1,3 @@
-// src/features/usuarios/components/UsuarioForm.tsx
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import type{ Usuario, CreateUsuarioRequest } from '../../../types/usuario';
@@ -31,10 +30,8 @@ export const UsuarioForm: React.FC<UsuarioFormProps> = ({
     setError,
   } = useForm<FormData>();
 
-  // Inicializar valores del formulario
   useEffect(() => {
     if (usuario) {
-      // Convertir fecha del backend a formato de input
       const fechaFormateada = backendDateToInputDate(usuario.fechaNacimiento);
       
       reset({
@@ -48,17 +45,16 @@ export const UsuarioForm: React.FC<UsuarioFormProps> = ({
         correo: usuario.correo,
         direccion: usuario.direccion,
         estado: usuario.estado ?? true,
-        contrasena: '', // Siempre vacío en edición
+        contrasena: '', 
       });
     } else {
       reset({
         estado: true,
-        genero: 'M', // Valor por defecto
+        genero: 'M', 
       });
     }
   }, [usuario, reset]);
 
-  // Manejar errores del servidor
   useEffect(() => {
     if (serverErrors) {
       Object.keys(serverErrors).forEach((field) => {

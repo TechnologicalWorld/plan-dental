@@ -1,4 +1,3 @@
-// src/features/odontograma/components/IndicadoresSaludBucal.tsx
 import React from "react";
 
 export type IndicadoresState = {

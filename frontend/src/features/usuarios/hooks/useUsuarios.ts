@@ -24,7 +24,6 @@ export const useUsuarios = () => {
 
   const createUsuario = async (usuarioData: CreateUsuarioRequest): Promise<boolean> => {
     try {
-      // Convertir fecha al formato del backend
       const dataParaBackend = {
         ...usuarioData,
         fechaNacimiento: inputDateToBackendDate(usuarioData.fechaNacimiento)
@@ -36,7 +35,6 @@ export const useUsuarios = () => {
       return true;
     } catch (err: any) {
       if (err.response?.data?.errors) {
-        // Los errores de validación vienen en err.response.data.errors
         const errorMsg = Object.values(err.response.data.errors).flat().join(', ');
         setError(errorMsg);
       } else {
@@ -48,7 +46,6 @@ export const useUsuarios = () => {
 
   const updateUsuario = async (id: number, usuarioData: UpdateUsuarioRequest): Promise<boolean> => {
     try {
-      // Convertir fecha si está presente
       const dataParaBackend = usuarioData.fechaNacimiento 
         ? {
             ...usuarioData,

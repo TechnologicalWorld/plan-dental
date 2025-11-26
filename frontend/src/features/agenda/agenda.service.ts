@@ -35,19 +35,14 @@ type AgendaResponse = {
   };
 };
 
-/**
- * Busca el odontólogo asociado al usuario actual
- * Primero intenta por ID directo, si falla lista todos y filtra
- */
+
 export async function buscarOdontologoPorUsuario(idUsuario: number): Promise<number | null> {
   try {
-    // Intento 1: Acceso directo (si idUsuario === idUsuario_Odontologo)
     const { data } = await api.get<OdontologoData>(`/odontologos/${idUsuario}`);
     if (data?.idUsuario_Odontologo) {
       return data.idUsuario_Odontologo;
     }
   } catch {
-    // Intento 2: Listar todos y buscar por usuario.idUsuario
     try {
       const { data: response } = await api.get("/odontologos");
       const odontologos = Array.isArray(response?.data) ? response.data : response;
@@ -65,9 +60,6 @@ export async function buscarOdontologoPorUsuario(idUsuario: number): Promise<num
   return null;
 }
 
-/**
- * Obtiene todas las citas del odontólogo desde el endpoint /agenda
- */
 export async function obtenerAgendaOdontologo(idOdontologo: number): Promise<Cita[]> {
   try {
     const { data } = await api.get<AgendaResponse>(`/odontologos/${idOdontologo}/agenda`);
@@ -84,7 +76,7 @@ export async function obtenerAgendaOdontologo(idOdontologo: number): Promise<Cit
 export function convertirCitaAEvento(cita: Cita): AgendaEvent {
   const hhmm = extractHHmm(cita.hora);
   const start = combineDateAndTime(cita.fecha, hhmm);
-  const end = addMinutes(start, 60); // duración por defecto 1 hora
+  const end = addMinutes(start, 60); 
 
   // Construir título con paciente si existe
   let titulo = cita.tipoCita || "Cita";

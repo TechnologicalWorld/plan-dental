@@ -275,7 +275,7 @@ class DashboardController extends Controller
 
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
 
-        while ($stmt->nextRowset()) { /* no-op: solo drenar */ }
+        while ($stmt->nextRowset()) 
 
         $stmt->closeCursor();
         return $rows;
@@ -303,7 +303,6 @@ class DashboardController extends Controller
         return $map[$m] ?? null;
     }
 
-    // Devuelve nombre de mes en español (lo usa el SP de día-semana)
     private function normalizeSpanishMonth(string $mes): ?string
     {
         $s = strtolower(trim($mes));
@@ -323,7 +322,6 @@ class DashboardController extends Controller
         ];
         return in_array($s, $aceptados, true) ? $s : null;
     }
-        // GET /dashboard/graf-citas-por-paciente?anio=&mes=&idUsuario=
     public function grafCitasPorPaciente(Request $req)
     {
         $req->validate([
@@ -359,7 +357,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/graf-tratamientos-realizados?anio=&mes=&idUsuario=
     public function grafTratamientosRealizados(Request $req)
     {
         $req->validate([
@@ -395,7 +392,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/graf-ingresos-mensuales-odontologo?anio=&mes=&idUsuario=
     public function grafIngresosMensualesPorOdontologo(Request $req)
     {
         $req->validate([
@@ -431,7 +427,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/nro-odontogramas-paciente?anio=&mes=&idUsuario=
     public function dashboardNroOdontogramasPaciente(Request $req)
     {
         $req->validate([
@@ -467,7 +462,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/total-citas-odontologo?anio=&mes=&idUsuario=
     public function dashboardTotalCitasOdontologo(Request $req)
     {
         $req->validate([
@@ -503,7 +497,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/total-ingresos-odontologo?anio=&mes=&idUsuario=
     public function dashboardTotalIngresosOdontologo(Request $req)
     {
         $req->validate([
@@ -539,7 +532,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/ultimo-plan-paciente?anio=&mes=&idUsuario=
     public function dashboardUltimoPlanPaciente(Request $req)
     {
         $req->validate([
@@ -575,7 +567,6 @@ class DashboardController extends Controller
         }
     }
     
-// GET /dashboard/paciente/piezas-por-estado?idUsuario=
 public function pacientePiezasPorEstado(Request $req)
 {
     $req->validate([
@@ -595,7 +586,6 @@ public function pacientePiezasPorEstado(Request $req)
     }
 }
 
-    // GET /dashboard/paciente/ultimo-plan?idUsuario=
     public function pacienteUltimoPlan(Request $req)
     {
         $req->validate([
@@ -615,7 +605,6 @@ public function pacientePiezasPorEstado(Request $req)
         }
     }
 
-    // GET /dashboard/paciente/historia-clinica?idUsuario=
     public function pacienteHistoriaClinica(Request $req)
     {
         $req->validate([
@@ -635,7 +624,6 @@ public function pacientePiezasPorEstado(Request $req)
         }
     }
 
-    // GET /dashboard/paciente/ultima-cita?idUsuario=
     public function pacienteUltimaCita(Request $req)
     {
         $req->validate([
@@ -655,7 +643,6 @@ public function pacientePiezasPorEstado(Request $req)
         }
     }
 
-    // GET /dashboard/paciente/doctores?idUsuario=
     public function pacienteDoctores(Request $req)
     {
         $req->validate([
@@ -1011,5 +998,4 @@ public function cd_paciente_doctores(Request $request)
         ], 500);
     }
 }
-
 }

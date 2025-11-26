@@ -31,13 +31,11 @@ export default function useMisPacientes() {
     setLoading(true);
     setError(null);
     try {
-      // 1) obtener odontólogo por usuario
       const odonto = await getOdontologoByUsuario(idUsuario);
       if (!odonto?.idUsuario_Odontologo) {
         setMisPacientes([]);
         return;
       }
-      // 2) fetch y set
       const list = await fetchMisPacientes(odonto.idUsuario_Odontologo);
       setMisPacientes(list);
     } catch (e: any) {
@@ -73,7 +71,6 @@ export default function useMisPacientes() {
   }, [idUsuario]);
 
   useEffect(() => {
-    // limpiar resultados cuando se borra la query
     if (!canSearch) {
       setResults([]);
       setPage(1);

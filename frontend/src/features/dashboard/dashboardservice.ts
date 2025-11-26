@@ -1,11 +1,8 @@
-// dashboardService.ts
-
 import api from "@/shared/api/apiClient";
 import type { AxiosInstance, AxiosError } from "axios";
 
-// —— Tipos comunes ——
 export type MesParam =
-  | number // 1..12
+  | number 
   | "ene" | "enero"
   | "feb" | "febrero"
   | "mar" | "marzo"
@@ -21,7 +18,6 @@ export type MesParam =
 
 export type Rows<T = any> = T[];
 
-// Normaliza y arma querystring ignorando undefined/null
 function qs(params: Record<string, unknown>) {
   const p = new URLSearchParams();
   Object.entries(params).forEach(([k, v]) => {
@@ -32,7 +28,6 @@ function qs(params: Record<string, unknown>) {
   return s ? `?${s}` : "";
 }
 
-// Manejo de error uniforme
 function unwrap<T>(promise: Promise<{ data: T }>): Promise<T> {
   return promise
     .then((r) => r.data)
@@ -46,7 +41,6 @@ function unwrap<T>(promise: Promise<{ data: T }>): Promise<T> {
     });
 }
 
-/** Si usas token Bearer, expón un setter opcional */
 export function setAuthToken(token?: string) {
   if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -68,7 +62,6 @@ export const dashboardService = {
 
   /**
    * GET /dashboard/citas-por-dia-semana-mes?mes=&anio=
-   * (anio y mes son requeridos por el backend)
    */
   citasPorDiaSemanaMes<T = any>(params: { anio: number; mes: MesParam }) {
     return unwrap<Rows<T>>(
@@ -154,7 +147,7 @@ export const dashboardService = {
   },
 
     // ======================================================
-    // =============== NUEVOS MÉTODOS DASHBOARD =============
+    // =============== MÉTODOS DASHBOARD =============
     // ======================================================
 
     /**
@@ -237,7 +230,6 @@ export const dashboardService = {
 
     /**
      * GET /dashboard/ultimo-plan-paciente?anio=&mes=&idUsuario=
-     * (versión con filtros anio/mes/idUsuario)
      */
     ultimoPlanPaciente<T = any>(params: {
       anio?: number;
@@ -249,7 +241,7 @@ export const dashboardService = {
       );
     },
 
-    // ---------- Endpoints por paciente (idUsuario obligatorio) ----------
+    // ---------- Endpoints por paciente ----------
 
     /**
      * GET /dashboard/paciente/piezas-por-estado?idUsuario=
@@ -383,7 +375,6 @@ export const dashboardService = {
 
     /**
      * GET /dashboard/cd-vaciar-bd?dbname=
-     * (OJO: este devuelve { message: string }, no array)
      */
     cdVaciarBd(params: { dbname: string }) {
       return unwrap<{ message: string }>(

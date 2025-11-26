@@ -1,4 +1,3 @@
-// src/features/usuarios/components/UsuarioModal.tsx
 import React from 'react';
 import type{ Usuario, CreateUsuarioRequest } from '../../../types/usuario';
 import { UsuarioForm } from './UsuarioForm';
