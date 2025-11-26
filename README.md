@@ -107,9 +107,9 @@ npm run dev
 | Rol | Email | Contraseña | Permisos |
 |-----|-------|------------|----------|
 | 🧑‍💼 **Administrador** | admin@clinicadental.com | admin123 |
-| 🦷 **Odontólogo** | odontologo@clinicadental.com | 123456789 |
-| 🧑 **Asistente** | asistente@clinicadental.com | 123456789 |
-| 👩‍🦰 **Paciente** | paciente@clinicadental.com | 123456789 |
+| 🦷 **Odontólogo** | patricia.quisbert@email.com | password123 |
+| 🧑 **Asistente** | asistente@gmail.com | password123 |
+| 👩‍🦰 **Paciente** | maria.gonzalez@email.com | password123 |
 
 
 ## 🗂️ Estructura del Proyecto
