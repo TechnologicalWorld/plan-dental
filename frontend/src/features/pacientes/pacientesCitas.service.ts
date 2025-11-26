@@ -4,10 +4,10 @@ import type { Cita } from "@/types/cita";
 
 // Obtener historial de Citas del paciente
 export async function fetchCitasPorPaciente(idUsuario: number): Promise<Cita[]> {
-  const { data } = await api.get(`/citas/${idUsuario}`);
+  const { data } = await api.get(`/pacientes/${idUsuario}/citas`);
 
   // backend retorna => { historial: { citas: [...] } }
-  const citas: Cita[] = data.historial?.citas ?? [];
+  const citas: Cita[] = data.citas ?? [];
 
   return citas;
 }
