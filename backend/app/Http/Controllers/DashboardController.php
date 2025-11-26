@@ -36,18 +36,16 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/citas-por-dia-semana-mes?mes=&anio=
     public function citasPorDiaSemanaMes(Request $req)
     {
         $req->validate([
             'anio' => 'required|integer|min:1900|max:2100',
-            'mes'  => 'required', // número o texto; se normaliza a español
+            'mes'  => 'required', 
         ]);
 
         $anio = (int) $req->query('anio');
         $mesInput = (string) $req->query('mes');
 
-        // Normaliza a texto español (lo requiere el SP)
         $mes = $this->normalizeSpanishMonth($mesInput);
         if ($mes === null) {
             return response()->json([
@@ -66,12 +64,11 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/ingresos-odonto?anio=&mes=
     public function ingresosPorOdontoMes(Request $req)
     {
         $req->validate([
             'anio' => 'nullable|integer|min:1900|max:2100',
-            'mes'  => 'nullable', // texto o número
+            'mes'  => 'nullable', 
         ]);
 
         $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
@@ -97,12 +94,11 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/resumen-citas-odonto?anio=&mes=
     public function resumenCitasPorOdonto(Request $req)
     {
         $req->validate([
             'anio' => 'nullable|integer|min:1900|max:2100',
-            'mes'  => 'nullable', // número o texto (ene, feb, octubre, 10, etc.)
+            'mes'  => 'nullable',
         ]);
 
         $anio = $req->filled('anio') ? (int) $req->query('anio') : null;
@@ -128,12 +124,11 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/citas-dias?anio=&mes=&idUsuario=
     public function resumenCitasDias(Request $req)
     {
         $req->validate([
             'anio'      => 'nullable|integer|min:1900|max:2100',
-            'mes'       => 'nullable',            // número o texto (ene, feb, 10, octubre…)
+            'mes'       => 'nullable',            
             'idUsuario' => 'nullable|integer|min:1',
         ]);
 
@@ -161,12 +156,11 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/citas-estado-odontologo?anio=&mes=
     public function reporteCitasEstadoOdontologo(Request $req)
     {
         $req->validate([
             'anio' => 'nullable|integer|min:1900|max:2100',
-            'mes'  => 'nullable', // 1..12 o nombre/abreviatura en español
+            'mes'  => 'nullable',
         ]);
 
         $anio = $req->filled('anio') ? (int)$req->query('anio') : null;
@@ -189,7 +183,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/ganancia-citas-odontologo?anio=&mes=
     public function gananciaCitasPorOdontologo(Request $req)
     {
         $req->validate([
@@ -217,7 +210,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/ganancia-tratamientos-odontologo?anio=&mes=
     public function gananciaTratamientosPorOdontologo(Request $req)
     {
         $req->validate([
@@ -245,7 +237,6 @@ class DashboardController extends Controller
         }
     }
 
-    // GET /dashboard/ganancia-por-tratamiento?anio=&mes=
     public function gananciaPorTratamiento(Request $req)
     {
         $req->validate([
@@ -273,12 +264,6 @@ class DashboardController extends Controller
         }
     }
 
-    // ======================= HELPERS =======================
-
-    /**
-     * Ejecuta un procedimiento almacenado sin caché.
-     * Drena posibles result sets adicionales para evitar "Commands out of sync".
-     */
     private function callSp(string $spName, array $args = []): array
     {
         $placeholders = implode(',', array_fill(0, count($args), '?'));
@@ -288,17 +273,14 @@ class DashboardController extends Controller
         $stmt = $pdo->prepare($sql);
         $stmt->execute($args);
 
-        // Primer resultset
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
 
-        // Drenar posibles resultsets adicionales
         while ($stmt->nextRowset()) { /* no-op: solo drenar */ }
 
         $stmt->closeCursor();
         return $rows;
     }
 
-    // Convierte 1..12 o nombres/abreviaturas de mes en español -> número 1..12
     private function monthToInt(string $in): ?int
     {
         $m = mb_strtolower(trim($in), 'UTF-8');
