@@ -7,24 +7,19 @@ import {
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
-import type { DocumentProps } from "@react-pdf/renderer";
+import type { Style } from "@react-pdf/renderer";
 import type { MesParam } from "../../dashboard/dashboardservice";
 
 // ===== Tipos de filtros y datasets esperados =====
 export type ReportFilters = {
   anio?: number;
   mes?: MesParam;
-  idUsuario?: number | null; // si prefieres, puedes quitar el null
+  idUsuario?: number | null;
 };
 
 export type ReportData = {
   filtros: ReportFilters;
-
-
-  // 2 (requiere anio+mes)
   citasPorDiaSemanaMes: Array<{ dia_semana: string; total_citas: number }>;
-
-  // 3
   ingresosPorOdontoMes: Array<{
     idUsuario: number;
     total: number;
@@ -32,8 +27,6 @@ export type ReportData = {
     anio: number | null;
     mes: number | null;
   }>;
-
-  // 4
   resumenCitasPorOdonto: Array<{
     idUsuario: number;
     nombre_completo: string;
@@ -42,8 +35,6 @@ export type ReportData = {
     mes: number | null;
     Nro: number;
   }>;
-
-  // 5
   resumenCitasDias: Array<{
     idUsuario: number | null;
     estado: string;
@@ -52,82 +43,100 @@ export type ReportData = {
     dia: string;
     Nro: number;
   }>;
-
-  // 6
   reporteCitasEstadoOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     estado: string;
     Nro_Citas: number;
   }>;
-
-  // 7
   gananciaCitasPorOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     Total_Ganancia_Citas: number;
   }>;
-
-  // 8
   gananciaTratamientosPorOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     total_ganancia_tratamiento: number;
   }>;
-
-  // 9
   gananciaPorTratamiento: Array<{ nombre: string; total_ganancia_tratamiento: number }>;
 };
 
-export function DashboardReportPDF(
-  { data, titulo }: { data: ReportData; titulo: string }
-): React.ReactElement<DocumentProps> {
-  const styles = StyleSheet.create({
-    page: {
-      paddingTop: 60,
-      paddingBottom: 40,
-      paddingHorizontal: 28,
-      fontSize: 10,
-    },
-    header: {
-      position: "absolute", // "fixed" es prop, no valor de style
-      top: 20,
-      left: 28,
-      right: 28,
-      height: 24,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      fontSize: 10,
-    },
-    footer: {
-      position: "absolute",
-      bottom: 16,
-      left: 28,
-      right: 28,
-      height: 16,
-      fontSize: 9,
-      flexDirection: "row",
-      justifyContent: "space-between",
-    },
-    h1: { fontSize: 16, marginBottom: 6 },
-    h2: { fontSize: 12, marginTop: 12, marginBottom: 6 },
-    small: { color: "#666" },
-    row: {
-      flexDirection: "row",
-      borderBottomWidth: 1,
-      borderColor: "#ddd",
-      paddingVertical: 4,
-    },
-    th: { fontWeight: "bold" },
-    cell: { paddingRight: 6 },
-    right: { textAlign: "right" as const },
-    col1: { width: "10%" },
-    col2: { width: "50%" },
-    col3: { width: "20%" },
-    col4: { width: "20%" },
-    wrapBlock: { marginBottom: 6 },
-  });
+// Crear estilos fuera del componente para evitar recreación
+const styles = StyleSheet.create({
+  page: {
+    paddingTop: 60,
+    paddingBottom: 40,
+    paddingHorizontal: 28,
+    fontSize: 10,
+  },
+  header: {
+    position: "absolute",
+    top: 20,
+    left: 28,
+    right: 28,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 10,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 16,
+    left: 28,
+    right: 28,
+    fontSize: 9,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  h1: { 
+    fontSize: 16, 
+    marginBottom: 6,
+    fontWeight: 700,
+  },
+  h2: { 
+    fontSize: 12, 
+    marginTop: 12, 
+    marginBottom: 6,
+    fontWeight: 700,
+  },
+  small: { 
+    color: "#666",
+    fontSize: 9,
+  },
+  row: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    paddingVertical: 4,
+  },
+  rowHeader: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    paddingVertical: 4,
+    fontWeight: 700,
+    backgroundColor: "#f0f0f0",
+  },
+  cell: { 
+    paddingRight: 6,
+  },
+  cellRight: { 
+    paddingRight: 6,
+    textAlign: "right",
+  },
+  col1: { width: "10%" },
+  col2: { width: "50%" },
+  col3: { width: "20%" },
+  col4: { width: "20%" },
+  wrapBlock: { 
+    marginBottom: 6,
+  },
+  labelBold: {
+    fontWeight: 700,
+  },
+});
 
+export function DashboardReportPDF({ data, titulo }: { data: ReportData; titulo: string }) {
   const { filtros } = data;
   const fecha = new Date().toLocaleString("es-BO");
 
@@ -148,7 +157,7 @@ export function DashboardReportPDF(
     return map[(m as number) - 1] ?? String(m);
   };
 
-  const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  const SectionTitle = ({ children }: { children: string }) => (
     <Text style={styles.h2}>{children}</Text>
   );
 
@@ -173,7 +182,7 @@ export function DashboardReportPDF(
   );
 
   const TableHeader = ({ cols }: { cols: string[] }) => (
-    <View style={[styles.row, styles.th]}>
+    <View style={styles.rowHeader}>
       {cols.map((c, i) => (
         <Text
           key={i}
@@ -191,8 +200,8 @@ export function DashboardReportPDF(
   const KV = ({ k, v }: { k: string; v: string }) => (
     <View style={styles.wrapBlock}>
       <Text>
-        <Text style={{ fontWeight: "bold" }}>{k}: </Text>
-        {v}
+        <Text style={styles.labelBold}>{k}: </Text>
+        <Text>{v}</Text>
       </Text>
     </View>
   );
@@ -210,9 +219,8 @@ export function DashboardReportPDF(
           v={`Año=${filtros.anio ?? "—"} • Mes=${monthNameEs(filtros.mes)} • Odonto=${filtros.idUsuario ?? "—"}`}
         />
 
-
-        {/* 2) Citas por día-semana del mes (si anio+mes) */}
-        {data.citasPorDiaSemanaMes.length > 0 && (
+        {/* 2) Citas por día-semana del mes */}
+        {data.citasPorDiaSemanaMes && data.citasPorDiaSemanaMes.length > 0 && (
           <>
             <SectionTitle>Citas por día de la semana (mes seleccionado)</SectionTitle>
             <TableHeader cols={["#", "Día", "Citas", ""]} />
@@ -220,7 +228,7 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{r.dia_semana}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>{r.total_citas}</Text>
+                <Text style={[styles.cellRight, styles.col3]}>{r.total_citas}</Text>
                 <Text style={[styles.cell, styles.col4]} />
               </View>
             ))}
@@ -228,7 +236,7 @@ export function DashboardReportPDF(
         )}
 
         {/* 3) Ingresos por odontólogo */}
-        {data.ingresosPorOdontoMes.length > 0 && (
+        {data.ingresosPorOdontoMes && data.ingresosPorOdontoMes.length > 0 && (
           <>
             <SectionTitle>Ingresos por odontólogo</SectionTitle>
             <TableHeader cols={["#", "Odontólogo", "Total", "Año/Mes"]} />
@@ -236,8 +244,8 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{r.nombre_completo}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>{money(r.total)}</Text>
-                <Text style={[styles.cell, styles.col4, styles.right]}>
+                <Text style={[styles.cellRight, styles.col3]}>{money(r.total)}</Text>
+                <Text style={[styles.cellRight, styles.col4]}>
                   {`${r.anio ?? "—"}/${r.mes ?? "—"}`}
                 </Text>
               </View>
@@ -245,8 +253,8 @@ export function DashboardReportPDF(
           </>
         )}
 
-        {/* 4) Resumen de citas por odontólogo (por estado) */}
-        {data.resumenCitasPorOdonto.length > 0 && (
+        {/* 4) Resumen de citas por odontólogo */}
+        {data.resumenCitasPorOdonto && data.resumenCitasPorOdonto.length > 0 && (
           <>
             <SectionTitle>Resumen de citas por odontólogo (por estado)</SectionTitle>
             <TableHeader cols={["#", "Odontólogo / Estado", "Nro", "Año/Mes"]} />
@@ -254,8 +262,8 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{`${r.nombre_completo} — ${r.estado}`}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>{r.Nro}</Text>
-                <Text style={[styles.cell, styles.col4, styles.right]}>
+                <Text style={[styles.cellRight, styles.col3]}>{r.Nro}</Text>
+                <Text style={[styles.cellRight, styles.col4]}>
                   {`${r.anio ?? "—"}/${r.mes ?? "—"}`}
                 </Text>
               </View>
@@ -263,8 +271,8 @@ export function DashboardReportPDF(
           </>
         )}
 
-        {/* 5) Resumen citas por día (por odontólogo/estado) */}
-        {data.resumenCitasDias.length > 0 && (
+        {/* 5) Resumen citas por día */}
+        {data.resumenCitasDias && data.resumenCitasDias.length > 0 && (
           <>
             <SectionTitle>Resumen de citas por día (por odontólogo/estado)</SectionTitle>
             <TableHeader cols={["#", "Odontólogo / Estado / Día", "Nro", "Año/Mes"]} />
@@ -274,8 +282,8 @@ export function DashboardReportPDF(
                 <Text style={[styles.cell, styles.col2]}>
                   {`${r.idUsuario ?? "—"} • ${r.estado} • ${r.dia}`}
                 </Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>{r.Nro}</Text>
-                <Text style={[styles.cell, styles.col4, styles.right]}>
+                <Text style={[styles.cellRight, styles.col3]}>{r.Nro}</Text>
+                <Text style={[styles.cellRight, styles.col4]}>
                   {`${r.anio ?? "—"}/${r.mes ?? "—"}`}
                 </Text>
               </View>
@@ -284,7 +292,7 @@ export function DashboardReportPDF(
         )}
 
         {/* 6) Citas por estado y odontólogo */}
-        {data.reporteCitasEstadoOdontologo.length > 0 && (
+        {data.reporteCitasEstadoOdontologo && data.reporteCitasEstadoOdontologo.length > 0 && (
           <>
             <SectionTitle>Citas por estado y odontólogo</SectionTitle>
             <TableHeader cols={["#", "Odontólogo / Estado", "Nro Citas", ""]} />
@@ -292,7 +300,7 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{`${r.nombre_completo} — ${r.estado}`}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>{r.Nro_Citas}</Text>
+                <Text style={[styles.cellRight, styles.col3]}>{r.Nro_Citas}</Text>
                 <Text style={[styles.cell, styles.col4]} />
               </View>
             ))}
@@ -300,7 +308,7 @@ export function DashboardReportPDF(
         )}
 
         {/* 7) Ganancia por citas por odontólogo */}
-        {data.gananciaCitasPorOdontologo.length > 0 && (
+        {data.gananciaCitasPorOdontologo && data.gananciaCitasPorOdontologo.length > 0 && (
           <>
             <SectionTitle>Ganancia por citas por odontólogo</SectionTitle>
             <TableHeader cols={["#", "Odontólogo", "Total", ""]} />
@@ -308,7 +316,7 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{r.nombre_completo}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>
+                <Text style={[styles.cellRight, styles.col3]}>
                   {money(r.Total_Ganancia_Citas)}
                 </Text>
                 <Text style={[styles.cell, styles.col4]} />
@@ -318,7 +326,7 @@ export function DashboardReportPDF(
         )}
 
         {/* 8) Ganancia por tratamientos por odontólogo */}
-        {data.gananciaTratamientosPorOdontologo.length > 0 && (
+        {data.gananciaTratamientosPorOdontologo && data.gananciaTratamientosPorOdontologo.length > 0 && (
           <>
             <SectionTitle>Ganancia por tratamientos por odontólogo</SectionTitle>
             <TableHeader cols={["#", "Odontólogo", "Total", ""]} />
@@ -326,7 +334,7 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{r.nombre_completo}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>
+                <Text style={[styles.cellRight, styles.col3]}>
                   {money(r.total_ganancia_tratamiento)}
                 </Text>
                 <Text style={[styles.cell, styles.col4]} />
@@ -335,8 +343,8 @@ export function DashboardReportPDF(
           </>
         )}
 
-        {/* 9) Ganancia por tratamiento (nombre) */}
-        {data.gananciaPorTratamiento.length > 0 && (
+        {/* 9) Ganancia por tratamiento */}
+        {data.gananciaPorTratamiento && data.gananciaPorTratamiento.length > 0 && (
           <>
             <SectionTitle>Ganancia por tratamiento</SectionTitle>
             <TableHeader cols={["#", "Tratamiento", "Total", ""]} />
@@ -344,7 +352,7 @@ export function DashboardReportPDF(
               <View key={i} style={styles.row}>
                 <Text style={[styles.cell, styles.col1]}>{i + 1}</Text>
                 <Text style={[styles.cell, styles.col2]}>{r.nombre}</Text>
-                <Text style={[styles.cell, styles.col3, styles.right]}>
+                <Text style={[styles.cellRight, styles.col3]}>
                   {money(r.total_ganancia_tratamiento)}
                 </Text>
                 <Text style={[styles.cell, styles.col4]} />

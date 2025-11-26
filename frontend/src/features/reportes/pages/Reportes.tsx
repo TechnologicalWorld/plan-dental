@@ -1,7 +1,6 @@
-// Reportes.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { dashboardService, type MesParam } from "../../dashboard/dashboardservice";
 import DashboardReportDownload from "../components/DashboardReportDownload";
 import { reportesService } from "../reportesservices";
@@ -11,10 +10,8 @@ const obtenertotalcitas = reportesService.obtenerTotalCitas;
 const obtenerodontologos = reportesService.obtenerOdontologosActivos;
 const obtenercitasestado = reportesService.obtenerCitasPorEstado;
 const obtenersumapagado = reportesService.obtenerSumaPagado;
-const citaspordiasemana = dashboardService.citasPorDiaSemanaMes;
 const ingresosporodontomes = dashboardService.ingresosPorOdontoMes;
 const resumencitasodontologo = dashboardService.resumenCitasPorOdonto;
-const resumencitasdias = dashboardService.resumenCitasDias;
 const reportecitasestadoodontologo = dashboardService.reporteCitasEstadoOdontologo;
 const gananciacitasporodonto = dashboardService.gananciaCitasPorOdontologo;
 const gananciaPorTratamiento = dashboardService.gananciaPorTratamiento;
@@ -40,6 +37,9 @@ export default function Reportes() {
   });
 
   const [datosListos, setDatosListos] = useState(false);
+  
+  const previousFiltersRef = useRef(filtrosAplicados);
+  const isInitialMount = useRef(true);
 
   const cargarDatos = async () => {
     try {
@@ -54,13 +54,8 @@ export default function Reportes() {
       resultados.odontologosActivos = await obtenerodontologos();
       resultados.citasPorEstado = await obtenercitasestado(filtrosAplicados);
       resultados.sumaPagado = await obtenersumapagado(filtrosAplicados);
-
-      resultados.citasPorDiaSemana = await citaspordiasemana(
-        filtrosAplicados as { anio: number; mes: MesParam }
-      );
       resultados.ingresosPorOdontologo = await ingresosporodontomes(filtrosAplicados);
       resultados.resumenCitasOdontologo = await resumencitasodontologo(filtrosAplicados);
-      resultados.resumenCitasDias = await resumencitasdias(filtrosAplicados);
       resultados.citasEstadoOdontologo = await reportecitasestadoodontologo(filtrosAplicados);
       resultados.gananciaCitasOdontologo = await gananciacitasporodonto(filtrosAplicados);
       resultados.gananciaPorTratamiento = await gananciaPorTratamiento(filtrosAplicados);
@@ -70,6 +65,7 @@ export default function Reportes() {
 
       setDatos(resultados);
       setDatosListos(true);
+      previousFiltersRef.current = filtrosAplicados;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al cargar los datos");
       setDatosListos(false);
@@ -80,7 +76,7 @@ export default function Reportes() {
 
   useEffect(() => {
     cargarDatos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    isInitialMount.current = false;
   }, [filtrosAplicados]);
 
   const aplicarFiltros = () => {
@@ -200,7 +196,31 @@ export default function Reportes() {
 
   return (
     <div className="p-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-white">Reportes del Sistema</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-white">Reportes del Sistema</h1>
+        <button
+          onClick={cargarDatos}
+          disabled={cargando}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-200 font-medium shadow-lg transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          title="Recargar reportes"
+        >
+          <svg
+            className={`w-5 h-5 ${cargando ? 'animate-spin' : ''}`}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+          {cargando ? 'Recargando...' : 'Recargar'}
+        </button>
+      </div>
 
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-xl shadow-xl mb-6 border border-slate-700">
         <h2 className="text-lg font-semibold mb-4 text-white">Filtros</h2>
@@ -242,10 +262,11 @@ export default function Reportes() {
           <div className="flex items-center gap-3">
             <button
               onClick={aplicarFiltros}
+              disabled={!hayCambiosPendientes}
               className={`px-6 py-2 rounded-lg transition-all duration-200 font-medium shadow-lg transform hover:scale-105 active:scale-95 ${
                 hayCambiosPendientes
                   ? "bg-blue-600 text-white hover:bg-blue-500 hover:shadow-blue-500/50"
-                  : "bg-slate-600 text-slate-300 cursor-default"
+                  : "bg-slate-600 text-slate-300 cursor-not-allowed opacity-60"
               }`}
             >
               {hayCambiosPendientes ? "Aplicar Filtros" : "Filtros Aplicados"}
@@ -258,6 +279,7 @@ export default function Reportes() {
           </div>
         </div>
 
+            
         <div className="mt-4 pt-4 border-t border-slate-700">
           <p className="text-sm text-slate-400">
             Mostrando datos de:{" "}
@@ -271,9 +293,11 @@ export default function Reportes() {
         </div>
       </div>
 
+
       {datosListos && Object.keys(datos).length > 0 && (
         <div className="mb-6">
           <DashboardReportDownload
+            key={`${filtrosAplicados.anio}-${filtrosAplicados.mes}`}
             datos={datos}
             filtros={filtrosAplicados}
             titulo="Informe de Gestión Odontológica"
@@ -284,30 +308,7 @@ export default function Reportes() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {Object.entries(datos).map(([clave, valor]) => (
-          <div
-            key={clave}
-            className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-xl p-6 border border-slate-700 hover:shadow-2xl hover:border-slate-600 transition-all duration-200"
-          >
-            <h2 className="text-xl font-semibold mb-4 text-white border-b border-slate-700 pb-3">
-              {clave
-                .replace(/([A-Z])/g, " $1")
-                .replace(/^./, (str) => str.toUpperCase())}
-            </h2>
-            <div className="max-h-96 overflow-y-auto custom-scrollbar">
-              {renderizarDatos(valor, clave)}
-            </div>
-            <div className="mt-4 text-sm text-slate-400 bg-slate-800/50 px-3 py-2 rounded-lg border border-slate-700">
-              Total de registros:{" "}
-              <span className="font-semibold text-slate-200">
-                {Array.isArray(valor) ? valor.length : 0}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-
+      
       <div className="mt-8 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-xl p-6 border border-slate-700">
         <h2 className="text-xl font-semibold mb-6 text-white">Resumen General</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -346,6 +347,30 @@ export default function Reportes() {
           </div>
         </div>
       </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {Object.entries(datos).map(([clave, valor]) => (
+          <div
+            key={clave}
+            className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-xl p-6 border border-slate-700 hover:shadow-2xl hover:border-slate-600 transition-all duration-200"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-white border-b border-slate-700 pb-3">
+              {clave
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
+            </h2>
+            <div className="max-h-96 overflow-y-auto custom-scrollbar">
+              {renderizarDatos(valor, clave)}
+            </div>
+            <div className="mt-4 text-sm text-slate-400 bg-slate-800/50 px-3 py-2 rounded-lg border border-slate-700">
+              Total de registros:{" "}
+              <span className="font-semibold text-slate-200">
+                {Array.isArray(valor) ? valor.length : 0}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 }
