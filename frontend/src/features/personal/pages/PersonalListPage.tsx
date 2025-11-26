@@ -841,6 +841,7 @@ export default function PersonalListPage() {
           </div>
         </div>
       </Modal>
+      {/* ----- Dialog ELIMINAR ----- */}
 
       <ConfirmDialog
         open={delOpen}
