@@ -37,9 +37,8 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [dashboardData, setDashboardData] = useState<any>(null);
   
-  // Filtros aplicados (los que se usan para cargar datos)
-  const [anio, setAnio] = useState(2024);
-  const [mes, setMes] = useState(10);
+  const [anio, setAnio] = useState(2025);
+  const [mes, setMes] = useState(11);
   
   const meses = [
     { value: 1, label: 'Enero' },
@@ -56,12 +55,11 @@ export default function Dashboard() {
     { value: 12, label: 'Diciembre' }
   ];
   
-  // Generar años dinámicamente (año actual - 5 años)
   const currentYear = new Date().getFullYear();
   const anios = Array.from({ length: 6 }, (_, i) => currentYear - i);
 
   const aplicarFiltros = () => {
-    setLoading(true); // Activar loading al aplicar nuevos filtros
+    setLoading(true); 
     fetchData();
   };
 
@@ -122,7 +120,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchData();
-  }, []); // Cargar datos iniciales solo una vez
+  }, []); 
 
   if (loading) {
     return (
@@ -172,7 +170,6 @@ export default function Dashboard() {
     resumenAdmin 
   } = dashboardData;
 
-  // Preparar datos para gráficas
   const citasPorEstadoData = citasPorEstado.map((item: any) => ({
     name: item.estado.charAt(0).toUpperCase() + item.estado.slice(1),
     value: item.total

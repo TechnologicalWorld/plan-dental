@@ -9,12 +9,11 @@ class DashboardController extends Controller
 {
     // ======================= ENDPOINTS =======================
 
-    // GET /dashboard/citas-por-mes-anio?anio=&mes=
     public function citasPorMesAnio(Request $req)
     {
         $req->validate([
             'anio' => 'nullable|integer|min:1900|max:2100',
-            'mes'  => 'nullable', // acepta texto o número
+            'mes'  => 'nullable', 
         ]);
 
         $anio = $req->filled('anio') ? (int)$req->query('anio') : null;
@@ -695,18 +694,33 @@ public function pacientePiezasPorEstado(Request $req)
     }
 
     // Funciones para procedimientos almacenados
+/**
+ * Helper para obtener año y mes desde la query (?anio=&mes=)
+ */
+private function getAnioMes(Request $request): array
+{
+    $anio = $request->query('anio');
+    $mes  = $request->query('mes');
+
+    return [
+        $anio !== null && $anio !== '' ? (int)$anio : null,
+        $mes  !== null && $mes  !== '' ? (int)$mes  : null,
+    ];
+}
 
 /**
  * Obtener ingresos por odontólogo por mes
  */
-public function cd_ingresos_por_odonto_mes($anio = null, $mes = null)
+public function cd_ingresos_por_odonto_mes(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL ingresos_por_odonto_mes(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener ingresos por odontólogo.',
+            'error'   => 'Error al obtener ingresos por odontólogo.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
@@ -715,14 +729,19 @@ public function cd_ingresos_por_odonto_mes($anio = null, $mes = null)
 /**
  * Resumen de citas por días de la semana
  */
-public function cd_resumen_citas_dias($anio = null, $mes = null, $idUsuario = null)
+public function cd_resumen_citas_dias(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
+        $idUsuario = $request->query('idUsuario');
+        $idUsuario = $idUsuario !== null && $idUsuario !== '' ? (int)$idUsuario : null;
+
         $rows = DB::select('CALL resumen_citas_dias(?, ?, ?)', [$anio, $mes, $idUsuario]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener resumen de citas por días.',
+            'error'   => 'Error al obtener resumen de citas por días.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
@@ -731,14 +750,16 @@ public function cd_resumen_citas_dias($anio = null, $mes = null, $idUsuario = nu
 /**
  * Resumen de citas por odontólogo
  */
-public function cd_resumen_citas_por_odonto($anio = null, $mes = null)
+public function cd_resumen_citas_por_odonto(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL resumen_citas_por_odonto(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener resumen de citas por odontólogo.',
+            'error'   => 'Error al obtener resumen de citas por odontólogo.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
@@ -747,14 +768,16 @@ public function cd_resumen_citas_por_odonto($anio = null, $mes = null)
 /**
  * Ganancia de citas por odontólogo
  */
-public function cd_ganancia_citas_por_odontologo($anio = null, $mes = null)
+public function cd_ganancia_citas_por_odontologo(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_ganancia_citas_por_odontologo(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener ganancia de citas por odontólogo.',
+            'error'   => 'Error al obtener ganancia de citas por odontólogo.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
@@ -763,14 +786,16 @@ public function cd_ganancia_citas_por_odontologo($anio = null, $mes = null)
 /**
  * Ganancia por tratamiento
  */
-public function cd_ganancia_por_tratamiento($anio = null, $mes = null)
+public function cd_ganancia_por_tratamiento(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_ganancia_por_tratamiento(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener ganancia por tratamiento.',
+            'error'   => 'Error al obtener ganancia por tratamiento.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
@@ -779,72 +804,83 @@ public function cd_ganancia_por_tratamiento($anio = null, $mes = null)
 /**
  * Ganancia de tratamientos por odontólogo
  */
-public function cd_ganancia_tratamientos_por_odontologo($anio = null, $mes = null)
+public function cd_ganancia_tratamientos_por_odontologo(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_ganancia_tratamientos_por_odontologo(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener ganancia de tratamientos por odontólogo.',
+            'error'   => 'Error al obtener ganancia de tratamientos por odontólogo.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_reporte_citas_por_estado_odontologo($anio = null, $mes = null)
+public function cd_reporte_citas_por_estado_odontologo(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_reporte_citas_por_estado_odontologo(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener reporte de citas por estado.',
+            'error'   => 'Error al obtener reporte de citas por estado.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_vaciar_bd($dbname)
+public function cd_vaciar_bd(Request $request)
 {
     try {
+        $dbname = $request->query('dbname');
+
         DB::select('CALL vaciar_bd(?)', [$dbname]);
         return response()->json([
             'message' => 'Base de datos vaciada correctamente.',
         ], 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al vaciar la base de datos.',
+            'error'   => 'Error al vaciar la base de datos.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_obtener_ingresos_y_pendientes($anio = null, $mes = null)
+public function cd_obtener_ingresos_y_pendientes(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL obtener_ingresos_y_pendientes(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener ingresos y pendientes.',
+            'error'   => 'Error al obtener ingresos y pendientes.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_obtener_total_citas($anio = null, $mes = null)
+public function cd_obtener_total_citas(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL obtener_total_citas(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener total de citas.',
+            'error'   => 'Error al obtener total de citas.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
+
 public function cd_obtener_odontologos_activos()
 {
     try {
@@ -852,130 +888,146 @@ public function cd_obtener_odontologos_activos()
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener odontólogos activos.',
+            'error'   => 'Error al obtener odontólogos activos.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_obtener_citas_por_estado($anio = null, $mes = null)
+public function cd_obtener_citas_por_estado(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL obtener_citas_por_estado(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener citas por estado.',
+            'error'   => 'Error al obtener citas por estado.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_obtener_suma_pagado($anio = null, $mes = null)
+public function cd_obtener_suma_pagado(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL obtener_suma_pagado(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener suma de pagos.',
+            'error'   => 'Error al obtener suma de pagos.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_odontologos_citas_proporcion($anio = null, $mes = null)
+public function cd_odontologos_citas_proporcion(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_odontologos_citas_proporcion(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener proporción de citas por odontólogo.',
+            'error'   => 'Error al obtener proporción de citas por odontólogo.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_facturacion_diaria($anio = null, $mes = null)
+public function cd_facturacion_diaria(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_facturacion_diaria(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener facturación diaria.',
+            'error'   => 'Error al obtener facturación diaria.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_estados_cita_proporcion($anio = null, $mes = null)
+public function cd_estados_cita_proporcion(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_estados_cita_proporcion(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener proporción de estados de cita.',
+            'error'   => 'Error al obtener proporción de estados de cita.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_resumen_administrativo($anio = null, $mes = null)
+public function cd_resumen_administrativo(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_resumen_administrativo(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener resumen administrativo.',
+            'error'   => 'Error al obtener resumen administrativo.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_tratamientos_proporcion($anio = null, $mes = null)
+public function cd_tratamientos_proporcion(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_tratamientos_proporcion(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener proporción de tratamientos.',
+            'error'   => 'Error al obtener proporción de tratamientos.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_odontogramas_odontologos($anio = null, $mes = null)
+public function cd_odontogramas_odontologos(Request $request)
 {
     try {
+        [$anio, $mes] = $this->getAnioMes($request);
+
         $rows = DB::select('CALL sp_odontogramas_odontologos(?, ?)', [$anio, $mes]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener odontogramas por odontólogos.',
+            'error'   => 'Error al obtener odontogramas por odontólogos.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
 
-public function cd_paciente_doctores($idUsuario)
+public function cd_paciente_doctores(Request $request)
 {
     try {
+        $idUsuario = $request->query('idUsuario');
+        $idUsuario = $idUsuario !== null && $idUsuario !== '' ? (int)$idUsuario : null;
+
         $rows = DB::select('CALL dashboard_doctores_paciente(?)', [$idUsuario]);
         return response()->json($rows, 200);
     } catch (\Throwable $e) {
         return response()->json([
-            'error' => 'Error al obtener doctores del paciente.',
+            'error'   => 'Error al obtener doctores del paciente.',
             'detalle' => $e->getMessage(),
         ], 500);
     }
 }
-
-
-    
 
 }
