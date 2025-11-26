@@ -38,6 +38,7 @@ export default function Reportes() {
 
   const [datosListos, setDatosListos] = useState(false);
   
+  // Ref para evitar re-renderizados innecesarios del componente de descarga
   const previousFiltersRef = useRef(filtrosAplicados);
   const isInitialMount = useRef(true);
 
@@ -77,6 +78,7 @@ export default function Reportes() {
   useEffect(() => {
     cargarDatos();
     isInitialMount.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtrosAplicados]);
 
   const aplicarFiltros = () => {
@@ -279,7 +281,6 @@ export default function Reportes() {
           </div>
         </div>
 
-            
         <div className="mt-4 pt-4 border-t border-slate-700">
           <p className="text-sm text-slate-400">
             Mostrando datos de:{" "}
@@ -292,7 +293,6 @@ export default function Reportes() {
           </p>
         </div>
       </div>
-
 
       {datosListos && Object.keys(datos).length > 0 && (
         <div className="mb-6">
@@ -307,7 +307,6 @@ export default function Reportes() {
           />
         </div>
       )}
-
       
       <div className="mt-8 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-xl p-6 border border-slate-700">
         <h2 className="text-xl font-semibold mb-6 text-white">Resumen General</h2>
@@ -347,6 +346,7 @@ export default function Reportes() {
           </div>
         </div>
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Object.entries(datos).map(([clave, valor]) => (
           <div
