@@ -55,7 +55,7 @@ export async function listarAsistentes(params?: { page?: number; per_page?: numb
   }
 }
 
-/** ----- USUARIO BASE (común) ----- */
+/** ----- USUARIO BASE ----- */
 export async function crearUsuario(payload: {
   ci: string; nombre: string; paterno: string; materno?: string;
   fechaNacimiento: string; genero: 'M'|'F'|'Otro';
@@ -120,7 +120,7 @@ export async function actualizarEstadoUsuario(idUsuario: number, estado: boolean
 /** ----- USUARIO COMÚN: ver / editar / eliminar ----- */
 export async function getUsuario(idUsuario: number) {
   const { data } = await api.get(`/usuarios/${idUsuario}`);
-  return data; // UsuarioCore
+  return data; 
 }
 
 export async function updateUsuario(
@@ -139,7 +139,7 @@ export async function updateUsuario(
   }>
 ) {
   const { data } = await api.put(`/usuarios/${idUsuario}`, payload);
-  return data; // UsuarioCore actualizado
+  return data;
 }
 
 export async function deleteUsuario(idUsuario: number) {
@@ -171,7 +171,6 @@ export async function eliminarEspecialidad(idEspecialidad: number) {
   return data;
 }
 
-// personal.service.ts
 export async function asignarEspecialidadesAOdontologo(
   idUsuarioOdontologo: number,
   especialidades: number[]
@@ -183,8 +182,6 @@ export async function asignarEspecialidadesAOdontologo(
   return data;
 }
 
-
-/** Obtener un odontólogo por id de usuario (para ver especialidades) */
 export async function getOdontologoByUsuario(idUsuario: number) {
   const { data } = await api.get('/odontologos');
   const arr = (data?.data ?? data) as Odontologo[];

@@ -25,17 +25,16 @@ function segToCuadrante(seg?: ToothSegment): string {
 
 // Colores para cada acción 
 const accionColors: Record<string, string> = {
-  "Caries": "#EF4444",          // rojo
-  "Obturación": "#3B82F6",      // azul
-  "Corona": "#EAB308",          // amarillo
-  "Extracción": "#8B5CF6",      // violeta
-  "Endodoncia": "#EC4899",      // rosa
-  "Implante": "#06B6D4",        // cyan
-  "Limpieza": "#10B981",        // verde
-  "Sellador": "#F97316",        // naranja (por si acaso)
+  "Caries": "#EF4444",          
+  "Obturación": "#3B82F6",     
+  "Corona": "#EAB308",        
+  "Extracción": "#8B5CF6",     
+  "Endodoncia": "#EC4899",      
+  "Implante": "#06B6D4",        
+  "Limpieza": "#10B981",        
+  "Sellador": "#F97316",        
 };
 
-// CSS solo para este componente (scrollbar dark)
 const toothModalScrollStyles = `
   .tooth-modal-scroll {
     scrollbar-width: thin;
@@ -124,7 +123,6 @@ export default function ToothActionModal({
   async function handleSave() {
     if (!piezaBase) return;
 
-    // Validación básica
     if (!accionId && seleccionTrat.length === 0) {
       alert("Debes seleccionar al menos una acción o tratamiento");
       return;
@@ -132,7 +130,6 @@ export default function ToothActionModal({
 
     setSaving(true);
     try {
-      // 1. Crear o actualizar la pieza dental
       const piezaPayload: Partial<PiezaDental> = {
         idPieza: piezaBase.idPieza,
         posicion: piezaBase.posicion,
@@ -142,14 +139,12 @@ export default function ToothActionModal({
         idOdontograma: odontogramaId,
       };
 
-      // Solo agregar observación si hay contenido
       if (observacion?.trim()) {
         piezaPayload.observacion = observacion.trim();
       }
 
       const saved = await upsertPieza(piezaPayload);
 
-      // 2. Asignar tratamientos si hay selección
       if (saved?.idPieza && seleccionTrat.length > 0) {
         const promises = seleccionTrat.map((idT) =>
           asignarPiezasATratamiento(idT, [saved.idPieza!])
@@ -157,7 +152,6 @@ export default function ToothActionModal({
         await Promise.all(promises);
       }
 
-      // 3. Crear detalle dental si hay acción seleccionada
       if (saved?.idPieza && typeof accionId === "number") {
         const detallePayload = {
           idAccion: accionId,
@@ -171,7 +165,6 @@ export default function ToothActionModal({
         await crearDetalleDental(detallePayload);
       }
 
-      // 4. Notificar éxito
       onSaved(saved);
       onClose();
     } catch (error: any) {
@@ -192,7 +185,6 @@ export default function ToothActionModal({
 
   return (
     <>
-      {/* estilos locales para el scrollbar dark */}
       <style>{toothModalScrollStyles}</style>
 
       <Modal 
@@ -200,7 +192,6 @@ export default function ToothActionModal({
         onClose={onClose} 
         title={`Pieza ${piezaBase?.posicion ?? ""} · Zona: ${zonaLabel}`}
       >
-        {/* Contenedor principal con scrollbar oscuro */}
         <div className="space-y-6 max-h-[75vh] sm:max-h-[80vh] overflow-y-auto px-2 sm:px-0 tooth-modal-scroll">
           {/* Acción / Diagnóstico */}
           <div>

@@ -9,7 +9,6 @@ export async function resumenRoles(): Promise<RolInfo[]> {
     api.get('/usuarios/pacientes/listar'),
   ]);
 
-  // Los endpoints pueden devolver { data: [...] } o [...]
   const admins  = (adminsR.data?.data  ?? adminsR.data)  as unknown[];
   const odontos = (odontosR.data?.data ?? odontosR.data) as unknown[];
   const asis    = (asisR.data?.data    ?? asisR.data)    as unknown[];

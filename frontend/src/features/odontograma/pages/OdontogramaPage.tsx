@@ -18,7 +18,6 @@ import {
 } from "../odontograma.service";
 import type { ToothSegment } from "../components/ToothCell";
 
-// Estilos para el PDF
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -149,18 +148,16 @@ const styles = StyleSheet.create({
   }
 });
 
-// Colores para cada acción 
 const accionColors: Record<string, string> = {
-  "Caries": "#EF4444",          // rojo
-  "Obturación": "#3B82F6",      // azul
-  "Corona": "#EAB308",          // amarillo
-  "Extracción": "#8B5CF6",      // violeta
-  "Endodoncia": "#EC4899",      // rosa
-  "Implante": "#06B6D4",        // cyan
-  "Limpieza": "#10B981",        // verde
+  "Caries": "#EF4444",          
+  "Obturación": "#3B82F6",      
+  "Corona": "#EAB308",          
+  "Extracción": "#8B5CF6",      
+  "Endodoncia": "#EC4899",      
+  "Implante": "#06B6D4",        
+  "Limpieza": "#10B981",        
 };
 
-// Componente para renderizar un diente en el PDF con 5 secciones
 const ToothPDF = ({ 
   number, 
   coloredSegments 
@@ -259,7 +256,6 @@ const ToothPDF = ({
   );
 };
 
-// Componente del documento PDF
 const OdontogramaPDF = ({ 
   paciente, 
   descripcion, 
@@ -513,24 +509,20 @@ export default function OdontogramaPage() {
   const [segmentModal, setSegmentModal] = useState<ToothSegment | null>(null);
   const [creandoOdontograma, setCreandoOdontograma] = useState(false);
 
-  // Ref para el contenedor que se capturará
   const odontogramaRef = useRef<HTMLDivElement>(null);
 
   const pacienteId = useMemo(() => paciente?.idUsuario_Paciente, [paciente]);
 
-  // Cargar piezas y crear odontograma al seleccionar paciente
   useEffect(() => {
     let live = true;
     if (!pacienteId) return;
 
     (async () => {
       try {
-        // 1. Cargar piezas existentes
         const list = await getPiezasPorPaciente(pacienteId);
         if (!live) return;
         setPiezas(list);
 
-        // 2. Crear odontograma automáticamente si no existe
         if (!odo) {
           setCreandoOdontograma(true);
           const nuevoOdo = await crearOdontograma({
@@ -545,7 +537,6 @@ export default function OdontogramaPage() {
           }
         }
 
-        // 3. Cargar colores por zona
         const colored = await fetchColoresPorPieza(list);
         if (live) setColoredByPos(colored);
       } catch (error) {
@@ -558,7 +549,6 @@ export default function OdontogramaPage() {
     return () => { live = false; };
   }, [pacienteId]);
 
-  // Cargar datos completos del paciente
   async function handleSelect(p: PacienteLite | null) {
     if (!p) {
       setPaciente(null);
@@ -601,7 +591,6 @@ export default function OdontogramaPage() {
     setGenerandoPDF(true);
 
     try {
-      // Crear el documento PDF directamente sin captura de pantalla
       const doc = (
         <OdontogramaPDF
           paciente={paciente}
@@ -612,10 +601,8 @@ export default function OdontogramaPage() {
         />
       );
 
-      // Generar el blob del PDF
       const blob = await pdf(doc).toBlob();
 
-      // Crear link de descarga
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       
@@ -631,7 +618,6 @@ export default function OdontogramaPage() {
       link.download = fileName;
       link.click();
 
-      // Limpiar
       URL.revokeObjectURL(url);
 
       alert("PDF descargado exitosamente");
@@ -671,10 +657,8 @@ export default function OdontogramaPage() {
         )}
       </section>
 
-      {/* Solo mostrar el resto si hay paciente Y odontograma */}
       {pacienteId && odo?.idOdontograma && (
         <>
-          {/* Contenedor REF para captura de PDF */}
           <div ref={odontogramaRef} className="space-y-5">
             {/* Descripción */}
             <section className="bg-white/5 rounded-xl p-4 border border-slate-700">
@@ -712,7 +696,6 @@ export default function OdontogramaPage() {
             <IndicadoresSaludBucal value={indicadores} onChange={setIndicadores} />
           </div>
 
-          {/* Botones de acción - FUERA del ref */}
           <div className="flex justify-end gap-3">
             <button
               onClick={descargarPDF}

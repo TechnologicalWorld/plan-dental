@@ -1,12 +1,9 @@
-// src/services/pacientesCitas.service.ts
 import api from "@/shared/api/apiClient";
 import type { Cita } from "@/types/cita";
 
-// Obtener historial de Citas del paciente
 export async function fetchCitasPorPaciente(idUsuario: number): Promise<Cita[]> {
   const { data } = await api.get(`/pacientes/${idUsuario}/citas`);
 
-  // backend retorna => { historial: { citas: [...] } }
   const citas: Cita[] = data.citas ?? [];
 
   return citas;
@@ -18,7 +15,6 @@ export async function fetchCitasPorPaciente(idUsuario: number): Promise<Cita[]> 
 export async function fetchEspecialidades() {
   const { data } = await api.get("/especialidades");
 
-  // apiResource => { data: [...] }
   const especialidades = data.data ?? [];
 
   return especialidades;
@@ -52,13 +48,12 @@ export async function fetchAgendaOdontologo(idOdontologo: number) {
 export async function agendarCita(payload: {
   idUsuario_Paciente: number;
   idUsuario_Odontologo: number;
-  fecha: string; // YYYY-MM-DD
-  hora: string;  // HH:mm
+  fecha: string; 
+  hora: string;  
   tipoCita: string;
   costo?: number;
 }) {
   const { data } = await api.post("/citas", payload);
 
-  // apiResource → devuelve { data: {...} }
   return data.data ?? data;
 }

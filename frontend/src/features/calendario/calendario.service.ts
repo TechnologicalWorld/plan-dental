@@ -1,4 +1,3 @@
-// src/features/calendario/calendario.service.ts
 import api from "@/shared/api/apiClient";
 import { addMinutes, combineDateAndTime, extractHHmm } from "@/shared/utils/dateHelper";
 
@@ -44,7 +43,6 @@ export async function fetchCitasComoEventos(): Promise<CalendarioEvent[]> {
   });
 }
 
-/** Detalle con pacientes/odontólogos para el modal */
 export async function fetchCitaDetalle(id: number) {
   const { data } = await api.get(`/citas/${id}`);
   return data?.data ?? data;

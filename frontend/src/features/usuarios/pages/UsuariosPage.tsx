@@ -1,4 +1,3 @@
-// src/features/usuarios/pages/UsuariosPage.tsx  ← REEMPLAZA
 import React, { useState } from 'react';
 import type { AxiosError } from 'axios';
 import type {
@@ -60,7 +59,6 @@ function UsuariosPage() {
         success = await createUsuario(data);
       }
     } catch (err: unknown) {
-      // Tipamos el error de Axios y extraemos los errores de validación si existen
       const axiosErr = err as AxiosError<ValidationErrorResponse>;
       const resp = axiosErr.response?.data;
       if (resp?.errors) setFormErrors(resp.errors);

@@ -1,4 +1,3 @@
-// src/features/usuarios/components/UsuarioTable.tsx
 import React from "react";
 import type { Usuario } from "../../../types/usuario";
 import { backendDateToInputDate, formatDateForDisplay, inputDateToBackendDate } from "../../../utils/dateHelper";

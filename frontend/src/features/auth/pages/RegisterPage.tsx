@@ -1,4 +1,3 @@
-// src/features/auth/pages/RegisterPage.tsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/shared/hooks/useAuthStore';
@@ -35,7 +34,6 @@ export default function RegisterPage() {
   }
 
   return (
-    // OJO: PublicLayout ya pone el fondo liso (#0f625f), así que aquí NO ponemos bg oscuro
     <div className="min-h-[calc(100vh-0px)] grid place-items-center p-4">
       <div className="w-full max-w-2xl rounded-2xl bg-white/5 backdrop-blur-md shadow-2xl shadow-black/20 ring-1 ring-white/10">
         {/* Header */}
@@ -67,7 +65,6 @@ export default function RegisterPage() {
               onChange={(e) => onChange('materno', e.target.value)}
             />
 
-            {/* Fecha de nacimiento con etiqueta clara */}
             <div className="flex flex-col">
 
               <input
@@ -140,7 +137,7 @@ export default function RegisterPage() {
               onChange={(e) => onChange('domicilio', e.target.value)}
             />
 
-            {/* Fecha de ingreso con etiqueta clara */}
+            {/* Fecha de ingreso */}
             <div className="md:col-span-2 flex flex-col">
               <label className="text-xs text-teal-100/90 mb-1">Fecha de ingreso</label>
               <input

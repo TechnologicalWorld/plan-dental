@@ -1,4 +1,3 @@
-// DashboardReportPDF.tsx
 import React from "react";
 import {
   Document,
@@ -10,16 +9,26 @@ import {
 import type { Style } from "@react-pdf/renderer";
 import type { MesParam } from "../../dashboard/dashboardservice";
 
-// ===== Tipos de filtros y datasets esperados =====
 export type ReportFilters = {
   anio?: number;
   mes?: MesParam;
+<<<<<<< HEAD
   idUsuario?: number | null;
+=======
+  idUsuario?: number | null; 
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
 };
 
 export type ReportData = {
   filtros: ReportFilters;
+<<<<<<< HEAD
   citasPorDiaSemanaMes: Array<{ dia_semana: string; total_citas: number }>;
+=======
+
+  citasPorDiaSemanaMes: Array<{ dia_semana: string; total_citas: number }>;
+
+
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
   ingresosPorOdontoMes: Array<{
     idUsuario: number;
     total: number;
@@ -27,6 +36,10 @@ export type ReportData = {
     anio: number | null;
     mes: number | null;
   }>;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
   resumenCitasPorOdonto: Array<{
     idUsuario: number;
     nombre_completo: string;
@@ -35,6 +48,10 @@ export type ReportData = {
     mes: number | null;
     Nro: number;
   }>;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
   resumenCitasDias: Array<{
     idUsuario: number | null;
     estado: string;
@@ -43,22 +60,35 @@ export type ReportData = {
     dia: string;
     Nro: number;
   }>;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
   reporteCitasEstadoOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     estado: string;
     Nro_Citas: number;
   }>;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
   gananciaCitasPorOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     Total_Ganancia_Citas: number;
   }>;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
   gananciaTratamientosPorOdontologo: Array<{
     idUsuario: number;
     nombre_completo: string;
     total_ganancia_tratamiento: number;
   }>;
+<<<<<<< HEAD
   gananciaPorTratamiento: Array<{ nombre: string; total_ganancia_tratamiento: number }>;
 };
 
@@ -135,6 +165,60 @@ const styles = StyleSheet.create({
     fontWeight: 700,
   },
 });
+=======
+
+  gananciaPorTratamiento: Array<{ nombre: string; total_ganancia_tratamiento: number }>;
+};
+
+export function DashboardReportPDF(
+  { data, titulo }: { data: ReportData; titulo: string }
+): React.ReactElement<DocumentProps> {
+  const styles = StyleSheet.create({
+    page: {
+      paddingTop: 60,
+      paddingBottom: 40,
+      paddingHorizontal: 28,
+      fontSize: 10,
+    },
+    header: {
+      position: "absolute", 
+      top: 20,
+      left: 28,
+      right: 28,
+      height: 24,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      fontSize: 10,
+    },
+    footer: {
+      position: "absolute",
+      bottom: 16,
+      left: 28,
+      right: 28,
+      height: 16,
+      fontSize: 9,
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    h1: { fontSize: 16, marginBottom: 6 },
+    h2: { fontSize: 12, marginTop: 12, marginBottom: 6 },
+    small: { color: "#666" },
+    row: {
+      flexDirection: "row",
+      borderBottomWidth: 1,
+      borderColor: "#ddd",
+      paddingVertical: 4,
+    },
+    th: { fontWeight: "bold" },
+    cell: { paddingRight: 6 },
+    right: { textAlign: "right" as const },
+    col1: { width: "10%" },
+    col2: { width: "50%" },
+    col3: { width: "20%" },
+    col4: { width: "20%" },
+    wrapBlock: { marginBottom: 6 },
+  });
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
 
 export function DashboardReportPDF({ data, titulo }: { data: ReportData; titulo: string }) {
   const { filtros } = data;
@@ -219,8 +303,12 @@ export function DashboardReportPDF({ data, titulo }: { data: ReportData; titulo:
           v={`Año=${filtros.anio ?? "—"} • Mes=${monthNameEs(filtros.mes)} • Odonto=${filtros.idUsuario ?? "—"}`}
         />
 
+<<<<<<< HEAD
         {/* 2) Citas por día-semana del mes */}
         {data.citasPorDiaSemanaMes && data.citasPorDiaSemanaMes.length > 0 && (
+=======
+        {data.citasPorDiaSemanaMes.length > 0 && (
+>>>>>>> 2256e560f645c2a82c04a8f605af59bb48d119c8
           <>
             <SectionTitle>Citas por día de la semana (mes seleccionado)</SectionTitle>
             <TableHeader cols={["#", "Día", "Citas", ""]} />

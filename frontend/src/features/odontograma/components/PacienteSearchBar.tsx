@@ -1,4 +1,3 @@
-// src/features/odontograma/components/PacienteSearchBar.tsx
 import { useEffect, useMemo, useState } from "react";
 import { searchPacientes, type PacienteLite } from "../odontograma.service";
 
