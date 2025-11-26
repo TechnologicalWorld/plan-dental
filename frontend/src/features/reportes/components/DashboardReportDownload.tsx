@@ -2,7 +2,7 @@
 
 import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { DashboardReportPDF, type ReportData, type ReportFilters } from "./DashboardReportPDF";
+import DashboardReportPDF, { type ReportData, type ReportFilters } from "./DashboardReportPDF";
 import type { MesParam } from "../../dashboard/dashboardservice";
 
 interface DashboardReportDownloadProps {
