@@ -1,7 +1,6 @@
 import api from '@/shared/api/apiClient';
 import type { Cita } from '@/types/cita';
 
-// === TIPOS ===
 export type CitaCreatePayload = {
   hora: string;
   fecha: string;

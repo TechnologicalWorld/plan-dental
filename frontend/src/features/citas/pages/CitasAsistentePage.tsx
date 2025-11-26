@@ -1,6 +1,4 @@
-// src/features/citas/CitasAsistentePage.tsx
 import { useEffect, useState } from "react";
-//import { useAuthStore } from "@/shared/hooks/useAuthStore";
 import { listarCitas, eliminarCita } from "@/features/citas/citas.service";
 import { listarOdontologos } from "@/features/personal/personal.service";
 import { listarPacientes } from "@/features/pacientes/pacientes.service";
@@ -74,11 +72,6 @@ export default function CitasAsistentePage() {
       const pacientesData = Array.isArray(pacRes?.data) ? pacRes.data : pacRes ?? [];
       const odontologosData = Array.isArray(odontoRes?.data) ? odontoRes.data : odontoRes ?? [];
 
-      //console.log("CITAS:", citasData);
-      //console.log("relaciones:", relacionesData);
-      //console.log("odontologos:", odontologosData);
-      //console.log("pacientes:", pacientesData);
-
       const mapaRelaciones: Record<number, { idUsuario_Paciente: number; idUsuario_Odontologo: number }> = {};
       relacionesData.forEach((rel: any) => {
         if (rel?.idCita) {
@@ -88,7 +81,6 @@ export default function CitasAsistentePage() {
           };
         }
       });
-      //console.log("relaciones12222:", relacionesData);
 
       const mapaPacientes: Record<number, Paciente> = {};
       pacientesData.forEach((p: Paciente) => {
@@ -145,7 +137,6 @@ export default function CitasAsistentePage() {
     }
   };
 
-  // TOD_OS LOS FILTROS
   const citasFiltradas = citas.filter((c) => {
     const matchOdonto =
       !filtroOdontologo ||
