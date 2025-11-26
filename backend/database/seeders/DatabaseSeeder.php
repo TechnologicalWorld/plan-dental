@@ -88,11 +88,11 @@ class DatabaseSeeder extends Seeder
         
         // Pacientes
         $pacientes = [
-            ['idUsuario_Paciente' => 1, 'codigoSeguro' => 'SEG-001-2024', 'lugarNacimiento' => 'La Paz', 'domicilio' => 'Av. Arce #1234', 'fechaIngreso' => '2024-01-15'],
-            ['idUsuario_Paciente' => 2, 'codigoSeguro' => 'SEG-002-2024', 'lugarNacimiento' => 'El Alto', 'domicilio' => 'Calle Sucre #567', 'fechaIngreso' => '2024-02-20'],
-            ['idUsuario_Paciente' => 3, 'codigoSeguro' => 'SEG-003-2024', 'lugarNacimiento' => 'La Paz', 'domicilio' => 'Zona Sopocachi #890', 'fechaIngreso' => '2024-03-10'],
-            ['idUsuario_Paciente' => 4, 'codigoSeguro' => 'SEG-004-2024', 'lugarNacimiento' => 'Oruro', 'domicilio' => 'Av. 6 de Agosto #234', 'fechaIngreso' => '2024-04-05'],
-            ['idUsuario_Paciente' => 5, 'codigoSeguro' => 'SEG-005-2024', 'lugarNacimiento' => 'Cochabamba', 'domicilio' => 'Villa Fátima #456', 'fechaIngreso' => '2024-05-12'],
+            ['idUsuario_Paciente' => 1, 'codigoSeguro' => 'SEG-001-2025', 'lugarNacimiento' => 'La Paz', 'domicilio' => 'Av. Arce #1234', 'fechaIngreso' => '2025-01-15'],
+            ['idUsuario_Paciente' => 2, 'codigoSeguro' => 'SEG-002-2025', 'lugarNacimiento' => 'El Alto', 'domicilio' => 'Calle Sucre #567', 'fechaIngreso' => '2025-02-20'],
+            ['idUsuario_Paciente' => 3, 'codigoSeguro' => 'SEG-003-2025', 'lugarNacimiento' => 'La Paz', 'domicilio' => 'Zona Sopocachi #890', 'fechaIngreso' => '2025-03-10'],
+            ['idUsuario_Paciente' => 4, 'codigoSeguro' => 'SEG-004-2025', 'lugarNacimiento' => 'Oruro', 'domicilio' => 'Av. 6 de Agosto #234', 'fechaIngreso' => '2025-04-05'],
+            ['idUsuario_Paciente' => 5, 'codigoSeguro' => 'SEG-005-2025', 'lugarNacimiento' => 'Cochabamba', 'domicilio' => 'Villa Fátima #456', 'fechaIngreso' => '2025-05-12'],
             ['idUsuario_Paciente' => 14, 'codigoSeguro' => 'SEG-001234', 'lugarNacimiento' => 'La Paz, Bolivia', 'domicilio' => 'Calle Pacientes #789, Zona Central', 'fechaIngreso' => '2023-01-10'],
         ];
         foreach ($pacientes as $paciente) {
@@ -153,9 +153,25 @@ class DatabaseSeeder extends Seeder
             ['idCita' => 4, 'hora' => '15:30:00', 'fecha' => '2025-11-08', 'estado' => 'completada', 'tipoCita' => 'Extracción', 'costo' => 300.00, 'pagado' => 300.00],
             ['idCita' => 5, 'hora' => '09:00:00', 'fecha' => '2025-11-12', 'estado' => 'completada', 'tipoCita' => 'Ortodoncia', 'costo' => 1500.00, 'pagado' => 1500.00],
             ['idCita' => 6, 'hora' => '11:00:00', 'fecha' => '2025-11-15', 'estado' => 'confirmada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
-            ['idCita' => 7, 'hora' => '16:00:00', 'fecha' => '2025-11-18', 'estado' => 'confirmada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
+            ['idCita' => 7, 'hora' => '16:00:00', 'fecha' => '2025-11-18', 'estado' => 'completada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
             ['idCita' => 8, 'hora' => '10:00:00', 'fecha' => '2025-11-20', 'estado' => 'pendiente', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
-            ['idCita' => 9, 'hora' => '10:00:00', 'fecha' => '2025-11-14', 'estado' => 'confirmada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
+            ['idCita' => 9, 'hora' => '10:00:00', 'fecha' => '2025-11-14', 'estado' => 'completada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
+            ['idCita' => 10, 'hora' => '11:00:00', 'fecha' => '2025-12-01', 'estado' => 'confirmada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
+            ['idCita' => 11, 'hora' => '16:00:00', 'fecha' => '2025-12-02', 'estado' => 'completada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
+            ['idCita' => 12, 'hora' => '10:00:00', 'fecha' => '2025-12-04', 'estado' => 'completada', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
+            ['idCita' => 13, 'hora' => '13:00:00', 'fecha' => '2025-12-05', 'estado' => 'confirmada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
+            ['idCita' => 14, 'hora' => '11:00:00', 'fecha' => '2025-12-06', 'estado' => 'completada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
+            ['idCita' => 15, 'hora' => '16:00:00', 'fecha' => '2025-12-07', 'estado' => 'completada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
+            ['idCita' => 16, 'hora' => '14:00:00', 'fecha' => '2025-12-09', 'estado' => 'pendiente', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
+            ['idCita' => 17, 'hora' => '18:00:00', 'fecha' => '2025-12-12', 'estado' => 'completada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
+            ['idCita' => 18, 'hora' => '11:00:00', 'fecha' => '2025-12-13', 'estado' => 'completada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
+            ['idCita' => 19, 'hora' => '12:00:00', 'fecha' => '2025-12-15', 'estado' => 'confirmada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
+            ['idCita' => 20, 'hora' => '10:00:00', 'fecha' => '2025-12-16', 'estado' => 'completada', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
+            ['idCita' => 21, 'hora' => '19:00:00', 'fecha' => '2025-12-18', 'estado' => 'completada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
+            ['idCita' => 22, 'hora' => '11:00:00', 'fecha' => '2025-12-19', 'estado' => 'confirmada', 'tipoCita' => 'Blanqueamiento', 'costo' => 600.00, 'pagado' => 0.00],
+            ['idCita' => 23, 'hora' => '16:00:00', 'fecha' => '2025-12-21', 'estado' => 'confirmada', 'tipoCita' => 'Implante', 'costo' => 3000.00, 'pagado' => 0.00],
+            ['idCita' => 24, 'hora' => '12:00:00', 'fecha' => '2025-12-23', 'estado' => 'completada', 'tipoCita' => 'Consulta', 'costo' => 150.00, 'pagado' => 0.00],
+            ['idCita' => 25, 'hora' => '10:00:00', 'fecha' => '2025-12-25', 'estado' => 'completada', 'tipoCita' => 'Consulta y tratamiento', 'costo' => 150.00, 'pagado' => 1.00],
         ];
         foreach ($citas as $cita) {
             Cita::create($cita);
@@ -179,41 +195,88 @@ class DatabaseSeeder extends Seeder
 
         // ==================== HACE (Paciente - Cita - Asistente - Odontólogo) ====================
         $hace = [
-            ['idUsuario_Paciente' => 1, 'idCita' => 1, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6, 'fecha' => '2024-10-01'],
-            ['idUsuario_Paciente' => 2, 'idCita' => 2, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-02'],
-            ['idUsuario_Paciente' => 3, 'idCita' => 3, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-05'],
-            ['idUsuario_Paciente' => 4, 'idCita' => 4, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 8, 'fecha' => '2024-10-08'],
-            ['idUsuario_Paciente' => 5, 'idCita' => 5, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6, 'fecha' => '2024-10-12'],
-            ['idUsuario_Paciente' => 1, 'idCita' => 6, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6, 'fecha' => '2024-10-15'],
-            ['idUsuario_Paciente' => 2, 'idCita' => 7, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 8, 'fecha' => '2024-10-18'],
-            ['idUsuario_Paciente' => 3, 'idCita' => 8, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-20'],
+            // Citas iniciales (fechas corregidas para coincidir con la tabla cita)
+            ['idUsuario_Paciente' => 1, 'idCita' => 1, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-10-01'],
+            ['idUsuario_Paciente' => 2, 'idCita' => 2, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-10-02'],
+            ['idUsuario_Paciente' => 3, 'idCita' => 3, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-10-05'],
+            ['idUsuario_Paciente' => 4, 'idCita' => 4, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 8,  'fecha' => '2025-11-08'],
+            ['idUsuario_Paciente' => 5, 'idCita' => 5, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-11-12'],
+            ['idUsuario_Paciente' => 1, 'idCita' => 6, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-11-15'],
+            ['idUsuario_Paciente' => 2, 'idCita' => 7, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 8,  'fecha' => '2025-11-18'],
+            ['idUsuario_Paciente' => 3, 'idCita' => 8, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-11-20'],
+
+            // Cita 9: caso del paciente 14 con el odontólogo 13
+            ['idUsuario_Paciente' => 14, 'idCita' => 9, 'idUsuario_Asistente' => 15, 'idUsuario_Odontologo' => 13, 'fecha' => '2025-11-14'],
+
+            // Citas 10 a 25: distribución lógica entre pacientes, asistentes y odontólogos
+            ['idUsuario_Paciente' => 1,  'idCita' => 10, 'idUsuario_Asistente' => 15, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-12-01'],
+            ['idUsuario_Paciente' => 2,  'idCita' => 11, 'idUsuario_Asistente' => 15, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-12-02'],
+            ['idUsuario_Paciente' => 3,  'idCita' => 12, 'idUsuario_Asistente' => 15, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-12-04'],
+            ['idUsuario_Paciente' => 4,  'idCita' => 13, 'idUsuario_Asistente' => 15, 'idUsuario_Odontologo' => 8,  'fecha' => '2025-12-05'],
+            ['idUsuario_Paciente' => 5,  'idCita' => 14, 'idUsuario_Asistente' => 15, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-12-06'],
+            ['idUsuario_Paciente' => 1,  'idCita' => 15, 'idUsuario_Asistente' => 16, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-12-07'],
+            ['idUsuario_Paciente' => 2,  'idCita' => 16, 'idUsuario_Asistente' => 16, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-12-09'],
+            ['idUsuario_Paciente' => 3,  'idCita' => 17, 'idUsuario_Asistente' => 16, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-12-12'],
+            ['idUsuario_Paciente' => 4,  'idCita' => 18, 'idUsuario_Asistente' => 16, 'idUsuario_Odontologo' => 8,  'fecha' => '2025-12-13'],
+            ['idUsuario_Paciente' => 5,  'idCita' => 19, 'idUsuario_Asistente' => 16, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-12-15'],
+            ['idUsuario_Paciente' => 14, 'idCita' => 20, 'idUsuario_Asistente' => 16, 'idUsuario_Odontologo' => 13, 'fecha' => '2025-12-16'],
+            ['idUsuario_Paciente' => 1,  'idCita' => 21, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-12-18'],
+            ['idUsuario_Paciente' => 2,  'idCita' => 22, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-12-19'],
+            ['idUsuario_Paciente' => 3,  'idCita' => 23, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 8,  'fecha' => '2025-12-21'],
+            ['idUsuario_Paciente' => 4,  'idCita' => 24, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 6,  'fecha' => '2025-12-23'],
+            ['idUsuario_Paciente' => 5,  'idCita' => 25, 'idUsuario_Asistente' => 10, 'idUsuario_Odontologo' => 7,  'fecha' => '2025-12-25'],
         ];
+
         foreach ($hace as $relacion) {
             Hace::create($relacion);
         }
 
         // ==================== ATIENDE (Odontólogo - Cita) ====================
         $atiende = [
-            ['idUsuario_Odontologo' => 6, 'idCita' => 1, 'fecha' => '2024-10-01'],
-            ['idUsuario_Odontologo' => 7, 'idCita' => 2, 'fecha' => '2024-10-02'],
-            ['idUsuario_Odontologo' => 7, 'idCita' => 3, 'fecha' => '2024-10-05'],
-            ['idUsuario_Odontologo' => 8, 'idCita' => 4, 'fecha' => '2024-10-08'],
-            ['idUsuario_Odontologo' => 6, 'idCita' => 5, 'fecha' => '2024-10-12'],
+            // Coinciden con los odontólogos definidos en HACE
+            ['idUsuario_Odontologo' => 6,  'idCita' => 1,  'fecha' => '2025-10-01'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 2,  'fecha' => '2025-10-02'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 3,  'fecha' => '2025-10-05'],
+            ['idUsuario_Odontologo' => 8,  'idCita' => 4,  'fecha' => '2025-11-08'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 5,  'fecha' => '2025-11-12'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 6,  'fecha' => '2025-11-15'],
+            ['idUsuario_Odontologo' => 8,  'idCita' => 7,  'fecha' => '2025-11-18'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 8,  'fecha' => '2025-11-20'],
+
+            ['idUsuario_Odontologo' => 13, 'idCita' => 9,  'fecha' => '2025-11-14'],
+
+            ['idUsuario_Odontologo' => 6,  'idCita' => 10, 'fecha' => '2025-12-01'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 11, 'fecha' => '2025-12-02'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 12, 'fecha' => '2025-12-04'],
+            ['idUsuario_Odontologo' => 8,  'idCita' => 13, 'fecha' => '2025-12-05'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 14, 'fecha' => '2025-12-06'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 15, 'fecha' => '2025-12-07'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 16, 'fecha' => '2025-12-09'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 17, 'fecha' => '2025-12-12'],
+            ['idUsuario_Odontologo' => 8,  'idCita' => 18, 'fecha' => '2025-12-13'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 19, 'fecha' => '2025-12-15'],
+            ['idUsuario_Odontologo' => 13, 'idCita' => 20, 'fecha' => '2025-12-16'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 21, 'fecha' => '2025-12-18'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 22, 'fecha' => '2025-12-19'],
+            ['idUsuario_Odontologo' => 8,  'idCita' => 23, 'fecha' => '2025-12-21'],
+            ['idUsuario_Odontologo' => 6,  'idCita' => 24, 'fecha' => '2025-12-23'],
+            ['idUsuario_Odontologo' => 7,  'idCita' => 25, 'fecha' => '2025-12-25'],
         ];
+
         foreach ($atiende as $relacion) {
             Atiende::create($relacion);
         }
 
         // ==================== ODONTOGRAMAS ====================
         $odontogramas = [
-            ['idOdontograma' => 1, 'nombre' => 'Odontograma inicial - María González', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2024-10-01', 'observacion' => 'Estado dental bueno'],
-            ['idOdontograma' => 2, 'nombre' => 'Odontograma inicial - Carlos Mamani', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2024-10-02', 'observacion' => 'Requiere limpieza profunda'],
-            ['idOdontograma' => 3, 'nombre' => 'Odontograma inicial - Ana Rodríguez', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2024-10-05', 'observacion' => 'Caries en pieza 46'],
-            ['idOdontograma' => 4, 'nombre' => 'Odontograma inicial - Roberto Flores', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2024-10-08', 'observacion' => 'Muela del juicio problemática'],
-            ['idOdontograma' => 5, 'nombre' => 'Odontograma inicial - Laura Condori', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2024-10-12', 'observacion' => 'Apiñamiento dental severo'],
-            ['idOdontograma' => 6, 'nombre' => 'Odontograma seguimiento - María González', 'descripcion' => 'Control a los 3 meses', 'fecha' => '2024-11-01', 'observacion' => 'Mantenimiento preventivo'],
-            ['idOdontograma' => 7, 'nombre' => 'Odontograma seguimiento - Carlos Mamani', 'descripcion' => 'Post limpieza', 'fecha' => '2024-10-16', 'observacion' => 'Mejoría notable en encías'],
-            ['idOdontograma' => 8, 'nombre' => 'Odontograma seguimiento - Ana Rodríguez', 'descripcion' => 'Post endodoncia', 'fecha' => '2024-10-19', 'observacion' => 'Tratamiento exitoso'],
+            ['idOdontograma' => 1, 'nombre' => 'Odontograma inicial - María González', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2025-10-01', 'observacion' => 'Estado dental bueno'],
+            ['idOdontograma' => 2, 'nombre' => 'Odontograma inicial - Carlos Mamani', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2025-10-02', 'observacion' => 'Requiere limpieza profunda'],
+            ['idOdontograma' => 3, 'nombre' => 'Odontograma inicial - Ana Rodríguez', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2025-10-05', 'observacion' => 'Caries en pieza 46'],
+            ['idOdontograma' => 4, 'nombre' => 'Odontograma inicial - Roberto Flores', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2025-10-08', 'observacion' => 'Muela del juicio problemática'],
+            ['idOdontograma' => 5, 'nombre' => 'Odontograma inicial - Laura Condori', 'descripcion' => 'Evaluación inicial del paciente', 'fecha' => '2025-10-12', 'observacion' => 'Apiñamiento dental severo'],
+            ['idOdontograma' => 6, 'nombre' => 'Odontograma seguimiento - María González', 'descripcion' => 'Control a los 3 meses', 'fecha' => '2025-11-01', 'observacion' => 'Mantenimiento preventivo'],
+            ['idOdontograma' => 7, 'nombre' => 'Odontograma seguimiento - Carlos Mamani', 'descripcion' => 'Post limpieza', 'fecha' => '2025-10-16', 'observacion' => 'Mejoría notable en encías'],
+            ['idOdontograma' => 8, 'nombre' => 'Odontograma seguimiento - Ana Rodríguez', 'descripcion' => 'Post endodoncia', 'fecha' => '2025-10-19', 'observacion' => 'Tratamiento exitoso'],
             ['idOdontograma' => 9, 'nombre' => 'Odontograma Inicial', 'descripcion' => 'Evaluación inicial del estado dental', 'fecha' => '2025-11-09', 'observacion' => 'Paciente con múltiples caries'],
         ];
         foreach ($odontogramas as $odontograma) {
@@ -222,14 +285,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== EFECTUA (Odontograma - Odontólogo - Paciente) ====================
         $efectua = [
-            ['idOdontograma' => 1, 'idUsuario_Odontologo' => 6, 'idUsuario_Paciente' => 1, 'fecha' => '2024-10-01'],
-            ['idOdontograma' => 2, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 2, 'fecha' => '2024-10-02'],
-            ['idOdontograma' => 3, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 3, 'fecha' => '2024-10-05'],
-            ['idOdontograma' => 4, 'idUsuario_Odontologo' => 8, 'idUsuario_Paciente' => 4, 'fecha' => '2024-10-08'],
-            ['idOdontograma' => 5, 'idUsuario_Odontologo' => 6, 'idUsuario_Paciente' => 5, 'fecha' => '2024-10-12'],
-            ['idOdontograma' => 6, 'idUsuario_Odontologo' => 6, 'idUsuario_Paciente' => 1, 'fecha' => '2024-11-01'],
-            ['idOdontograma' => 7, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 2, 'fecha' => '2024-10-16'],
-            ['idOdontograma' => 8, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 3, 'fecha' => '2024-10-19'],
+            ['idOdontograma' => 1, 'idUsuario_Odontologo' => 6, 'idUsuario_Paciente' => 1, 'fecha' => '2025-10-01'],
+            ['idOdontograma' => 2, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 2, 'fecha' => '2025-10-02'],
+            ['idOdontograma' => 3, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 3, 'fecha' => '2025-10-05'],
+            ['idOdontograma' => 4, 'idUsuario_Odontologo' => 8, 'idUsuario_Paciente' => 4, 'fecha' => '2025-10-08'],
+            ['idOdontograma' => 5, 'idUsuario_Odontologo' => 6, 'idUsuario_Paciente' => 5, 'fecha' => '2025-10-12'],
+            ['idOdontograma' => 6, 'idUsuario_Odontologo' => 6, 'idUsuario_Paciente' => 1, 'fecha' => '2025-11-01'],
+            ['idOdontograma' => 7, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 2, 'fecha' => '2025-10-16'],
+            ['idOdontograma' => 8, 'idUsuario_Odontologo' => 7, 'idUsuario_Paciente' => 3, 'fecha' => '2025-10-19'],
             ['idOdontograma' => 9, 'idUsuario_Odontologo' => 13, 'idUsuario_Paciente' => 14, 'fecha' => '2025-11-09'],
         ];
         foreach ($efectua as $relacion) {
@@ -263,14 +326,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== SESIONES ====================
         $sesiones = [
-            ['idSesion' => 1, 'nombre' => 'Consulta inicial María González', 'descripcion' => 'Primera evaluación dental', 'hora' => '09:00:00', 'observacion' => 'Paciente colaborador', 'fecha' => '2024-10-01'],
-            ['idSesion' => 2, 'nombre' => 'Limpieza Carlos Mamani', 'descripcion' => 'Limpieza dental profunda', 'hora' => '10:30:00', 'observacion' => 'Mejorar técnica de cepillado', 'fecha' => '2024-10-02'],
-            ['idSesion' => 3, 'nombre' => 'Endodoncia Ana Rodríguez - Sesión 1', 'descripcion' => 'Apertura cameral y conductometría', 'hora' => '14:00:00', 'observacion' => 'Anestesia efectiva', 'fecha' => '2024-10-05'],
-            ['idSesion' => 4, 'nombre' => 'Extracción Roberto Flores', 'descripcion' => 'Extracción muela del juicio', 'hora' => '15:30:00', 'observacion' => 'Procedimiento sin complicaciones', 'fecha' => '2024-10-08'],
-            ['idSesion' => 5, 'nombre' => 'Ortodoncia Laura Condori', 'descripcion' => 'Colocación de aparatología', 'hora' => '09:00:00', 'observacion' => 'Paciente tolera bien el procedimiento', 'fecha' => '2024-10-12'],
-            ['idSesion' => 6, 'nombre' => 'Consulta seguimiento María González', 'descripcion' => 'Control a los 3 meses', 'hora' => '11:00:00', 'observacion' => 'Estado dental estable', 'fecha' => '2024-11-01'],
-            ['idSesion' => 7, 'nombre' => 'Control Carlos Mamani', 'descripcion' => 'Evaluación post-limpieza', 'hora' => '16:00:00', 'observacion' => 'Mejoría significativa', 'fecha' => '2024-10-16'],
-            ['idSesion' => 8, 'nombre' => 'Endodoncia Ana Rodríguez - Sesión 2', 'descripcion' => 'Obturación de conductos', 'hora' => '10:00:00', 'observacion' => 'Tratamiento completado satisfactoriamente', 'fecha' => '2024-10-19'],
+            ['idSesion' => 1, 'nombre' => 'Consulta inicial María González', 'descripcion' => 'Primera evaluación dental', 'hora' => '09:00:00', 'observacion' => 'Paciente colaborador', 'fecha' => '2025-10-01'],
+            ['idSesion' => 2, 'nombre' => 'Limpieza Carlos Mamani', 'descripcion' => 'Limpieza dental profunda', 'hora' => '10:30:00', 'observacion' => 'Mejorar técnica de cepillado', 'fecha' => '2025-10-02'],
+            ['idSesion' => 3, 'nombre' => 'Endodoncia Ana Rodríguez - Sesión 1', 'descripcion' => 'Apertura cameral y conductometría', 'hora' => '14:00:00', 'observacion' => 'Anestesia efectiva', 'fecha' => '2025-10-05'],
+            ['idSesion' => 4, 'nombre' => 'Extracción Roberto Flores', 'descripcion' => 'Extracción muela del juicio', 'hora' => '15:30:00', 'observacion' => 'Procedimiento sin complicaciones', 'fecha' => '2025-10-08'],
+            ['idSesion' => 5, 'nombre' => 'Ortodoncia Laura Condori', 'descripcion' => 'Colocación de aparatología', 'hora' => '09:00:00', 'observacion' => 'Paciente tolera bien el procedimiento', 'fecha' => '2025-10-12'],
+            ['idSesion' => 6, 'nombre' => 'Consulta seguimiento María González', 'descripcion' => 'Control a los 3 meses', 'hora' => '11:00:00', 'observacion' => 'Estado dental estable', 'fecha' => '2025-11-01'],
+            ['idSesion' => 7, 'nombre' => 'Control Carlos Mamani', 'descripcion' => 'Evaluación post-limpieza', 'hora' => '16:00:00', 'observacion' => 'Mejoría significativa', 'fecha' => '2025-10-16'],
+            ['idSesion' => 8, 'nombre' => 'Endodoncia Ana Rodríguez - Sesión 2', 'descripcion' => 'Obturación de conductos', 'hora' => '10:00:00', 'observacion' => 'Tratamiento completado satisfactoriamente', 'fecha' => '2025-10-19'],
             ['idSesion' => 9, 'nombre' => 'Sesión de tratamiento inicial', 'descripcion' => 'Primera sesión de evaluación y planificación', 'hora' => '09:00:00', 'observacion' => 'Paciente colaborador y puntual', 'fecha' => '2025-11-12'],
         ];
         foreach ($sesiones as $sesion) {
@@ -279,14 +342,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== ASISTE (Sesión - Paciente - Odontólogo) ====================
         $asiste = [
-            ['idSesion' => 1, 'idUsuario_Paciente' => 1, 'idUsuario_Odontologo' => 6, 'fecha' => '2024-10-01'],
-            ['idSesion' => 2, 'idUsuario_Paciente' => 2, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-02'],
-            ['idSesion' => 3, 'idUsuario_Paciente' => 3, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-05'],
-            ['idSesion' => 4, 'idUsuario_Paciente' => 4, 'idUsuario_Odontologo' => 8, 'fecha' => '2024-10-08'],
-            ['idSesion' => 5, 'idUsuario_Paciente' => 5, 'idUsuario_Odontologo' => 6, 'fecha' => '2024-10-12'],
-            ['idSesion' => 6, 'idUsuario_Paciente' => 1, 'idUsuario_Odontologo' => 6, 'fecha' => '2024-11-01'],
-            ['idSesion' => 7, 'idUsuario_Paciente' => 2, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-16'],
-            ['idSesion' => 8, 'idUsuario_Paciente' => 3, 'idUsuario_Odontologo' => 7, 'fecha' => '2024-10-19'],
+            ['idSesion' => 1, 'idUsuario_Paciente' => 1, 'idUsuario_Odontologo' => 6, 'fecha' => '2025-10-01'],
+            ['idSesion' => 2, 'idUsuario_Paciente' => 2, 'idUsuario_Odontologo' => 7, 'fecha' => '2025-10-02'],
+            ['idSesion' => 3, 'idUsuario_Paciente' => 3, 'idUsuario_Odontologo' => 7, 'fecha' => '2025-10-05'],
+            ['idSesion' => 4, 'idUsuario_Paciente' => 4, 'idUsuario_Odontologo' => 8, 'fecha' => '2025-10-08'],
+            ['idSesion' => 5, 'idUsuario_Paciente' => 5, 'idUsuario_Odontologo' => 6, 'fecha' => '2025-10-12'],
+            ['idSesion' => 6, 'idUsuario_Paciente' => 1, 'idUsuario_Odontologo' => 6, 'fecha' => '2025-11-01'],
+            ['idSesion' => 7, 'idUsuario_Paciente' => 2, 'idUsuario_Odontologo' => 7, 'fecha' => '2025-10-16'],
+            ['idSesion' => 8, 'idUsuario_Paciente' => 3, 'idUsuario_Odontologo' => 7, 'fecha' => '2025-10-19'],
             ['idSesion' => 9, 'idUsuario_Paciente' => 14, 'idUsuario_Odontologo' => 13, 'fecha' => '2025-11-12'],
         ];
         foreach ($asiste as $relacion) {
@@ -295,14 +358,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== EVALUA (Sesión - Odontograma) ====================
         $evalua = [
-            ['idSesion' => 1, 'idOdontograma' => 1, 'fecha' => '2024-10-01'],
-            ['idSesion' => 2, 'idOdontograma' => 2, 'fecha' => '2024-10-02'],
-            ['idSesion' => 3, 'idOdontograma' => 3, 'fecha' => '2024-10-05'],
-            ['idSesion' => 4, 'idOdontograma' => 4, 'fecha' => '2024-10-08'],
-            ['idSesion' => 5, 'idOdontograma' => 5, 'fecha' => '2024-10-12'],
-            ['idSesion' => 6, 'idOdontograma' => 6, 'fecha' => '2024-11-01'],
-            ['idSesion' => 7, 'idOdontograma' => 7, 'fecha' => '2024-10-16'],
-            ['idSesion' => 8, 'idOdontograma' => 8, 'fecha' => '2024-10-19'],
+            ['idSesion' => 1, 'idOdontograma' => 1, 'fecha' => '2025-10-01'],
+            ['idSesion' => 2, 'idOdontograma' => 2, 'fecha' => '2025-10-02'],
+            ['idSesion' => 3, 'idOdontograma' => 3, 'fecha' => '2025-10-05'],
+            ['idSesion' => 4, 'idOdontograma' => 4, 'fecha' => '2025-10-08'],
+            ['idSesion' => 5, 'idOdontograma' => 5, 'fecha' => '2025-10-12'],
+            ['idSesion' => 6, 'idOdontograma' => 6, 'fecha' => '2025-11-01'],
+            ['idSesion' => 7, 'idOdontograma' => 7, 'fecha' => '2025-10-16'],
+            ['idSesion' => 8, 'idOdontograma' => 8, 'fecha' => '2025-10-19'],
             ['idSesion' => 9, 'idOdontograma' => 9, 'fecha' => '2025-11-12'],
         ];
         foreach ($evalua as $relacion) {
@@ -442,14 +505,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== DETALLE DENTAL ====================
         $detalles = [
-            ['idAccion' => 7, 'idPiezaDental' => 1, 'descripcion' => 'Limpieza y profilaxis', 'cuadrante' => '1', 'fecha' => '2024-10-01'],
-            ['idAccion' => 7, 'idPiezaDental' => 2, 'descripcion' => 'Limpieza y profilaxis', 'cuadrante' => '2', 'fecha' => '2024-10-01'],
-            ['idAccion' => 2, 'idPiezaDental' => 3, 'descripcion' => 'Obturación con resina compuesta', 'cuadrante' => '1', 'fecha' => '2024-09-15'],
-            ['idAccion' => 1, 'idPiezaDental' => 6, 'descripcion' => 'Caries oclusal moderada', 'cuadrante' => '3', 'fecha' => '2024-10-02'],
-            ['idAccion' => 1, 'idPiezaDental' => 7, 'descripcion' => 'Caries distal leve', 'cuadrante' => '4', 'fecha' => '2024-10-02'],
-            ['idAccion' => 5, 'idPiezaDental' => 9, 'descripcion' => 'Caries profunda con afectación pulpar', 'cuadrante' => '4', 'fecha' => '2024-10-05'],
-            ['idAccion' => 2, 'idPiezaDental' => 10, 'descripcion' => 'Obturación con amalgama', 'cuadrante' => '3', 'fecha' => '2024-09-20'],
-            ['idAccion' => 4, 'idPiezaDental' => 11, 'descripcion' => 'Extracción quirúrgica', 'cuadrante' => '3', 'fecha' => '2024-10-08'],
+            ['idAccion' => 7, 'idPiezaDental' => 1, 'descripcion' => 'Limpieza y profilaxis', 'cuadrante' => '1', 'fecha' => '2025-10-01'],
+            ['idAccion' => 7, 'idPiezaDental' => 2, 'descripcion' => 'Limpieza y profilaxis', 'cuadrante' => '2', 'fecha' => '2025-10-01'],
+            ['idAccion' => 2, 'idPiezaDental' => 3, 'descripcion' => 'Obturación con resina compuesta', 'cuadrante' => '1', 'fecha' => '2025-09-15'],
+            ['idAccion' => 1, 'idPiezaDental' => 6, 'descripcion' => 'Caries oclusal moderada', 'cuadrante' => '3', 'fecha' => '2025-10-02'],
+            ['idAccion' => 1, 'idPiezaDental' => 7, 'descripcion' => 'Caries distal leve', 'cuadrante' => '4', 'fecha' => '2025-10-02'],
+            ['idAccion' => 5, 'idPiezaDental' => 9, 'descripcion' => 'Caries profunda con afectación pulpar', 'cuadrante' => '4', 'fecha' => '2025-10-05'],
+            ['idAccion' => 2, 'idPiezaDental' => 10, 'descripcion' => 'Obturación con amalgama', 'cuadrante' => '3', 'fecha' => '2025-09-20'],
+            ['idAccion' => 4, 'idPiezaDental' => 11, 'descripcion' => 'Extracción quirúrgica', 'cuadrante' => '3', 'fecha' => '2025-10-08'],
             ['idAccion' => 1, 'idPiezaDental' => 15, 'descripcion' => 'Caries profunda en cara oclusal', 'cuadrante' => 'Superior Derecho', 'fecha' => '2025-11-09'],
             ['idAccion' => 1, 'idPiezaDental' => 18, 'descripcion' => 'Caries moderada en cara distal', 'cuadrante' => 'Inferior Derecho', 'fecha' => '2025-11-09'],
         ];
@@ -459,14 +522,14 @@ class DatabaseSeeder extends Seeder
 
         // ==================== EVOLUCIONES ====================
         $evoluciones = [
-            ['idTratamiento' => 1, 'idPieza' => 1, 'fecha' => '2024-10-01', 'diagnosticoCIE' => 'Z01.2', 'procedimientoIndicacion' => 'Control preventivo semestral'],
-            ['idTratamiento' => 1, 'idPieza' => 3, 'fecha' => '2024-10-01', 'diagnosticoCIE' => 'K02.1', 'procedimientoIndicacion' => 'Mantener higiene, control en 6 meses'],
-            ['idTratamiento' => 2, 'idPieza' => 6, 'fecha' => '2024-10-02', 'diagnosticoCIE' => 'K02.0', 'procedimientoIndicacion' => 'Tartrectomía y profilaxis'],
-            ['idTratamiento' => 2, 'idPieza' => 7, 'fecha' => '2024-10-02', 'diagnosticoCIE' => 'K02.0', 'procedimientoIndicacion' => 'Tartrectomía y profilaxis'],
-            ['idTratamiento' => 3, 'idPieza' => 9, 'fecha' => '2024-10-05', 'diagnosticoCIE' => 'K04.0', 'procedimientoIndicacion' => 'Endodoncia conducto radicular, colocar corona'],
-            ['idTratamiento' => 4, 'idPieza' => 11, 'fecha' => '2024-10-08', 'diagnosticoCIE' => 'K01.1', 'procedimientoIndicacion' => 'Extracción quirúrgica completada, control en 7 días'],
-            ['idTratamiento' => 5, 'idPieza' => 13, 'fecha' => '2024-10-12', 'diagnosticoCIE' => 'M26.0', 'procedimientoIndicacion' => 'Inicio tratamiento ortodóntico, control mensual'],
-            ['idTratamiento' => 5, 'idPieza' => 14, 'fecha' => '2024-10-12', 'diagnosticoCIE' => 'M26.0', 'procedimientoIndicacion' => 'Inicio tratamiento ortodóntico, control mensual'],
+            ['idTratamiento' => 1, 'idPieza' => 1, 'fecha' => '2025-10-01', 'diagnosticoCIE' => 'Z01.2', 'procedimientoIndicacion' => 'Control preventivo semestral'],
+            ['idTratamiento' => 1, 'idPieza' => 3, 'fecha' => '2025-10-01', 'diagnosticoCIE' => 'K02.1', 'procedimientoIndicacion' => 'Mantener higiene, control en 6 meses'],
+            ['idTratamiento' => 2, 'idPieza' => 6, 'fecha' => '2025-10-02', 'diagnosticoCIE' => 'K02.0', 'procedimientoIndicacion' => 'Tartrectomía y profilaxis'],
+            ['idTratamiento' => 2, 'idPieza' => 7, 'fecha' => '2025-10-02', 'diagnosticoCIE' => 'K02.0', 'procedimientoIndicacion' => 'Tartrectomía y profilaxis'],
+            ['idTratamiento' => 3, 'idPieza' => 9, 'fecha' => '2025-10-05', 'diagnosticoCIE' => 'K04.0', 'procedimientoIndicacion' => 'Endodoncia conducto radicular, colocar corona'],
+            ['idTratamiento' => 4, 'idPieza' => 11, 'fecha' => '2025-10-08', 'diagnosticoCIE' => 'K01.1', 'procedimientoIndicacion' => 'Extracción quirúrgica completada, control en 7 días'],
+            ['idTratamiento' => 5, 'idPieza' => 13, 'fecha' => '2025-10-12', 'diagnosticoCIE' => 'M26.0', 'procedimientoIndicacion' => 'Inicio tratamiento ortodóntico, control mensual'],
+            ['idTratamiento' => 5, 'idPieza' => 14, 'fecha' => '2025-10-12', 'diagnosticoCIE' => 'M26.0', 'procedimientoIndicacion' => 'Inicio tratamiento ortodóntico, control mensual'],
             ['idTratamiento' => 9, 'idPieza' => 15, 'fecha' => '2025-11-09', 'diagnosticoCIE' => 'K02.1', 'procedimientoIndicacion' => 'Obturación con composite en cara oclusal'],
         ];
         foreach ($evoluciones as $evolucion) {
@@ -1010,24 +1073,6 @@ DB::unprepared("
         ORDER BY fecha DESC;
     END
 ");
-    DB::unprepared("DROP PROCEDURE IF EXISTS `g_dashboard_ultimo_plan_paciente`");
-    DB::unprepared("
-        CREATE PROCEDURE `g_dashboard_ultimo_plan_paciente` (IN `p_idUsuario` INT)
-        BEGIN
-            SELECT 
-                p.medicamentos,
-                p.observacion,
-                p.duracionTotal
-            FROM plan p
-            INNER JOIN usuario u ON u.idUsuario = p.idUsuario_Paciente
-            WHERE u.idUsuario = p_idUsuario
-            AND p.idPlan = (
-                    SELECT MAX(ps.idPlan)
-                    FROM plan ps
-                    WHERE ps.idUsuario_Paciente = p_idUsuario
-            );
-        END
-    ");
 
 // Procedimiento: dashboard_piezas_por_estado_paciente
 DB::unprepared("DROP PROCEDURE IF EXISTS `dashboard_piezas_por_estado_paciente`");

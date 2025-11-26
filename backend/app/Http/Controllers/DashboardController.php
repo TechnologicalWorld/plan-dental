@@ -624,7 +624,7 @@ public function pacientePiezasPorEstado(Request $req)
         $idUsuario = (int) $req->query('idUsuario');
 
         try {
-            $rows = $this->callSp('dashboard_ultimo_plan_paciente', [$idUsuario]);
+            $rows = $this->callSp('g_dashboard_ultimo_plan_paciente', [$idUsuario]);
             return response()->json($rows, 200);
         } catch (\Throwable $e) {
             return response()->json([
